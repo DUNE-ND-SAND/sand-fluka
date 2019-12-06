@@ -1,3 +1,7 @@
+//This function analyses the barrel hits and using the digitization class (Ideal2RealCal), it groups in cell and fills an array with the information of the cells with hits
+//then it calculates the weigthed time for each cell and the sum of the energy of hits arriving in the cell in the barreltimecut window respect the weighted time
+//then it searches for cells over the threshold (sogliabarrel) and it saves the minimum weighted time in timegbarrel
+//
 extern const float sogliabarrel;
 extern const float barreltimecut;
 extern const float timecutcell;

@@ -1,3 +1,8 @@
+//This root macro analysis sand-fluka data (with or without 3dst).
+//It searches for neutrons, discards neutrons in endcap, checks which detector saw the neutron (in variable vistostt, vistogbarrel, visto3dst) and which detector saw the first hit (in visto=0,1,2).
+//Then it searches for the time of the first hit and calculate beta_reco
+//Every important variable is saved in an output tree
+
 #include"Ideal2RealCal.cpp"
 #include"Grouped_3DST.h"
 #include"Grouped_Barrel_Time.h"
