@@ -1,8 +1,9 @@
 void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *HeaderTree) {
 	dest.clear();
 
-	int nentries=10; //HeaderTree->GetEntries();  FIXME
-	
+	int nentries=HeaderTree->GetEntries();  
+	cout<<"Ho letto le entries "<<nentries<<endl;
+		
 	for(int i=0; i<nentries; i++){
 		TG4PrimaryVertex vtx;
 

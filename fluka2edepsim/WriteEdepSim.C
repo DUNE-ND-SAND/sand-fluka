@@ -5,7 +5,6 @@
 void WriteEdepSim() {
 	// check to see if the event class is in the dictionary
 	// if it is not load the definition in libEvent.so
-	cout<<"inizio "<<endl;
 
 	//if (!TClassTable::GetDict("Event")) {
 	//cout<<"carico la libreria"<<endl;
@@ -25,26 +24,46 @@ void WriteEdepSim() {
 	//FINE .hh
 
 
-	//APRO IL FILE E CREO IL TREE	
+	//Opening FLUKA FILE
+	
+	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_numu001_Out.root");
+    	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
+    	//TTree *HitsTree = (TTree*)f->Get("HitsTree");
+    	/*
+	Int_t fRun,fEvent;
+    	Float_t fx,fy,fz;
+    	T->SetBranchAddress("Run",&Run);
+    	T->SetBranchAddress("Event",&Event);
+    	T->SetBranchAddress("x",&x);
+    	T->SetBranchAddress("y",&y);
+    	T->SetBranchAddress("z",&z);
+    	TF->SetBranchAddress("Run",&fRun);
+    	TF->SetBranchAddress("Event",&fEvent);
+    	TF->SetBranchAddress("x",&fx);
+    	TF->SetBranchAddress("y",&fy);
+    	TF->SetBranchAddress("z",&fz);
+    	T->AddFriend(TF);
+	*/
+
+
+	
+	//Opening EDEPSIM OUTPUT FILE	
 	fOutput = TFile::Open("Provadep.root", "RECREATE", "EDepSim Root Output");
 	fOutput->cd();
 
 	fEventTree = new TTree("EDepSimEvents",
 			"Energy Deposition for Simulated Events");
 
-	//static TG4Event *pEvent = &fEventSummary;
 	TG4Event *pEvent=new TG4Event();
 	fEventTree->Branch("Event","TG4Event",&pEvent);
 
 	fEventsNotSaved = 0;
 
-
-	//apro il file di FLUKA
-	TTree *HeaderTree;
-	TTree *HitsTree;	
-
+	int NEVENT=HeaderTree->GetEntries();
+	cout<<"Number of event to rewrite: "<<NEVENT<<endl;
+	
 	//scrivo dentro EDEPSIM
-	for(int i=0; i<30; i++){  //FIXME
+	for(int i=0; i<30; i++){  
 		pEvent->RunId = 0;
 		pEvent->EventId = i;
 		cout<<"Event for run " << pEvent->RunId	<< " event " << pEvent->EventId<<endl;
@@ -55,7 +74,7 @@ void WriteEdepSim() {
 		FillPrimaries(pEvent->Primaries, HeaderTree);
 		cout<<"   Primaries " << pEvent->Primaries.size()<<endl;
 
-		FillTrajectories(pEvent->Trajectories,HitsTree);
+	//	FillTrajectories(pEvent->Trajectories,FlukaTree);
 		cout<<"   Trajectories " << pEvent->Trajectories.size()<<endl;
 
 		//FillSegmentDetectors(fEventSummary.SegmentDetectors, event);
