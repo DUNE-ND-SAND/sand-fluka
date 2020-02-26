@@ -1,0 +1,18 @@
+on 26th February 2020
+
+
+-- for downloading the code
+git clone git@baltig.infn.it:dune/sand-fluka.git
+
+--for going to the right work folder
+cd sand-fluka/fluka2edepsim
+
+
+-- for lunching the macro WriteEdepSim.C
+
+root -l 
+gSystem->Load("plotEDepSim_C.so")
+.L WriteEdepSim.C
+WriteEdepSim()
+
+
