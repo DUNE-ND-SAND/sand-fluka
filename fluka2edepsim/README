@@ -1,6 +1,21 @@
-# Tools to explore the edep-sim root tree output.
+2-3-2020
 
-This provides a set of ROOT macros to simplify handling of the output root
-tree.  These are not intended for any serious analysis, but are useful to
-help debug.
+In src/ folder there are the files .cxx and .h for MainWrite program.
+MainWrite program read a fluka file and convert the data in the EDepSim format output.
+
+To compile MainWrite:
+cd build
+make (in this way the .o and the TG4Event.so library is produced)
+
+to run
+./Main
+in this way a default fluka file is converted in a Provadep.root file
+
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
