@@ -65,6 +65,6 @@ void loadEDepSim() {
 
     // Load the rest of the tools.
     gROOT->ProcessLine(".x readEDepSim.C+");
-    gROOT->ProcessLine(".x plotEDepSim.C+");
+    //gROOT->ProcessLine(".x plotEDepSim.C+");
 
 }

@@ -4,7 +4,7 @@
 #define readEDepSim_h
 
 #include <TTree.h>
-#include "TG4Event.h"
+#include "EDepSimEvents/TG4Event.h"
 
 /// Return a pointer to the EDepSimEvents Tree found in the geometry file.
 TTree*    EDepSimTree();
