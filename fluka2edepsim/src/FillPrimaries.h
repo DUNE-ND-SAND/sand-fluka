@@ -4,8 +4,8 @@
 void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *mytree, int entry) {
 	dest.clear();
 
-	//int nentries=mytree->GetEntries();  
-	//std::cout<<"Ho letto le entries "<<nentries<<std::endl;
+	//std::cout<<"Numero elementi "<<dest.size()<<std::endl;
+
 
 	//---Branch of HeaderTree
 
@@ -85,6 +85,9 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *mytree, int entry
 	mytree->GetEntry(entry);
 	TG4PrimaryVertex vtx;
 
+	std::cout<<"evenum "<<EveNum<<std::endl;
+	std::cout<<"Vertex coord "<<Vertex[0]<<" "<<Vertex[1]<<" "<<Vertex[2]<<std::endl;
+
 	vtx.Position.SetX(Vertex[0]);
 	vtx.Position.SetY(Vertex[1]);
 	vtx.Position.SetZ(Vertex[2]);
@@ -94,50 +97,51 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *mytree, int entry
 
 	std::cout<<"Number of particle in vertex "<<NParticle<<std::endl;
 	// Add the particles associated with the vertex to the summary.
-	for (int j=0; j<NParticle ; ++j) {
-		TG4PrimaryParticle prim;
+	TG4PrimaryParticle prim;
 
-		for(int k=0; k<NumLep; k++){
-			prim.PDGCode = IdLep[k] ; 	
-			prim.TrackId = TrLep[k];;
-			prim.Momentum.SetX(P_Lep[0][k]);
-			prim.Momentum.SetY(P_Lep[1][k]);
-			prim.Momentum.SetZ(P_Lep[2][k]);
-			prim.Momentum.SetE(P_Lep[3][k]);
-			vtx.Particles.push_back(prim);
-		}
-
-		for(int k=0; k<NumHad; k++){
-			prim.PDGCode = IdHad[k] ; 	
-			prim.TrackId = TrHad[k];;
-			prim.Momentum.SetX(P_Had[0][k]);
-			prim.Momentum.SetY(P_Had[1][k]);
-			prim.Momentum.SetZ(P_Had[2][k]);
-			prim.Momentum.SetE(P_Had[3][k]);
-			vtx.Particles.push_back(prim);
-		}
-
-		for(int k=0; k<NumPhot; k++){
-			prim.PDGCode = IdPhot[k] ; 	
-			prim.TrackId = TrPhot[k];;
-			prim.Momentum.SetX(P_Phot[0][k]);
-			prim.Momentum.SetY(P_Phot[1][k]);
-			prim.Momentum.SetZ(P_Phot[2][k]);
-			prim.Momentum.SetE(P_Phot[3][k]);
-			vtx.Particles.push_back(prim);
-		}
-
-		for(int k=0; k<NumHeavy; k++){
-			prim.PDGCode = IdHeavy[k] ; 	
-			prim.TrackId = TrHeavy[k];;
-			prim.Momentum.SetX(P_Heavy[0][k]);
-			prim.Momentum.SetY(P_Heavy[1][k]);
-			prim.Momentum.SetZ(P_Heavy[2][k]);
-			prim.Momentum.SetE(P_Heavy[3][k]);
-			vtx.Particles.push_back(prim);
-		}
-
-		//vtx.Reaction = char(222);   //FIXME
-		dest.push_back(vtx);
+	for(int k=0; k<NumLep; k++){
+		prim.PDGCode = IdLep[k] ; 	
+		prim.TrackId = TrLep[k];;
+		prim.Momentum.SetX(P_Lep[0][k]);
+		prim.Momentum.SetY(P_Lep[1][k]);
+		prim.Momentum.SetZ(P_Lep[2][k]);
+		prim.Momentum.SetE(P_Lep[3][k]);
+		vtx.Particles.push_back(prim);
 	}
+
+	for(int k=0; k<NumHad; k++){
+		prim.PDGCode = IdHad[k] ; 	
+		prim.TrackId = TrHad[k];;
+		prim.Momentum.SetX(P_Had[0][k]);
+		prim.Momentum.SetY(P_Had[1][k]);
+		prim.Momentum.SetZ(P_Had[2][k]);
+		prim.Momentum.SetE(P_Had[3][k]);
+		vtx.Particles.push_back(prim);
+	}
+
+	for(int k=0; k<NumPhot; k++){
+		prim.PDGCode = IdPhot[k] ; 	
+		prim.TrackId = TrPhot[k];;
+		prim.Momentum.SetX(P_Phot[0][k]);
+		prim.Momentum.SetY(P_Phot[1][k]);
+		prim.Momentum.SetZ(P_Phot[2][k]);
+		prim.Momentum.SetE(P_Phot[3][k]);
+		vtx.Particles.push_back(prim);
+	}
+
+	for(int k=0; k<NumHeavy; k++){
+		prim.PDGCode = IdHeavy[k] ; 	
+		prim.TrackId = TrHeavy[k];;
+		prim.Momentum.SetX(P_Heavy[0][k]);
+		prim.Momentum.SetY(P_Heavy[1][k]);
+		prim.Momentum.SetZ(P_Heavy[2][k]);
+		prim.Momentum.SetE(P_Heavy[3][k]);
+		vtx.Particles.push_back(prim);
+	}
+
+	//vtx.Reaction = char(222);   //FIXME
+
+	dest.push_back(vtx);
+//	std::cout<<"Ho riempito "<<dest.size()<<std::endl;
+
 }
