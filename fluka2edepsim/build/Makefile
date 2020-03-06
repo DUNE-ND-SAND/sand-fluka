@@ -53,7 +53,7 @@ PRIMARIESO       =FillPrimaries.$(ObjSuf)
 
 
 OBJS          = $(TG4EVENTO) $(MAINWRITEO) $(TG4TRAJO) $(TG4HITSEGO) $(TG4PRIMO)
-PROGRAMS      = $(MAIN)
+PROGRAMS      = $(MAIN) $(TG4EVENTSO)
 
 
 
@@ -61,8 +61,7 @@ PROGRAMS      = $(MAIN)
 
 .SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf)
 
-all:            $(PROGRAMS) $(TG4EVENTSO)
-
+all:            $(PROGRAMS) 
 
 $(TG4EVENTSO):  $(TG4EVENTO) $(TG4TRAJO) $(TG4HITSEGO) $(TG4PRIMO)
 		$(LD) $(SOFLAGS) $(LDFLAGS) $^ $(OutPutOpt) $@ $(EXPLLINKLIBS)  
@@ -93,7 +92,6 @@ TG4Prim.$(ObjSuf): TG4PrimaryVertex.h
 TG4Traj.$(ObjSuf): TG4Trajectory.h
 TG4HitSegment.$(ObjSuf): TG4HitSegment.h
 FillPrimaries.$(ObjSuf): FillPrimaries.h
-
 
 
 TG4EventDict.$(SrcSuf): TG4Event.h  TG4PrimaryVertex.h TG4Trajectory.h TG4HitSegment.h edepsim_io_LinkDef.h
