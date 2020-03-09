@@ -116,7 +116,7 @@ int  main() {
 	std::cout<<"Number of event to rewrite: "<<NEVENT<<std::endl;
 	
 	//scrivo dentro EDEPSIM
-	for(int i=0; i<10; i++){  
+	for(int i=0; i<2; i++){  
 		pEvent->RunId = 0;
 		pEvent->EventId = i;
 		HeaderTree->GetEntry(i);
@@ -140,7 +140,8 @@ int  main() {
 		//break;
 	}
 	fOutput->Write();            // Write the file header
-	fEventTree->Print();           // Print the tree contents
+	//fEventTree->Print();           // Print the tree contents
+        fOutput->Close();
 }
 
 
