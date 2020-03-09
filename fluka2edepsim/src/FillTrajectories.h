@@ -47,6 +47,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree) {
 		// Add the particles associated with the vertex to the summary.
 		// Make sure they are ordered...etc ...see code /src/EDepSimPersistencyManager.cc at line 437
 		TG4TrajectoryPoint point;
+		PosX->Fill(PosInc[j][0]);
 
 		point.Position.SetXYZT(PosInc[j][0], PInc[j][1], PInc[j][2], TimeInc[j]);
 		point.Momentum.SetXYZ (PInc[j][0], PInc[j][1], PInc[j][2]);
@@ -62,6 +63,8 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree) {
 		//point.Process = edepPoint->GetProcessType();
 		//point.Subprocess = edepPoint->GetProcessSubType();
 		tx->Points.push_back(point);
+		if(tx != 0 && j == NIncHits - 1 && TrInDest.find(PrTrInc)==TrInDest.end())
+			dest.push_back(*tx);
 
        }
 }

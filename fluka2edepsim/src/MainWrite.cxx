@@ -1,5 +1,6 @@
 #include <map>
 #include "TFile.h"
+#include "TH1F.h"
 #include "TG4Event.h"
 //#include "FillPrimaries.h"
 //#include "FillTrajectories.h"
@@ -17,6 +18,7 @@ Int_t   RunNum, EveNum  , NIncHits, IdTrack     , IdInc[MaxNhit], IdParInc[MaxNh
 Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
 Float_t PosInc[MaxNhit][3];
 
+TH1F* PosX;
 #include "FillPrimaries.h"
 #include "FillTrajectories.h"
 
@@ -104,6 +106,7 @@ int  main() {
 	fOutput = TFile::Open("Provadep.root", "RECREATE", "EDepSim Root Output");
 	fOutput->cd();
 
+        PosX = new TH1F("PosX","PosX",100,-250,250);
 	fEventTree = new TTree("EDepSimEvents",
 			"Energy Deposition for Simulated Events");
 
@@ -116,7 +119,7 @@ int  main() {
 	std::cout<<"Number of event to rewrite: "<<NEVENT<<std::endl;
 	
 	//scrivo dentro EDEPSIM
-	for(int i=0; i<2; i++){  
+	for(int i=0; i<NEVENT; i++){  
 		pEvent->RunId = 0;
 		pEvent->EventId = i;
 		HeaderTree->GetEntry(i);
