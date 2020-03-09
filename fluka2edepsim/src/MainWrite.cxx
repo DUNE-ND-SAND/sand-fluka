@@ -116,7 +116,7 @@ int  main() {
 	std::cout<<"Number of event to rewrite: "<<NEVENT<<std::endl;
 	
 	//scrivo dentro EDEPSIM
-	for(int i=0; i<NEVENT; i++){  
+	for(int i=0; i<10; i++){  
 		pEvent->RunId = 0;
 		pEvent->EventId = i;
 		HeaderTree->GetEntry(i);
