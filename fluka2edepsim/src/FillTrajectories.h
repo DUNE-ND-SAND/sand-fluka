@@ -1,7 +1,6 @@
 void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree) {
 	dest.clear();
-        // HeaderTree->GetEntries();  FIXME
-        // ntrack->GetEntries()
+	
 	Double_t PrTrInc = -1;
         // Making another container to appened the unordered Info
         std::map<Int_t,Float_t> TrInDest;
