@@ -13,11 +13,11 @@ TG4Event* gEDepSimEvent = NULL;
 bool flukafile=true; //put true to read Provadep.root
 bool traj=true;      //put true to read trajectories
 bool segm=false;      //put true to read segment	
-TH1F* PosX;
+//TH1F* PosX;
 
 void readEDepSim() {
 	std::cout<<"STARTING READ execution "<<std::endl;
-        PosX = new TH1F("PosX","PosX",100,-250,250);
+        //PosX = new TH1F("PosX","PosX",100,-250,250);
 	if(flukafile==true){
 		TFile *ffile=new TFile("build/Provadep.root", "READ");
 		gEDepSimTree = (TTree*) ffile->Get("EDepSimEvents");
@@ -39,7 +39,7 @@ void readEDepSim() {
 		EDepSimDumpEvent();
 		//gEDepSimTree->Print();
 	}
-PosX->Draw();
+//PosX->Draw();
 }
 TTree* EDepSimTree() {
 	return gEDepSimTree;
@@ -69,12 +69,13 @@ void EDepSimDumpEvent() {
 			<< " " << v->Position.Y()
 			<< " " << v->Position.Z()
 			<< " Time " << v->Position.T();
-		std::cout <<" Nbr of particles " << v->Particles.size();
+		std::cout <<" Nbr of particles " << v->Particles.size()<<std::endl;
 		for (std::vector<TG4PrimaryParticle>::iterator
 				p = v->Particles.begin();
 				p != v->Particles.end(); ++p) {
+			std::cout << " TrackId " << p->TrackId;
 			std::cout << " PDGcode " << p->PDGCode;
-			std::cout << " Name " << p->Name;
+			std::cout << " Name " << p->Name<<std::endl;
 		}
 		std::cout << endl;
 	}
@@ -90,6 +91,7 @@ void EDepSimDumpEvent() {
 			int count = t->Points.size();
 			std::cout << " Up to " << count << " points";
 			std::cout << std::endl;
+			/*
 			std::cout << " TRAJ POINTS:    ";
 
 			for (std::vector<TG4TrajectoryPoint>::iterator
@@ -98,11 +100,12 @@ void EDepSimDumpEvent() {
 					++p) {
 				std::cout << " Time: " << p->Position.T();
 				std::cout << " Process: " << p->Process;
-                                PosX->Fill(p->Position.X());
+                                //PosX->Fill(p->Position.X());
 				std::cout << " Subprocess: " << p->Subprocess;
 				std::cout << std::endl;
 				if (--count < 1) break;
 			}
+*/
 		}
 	}
 	if(segm==true){	
