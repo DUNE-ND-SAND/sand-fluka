@@ -2,6 +2,7 @@
 // THE VARIOUS CLASSES.
 #include <TFile.h>
 #include <TTree.h>
+#include <TH1F.h>
 
 #include <iostream>
 
@@ -10,12 +11,13 @@
 TTree* gEDepSimTree = NULL;
 TG4Event* gEDepSimEvent = NULL;
 bool flukafile=true; //put true to read Provadep.root
-bool traj=false;      //put true to read trajectories
+bool traj=true;      //put true to read trajectories
 bool segm=false;      //put true to read segment	
+TH1F* PosX;
 
 void readEDepSim() {
 	std::cout<<"STARTING READ execution "<<std::endl;
-
+        PosX = new TH1F("PosX","PosX",100,-250,250);
 	if(flukafile==true){
 		TFile *ffile=new TFile("build/Provadep.root", "READ");
 		gEDepSimTree = (TTree*) ffile->Get("EDepSimEvents");
@@ -31,12 +33,13 @@ void readEDepSim() {
 	int N=gEDepSimTree->GetEntries();
 	std::cout<<"number of entries "<<N<<std::endl;
 
-	for (int i=0; i<2; i++){
+	for (int i=0; i<N; i++){
 
 		gEDepSimTree->GetEntry(i);
 		EDepSimDumpEvent();
 		//gEDepSimTree->Print();
 	}
+PosX->Draw();
 }
 TTree* EDepSimTree() {
 	return gEDepSimTree;
@@ -95,6 +98,7 @@ void EDepSimDumpEvent() {
 					++p) {
 				std::cout << " Time: " << p->Position.T();
 				std::cout << " Process: " << p->Process;
+                                PosX->Fill(p->Position.X());
 				std::cout << " Subprocess: " << p->Subprocess;
 				std::cout << std::endl;
 				if (--count < 1) break;
