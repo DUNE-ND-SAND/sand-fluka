@@ -87,7 +87,7 @@ int  main() {
 		FillTrajectories(pEvent->Trajectories,HitsTree);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
 
-		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree);
+		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, i);
 		cout<"   Segment Detectors "	<< pEvent.SegmentDetectors.size()<<endl;
 	
 		fEventTree->Fill();
