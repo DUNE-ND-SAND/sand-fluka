@@ -28,7 +28,7 @@ void FillSegmentDetectors(std::vector<TG4HitSegment>& dest, TTree *SttHits, int 
 	SttHits->SetBranchAddress("EdqStt",&EdqStt);
 	SttHits->SetBranchAddress("PosOuStt",&PosOuStt);
 
-	int Nstt=SttHits->GetEvent(i); // AS
+	int Nstt=SttHits->GetEvent(ientry); // AS
 		
 	for(int j=0; j<Nstt; j++){
 		TG4HitSegment hit;
