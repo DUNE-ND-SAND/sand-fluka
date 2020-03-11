@@ -29,6 +29,7 @@ void FillSegmentDetectors(std::vector<TG4HitSegment>& dest, TTree *SttHits, int 
 	SttHits->SetBranchAddress("PosOuStt",&PosOuStt);
 
 	int Nstt=SttHits->GetEvent(ientry); // AS
+	int TrHitContrib[10];
 		
 	for(int j=0; j<Nstt; j++){
 		TG4HitSegment hit;
@@ -37,6 +38,8 @@ void FillSegmentDetectors(std::vector<TG4HitSegment>& dest, TTree *SttHits, int 
         hit.EnergyDeposit = EdepStt[j];
         hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 		float segLen = sqrt(TMath::Power((PosOuStt[j][0]-PosInStt[j][0]),2) + TMath::Power((PosOuStt[j][1]-PosInStt[j][1]),2) + TMath::Power((PosOuStt[j][2]-PosInStt[j][2]),2));
+       	TrHitContrib[0] = TrStt[j];
+       	CopyHitContributors(hit.Contrib,TrHitContrib);
        	hit.TrackLength = segLen;
       	hit.Start.SetXYZT(PosInStt[j][0],
 					  	  PosInStt[j][1],
