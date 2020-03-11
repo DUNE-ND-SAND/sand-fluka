@@ -1,4 +1,4 @@
-void FillSegmentDetectors(std::vector<TG4HitSegment>& dest, TTree *SttTree, int ientry) {
+void FillSegmentDetectors(std::vector<TG4HitSegment>& dest, TTree *SttHits, int ientry) {
 
 	dest.clear();
 
@@ -15,7 +15,20 @@ void FillSegmentDetectors(std::vector<TG4HitSegment>& dest, TTree *SttTree, int 
 	Float_t EdepStt[NhitMax];
 	Float_t EdqStt[NhitMax];
 
-	int Nstt=SttTree->GetEvent(i); // AS
+	SttHits->SetBranchAddress("NStt",&NStt);
+	SttHits->SetBranchAddress("IdStt",&IdStt);
+	SttHits->SetBranchAddress("IdParStt",&IdParStt);
+	SttHits->SetBranchAddress("TrStt",&TrStt);
+	SttHits->SetBranchAddress("IntParStt",&IntParStt);
+	SttHits->SetBranchAddress("RegStt",&RegStt);
+	SttHits->SetBranchAddress("PosInStt",&PosInStt);
+	SttHits->SetBranchAddress("PStt",&PStt);
+	SttHits->SetBranchAddress("TimeStt",&TimeStt);
+	SttHits->SetBranchAddress("EdepStt",&EdepStt);
+	SttHits->SetBranchAddress("EdqStt",&EdqStt);
+	SttHits->SetBranchAddress("PosOuStt",&PosOuStt);
+
+	int Nstt=SttHits->GetEvent(i); // AS
 		
 	for(int j=0; j<Nstt; j++){
 		TG4HitSegment hit;
