@@ -3,6 +3,7 @@ void FillSegmentDetectors(std::vector<TG4HitSegment>& dest, TTree *SttHits, int 
 	dest.clear();
 
     const int NhitMax=50000;
+    Int_t Nstt;
     Int_t IdStt[NhitMax];
 	Int_t IdParStt[NhitMax];
 	Int_t TrStt[NhitMax];
@@ -28,7 +29,7 @@ void FillSegmentDetectors(std::vector<TG4HitSegment>& dest, TTree *SttHits, int 
 	SttHits->SetBranchAddress("EdqStt",&EdqStt);
 	SttHits->SetBranchAddress("PosOuStt",&PosOuStt);
 
-	int Nstt=SttHits->GetEvent(ientry); // AS
+	Nstt=SttHits->GetEvent(ientry); // AS
 	int TrHitContrib[10];
 		
 	for(int j=0; j<Nstt; j++){
@@ -39,7 +40,7 @@ void FillSegmentDetectors(std::vector<TG4HitSegment>& dest, TTree *SttHits, int 
         hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 		float segLen = sqrt(TMath::Power((PosOuStt[j][0]-PosInStt[j][0]),2) + TMath::Power((PosOuStt[j][1]-PosInStt[j][1]),2) + TMath::Power((PosOuStt[j][2]-PosInStt[j][2]),2));
        	TrHitContrib[0] = TrStt[j];
-       	CopyHitContributors(hit.Contrib,TrHitContrib);
+       	//CopyHitContributors(hit.Contrib,TrHitContrib);
        	hit.TrackLength = segLen;
       	hit.Start.SetXYZT(PosInStt[j][0],
 					  	  PosInStt[j][1],
