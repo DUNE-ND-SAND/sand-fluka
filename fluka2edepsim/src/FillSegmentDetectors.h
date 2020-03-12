@@ -3,7 +3,7 @@ void FillSegmentDetectors(std::vector<TG4HitSegment>& dest, TTree *SttHits, int 
 	dest.clear();
 
     const int NhitMax=50000;
-    Int_t Nstt;
+    Int_t NStt;
     Int_t IdStt[NhitMax];
 	Int_t IdParStt[NhitMax];
 	Int_t TrStt[NhitMax];
@@ -29,10 +29,10 @@ void FillSegmentDetectors(std::vector<TG4HitSegment>& dest, TTree *SttHits, int 
 	SttHits->SetBranchAddress("EdqStt",&EdqStt);
 	SttHits->SetBranchAddress("PosOuStt",&PosOuStt);
 
-	Nstt=SttHits->GetEvent(ientry); // AS
+	NStt=SttHits->GetEvent(ientry); // AS
 	int TrHitContrib[10];
 		
-	for(int j=0; j<Nstt; j++){
+	for(int j=0; j<NStt; j++){
 		TG4HitSegment hit;
 	
 		hit.PrimaryId = IdStt[j];
