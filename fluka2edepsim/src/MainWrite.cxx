@@ -21,7 +21,7 @@ Float_t PosInc[MaxNhit][3];
 TH1F* PosX;
 #include "FillPrimaries.h"
 #include "FillTrajectories.h"
-#include "FillSegmentDetector.h"
+#include "FillSegmentDetectors.h"
 
 int  main() {
 	/// The ROOT output file that events are saved into.
