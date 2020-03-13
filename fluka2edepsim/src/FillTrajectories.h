@@ -31,8 +31,10 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree) {
 				tx           = new TG4Trajectory;
 				tx->TrackId  = TrInc[j];
 				tx->ParentId = IdParInc[j];
+				tx->PDGCode  = IdInc[j];
                                 std::cout<< " ********** Track Id ***********"<< tx->TrackId<<std::endl;
                                 std::cout<< " ********** Parent Id ***********"<< tx->ParentId<<std::endl;
+                                std::cout<< " ********** PDG Code ***********"<< tx->PDGCode<<std::endl;
 				//tx->Name = "prova";
 				//tx->PDGCode= 10;
 
