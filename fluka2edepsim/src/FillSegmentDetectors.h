@@ -15,7 +15,6 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	Int_t TrStt[NhitMax];
 	Int_t IntParStt[NhitMax];
 	Int_t RegStt[NhitMax];
-	Int_t TrHitContrib[100];
 	Float_t PosInStt[NhitMax][3];
 	Float_t PosOuStt[NhitMax][3];
 	Float_t PStt[NhitMax][5];
@@ -60,13 +59,10 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			hit.EnergyDeposit = EdepStt[j];
 			hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 			float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
-
-			TrHitContrib[0] = TrStt[j];
-			   //Contrib.push_back(contrib);
-
-			//hit.Contrib(TrHitContrib);
-
 			hit.TrackLength = segLen;
+
+			(hit.Contrib).push_back(TrStt[j]);
+
 			hit.Start.SetXYZT(PosInStt[j][0],
 					PosInStt[j][1] -238.473,
 					PosInStt[j][2] +2391.0,
@@ -102,11 +98,10 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			hit.EnergyDeposit = EdepStt[j];
 			hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 			float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
-
-			TrHitContrib[0] = TrStt[j];
-			//hit.Contrib(TrHitContrib);
-
 			hit.TrackLength = segLen;
+
+			(hit.Contrib).push_back(TrStt[j]);
+
 			hit.Start.SetXYZT(PosInStt[j][0],
 					PosInStt[j][1] -238.473,
 					PosInStt[j][2] +2391.0,
@@ -152,14 +147,11 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 		hit.PrimaryId = IdCell[j];
 		hit.EnergyDeposit = EdepCell[j];
 		hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
-		//float segLen = 0.0;
+		float segLen = 0.0;
+		hit.TrackLength = segLen;
 
-		TrHitContrib[0] = IdParCell[j];
-		//Contrib.push_back(contrib);
+		(hit.Contrib).push_back(IdParCell[j]);
 
-		//hit.Contrib(TrHitContrib);
-
-		hit.TrackLength = 0.0;
 		hit.Start.SetXYZT(PosCell[j][0],
 				PosCell[j][1] -238.473,
 				PosCell[j][2] +2391.0,
