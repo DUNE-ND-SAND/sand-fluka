@@ -38,6 +38,8 @@ int  main() {
 	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_numu001_Out.root");
     	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
     	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
+	    TTree *SttTree = (TTree*)fInput->Get("SttTree");
+	    TTree *CellTree = (TTree*)fInput->Get("CellTree");
     	
 	//*************************************************
         //HitTree Info
@@ -50,9 +52,7 @@ int  main() {
         HitsTree->SetBranchAddress("PosInc",&PosInc);    //Position[3]   (x,y,z)             , Mc hit
         HitsTree->SetBranchAddress("PInc",&PInc);        //Energy-Mom[5] (px,py,pz,E,P)      , Mc hit
         HitsTree->SetBranchAddress("TimeInc",&TimeInc);     //Time                              , Mc hit
-	
-	    TTree *SttTree = (TTree*)fInput->Get("SttTree");
-	
+
 	//Opening EDEPSIM OUTPUT FILE	
 	fOutput = TFile::Open("Provadep.root", "RECREATE", "EDepSim Root Output");
 	fOutput->cd();
@@ -87,9 +87,9 @@ int  main() {
 		FillTrajectories(pEvent->Trajectories,HitsTree);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
 
-		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, i);
-		std::cout<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
-	
+		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
+		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
+
 		fEventTree->Fill();
 		//break;
 	}
