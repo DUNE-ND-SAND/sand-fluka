@@ -89,7 +89,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	    for(int j=0; j<NStt; j++){
 		float rad2 = pow(PosOuStt[j][1],2) + pow(PosOuStt[j][2],2);
 // ECAL:
-		if ((rad2>=40000.&&rad2<50200.) || (std::abs(PosOuStt[j][0])>=169. && std::abs(PosOuStt[j][0])<205.)) {
+		if (((rad2>=40000.&&rad2<50625.) || (std::abs(PosOuStt[j][0])>=169.)) && std::abs(PosOuStt[j][0])<216.) {
 
 			TG4HitSegment hit;
 			TG4HitSegment::Contributors Contrib;
@@ -173,12 +173,12 @@ void FillSegmentDetectors(std::map<std::string, std::vector<TG4HitSegment> >& de
 
 	dest.clear();
 
-	std::string det = "STT";
+	std::string det = "Straw";
 	int iflag = 1;
 	int entries_stt = 0;
 	SummarizeHitSegments(dest[det], SttHits, ientry, entries_stt, iflag);
 //
-	det = "ECAL";
+	det = "EMCalSci";
 	iflag = 2;
 	int entries_ecal = 0;
 	SummarizeHitSegments(dest[det], SttHits, ientry, entries_ecal, iflag);
