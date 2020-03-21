@@ -12,7 +12,7 @@ TTree* gEDepSimTree = NULL;
 TG4Event* gEDepSimEvent = NULL;
 bool flukafile=true; //put true to read Provadep.root
 bool traj=true;      //put true to read trajectories
-bool segm=false;      //put true to read segment	
+bool segm=true;      //put true to read segment	
 //TH1F* PosX;
 
 void readEDepSim() {
@@ -56,9 +56,11 @@ void EDepSimDumpEvent() {
 		std::cout << "Event not available" << std::endl;
 	}
 
-	std::cout << " event " << event->EventId;
+	std::cout << " " << event->EventId;
+	std::cout << " >event " << event->EventId;
 	std::cout << " primaries " << event->Primaries.size();
 	std::cout << " trajectories " << event->Trajectories.size();
+	std::cout << " segment-detectors " << event->SegmentDetectors.size();
 	std::cout << std::endl;
 	std::cout << "Analyzing PRIMARIES "<<std::endl;
 
@@ -124,7 +126,7 @@ void EDepSimDumpEvent() {
 				std::cout << " PrimaryId: " << h->PrimaryId;
 				std::cout << " EnergyDeposit: " << h->EnergyDeposit;
 				//std::cout << " S: " << h->SecondaryDeposit;
-				std::cout << " Contrib: " << h->Contrib.size();
+				std::cout << " Contrib: " << h->Contrib.size()<<" ["<<h->Contrib[0]<<"] ";
 				std::cout << " Track Length: " << h->TrackLength;
 				std::cout << std::endl;
 				if ((--count) < 1) break;
