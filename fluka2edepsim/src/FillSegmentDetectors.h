@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <math.h>
+#include "utils.h"
 
 void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev, int entries, int idet) {
 
@@ -62,15 +63,13 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			hit.TrackLength = segLen;
 
 			(hit.Contrib).push_back(TrStt[j]);
-
-			hit.Start.SetXYZT(PosInStt[j][0],
-					PosInStt[j][1] -238.473,
-					PosInStt[j][2] +2391.0,
-					TimeStt[j]);
-        		hit.Stop.SetXYZT(PosOuStt[j][0],
-					PosOuStt[j][1] -238.473,
-					PosOuStt[j][2] +2391.0,
-					TimeStt[j]);
+			
+			TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]);
+			TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]);
+			
+			hit.Start=GeneralCoordinates(pos_in);
+        		hit.Stop=GeneralCoordinates(pos_out);
+			
 			NSttHits++;
 //
                 	if (segLen == 0.0) {
