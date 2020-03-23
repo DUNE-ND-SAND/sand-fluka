@@ -67,8 +67,8 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]);
 			TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]);
 			
-			hit.Start=GeneralCoordinates(pos_in);
-        		hit.Stop=GeneralCoordinates(pos_out);
+			hit.Start=GlobalCoordinates(pos_in);
+        		hit.Stop=GlobalCoordinates(pos_out);
 			
 			NSttHits++;
 //

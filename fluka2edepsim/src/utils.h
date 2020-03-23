@@ -1,5 +1,7 @@
+#ifndef test
+#define test
 
-TLorentzVector GeneralCoordinates(TLorentzVector pos){
+TLorentzVector GlobalCoordinates(TLorentzVector pos){
 	TLorentzVector finalpos;
 	finalpos.SetXYZT(pos.X(),
 			pos.Y() -238.473,
@@ -7,3 +9,4 @@ TLorentzVector GeneralCoordinates(TLorentzVector pos){
 			pos.T());
 	return finalpos;
 }
+#endif

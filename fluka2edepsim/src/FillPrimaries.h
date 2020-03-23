@@ -1,5 +1,6 @@
 #include "TTree.h"
 #include <iostream>
+#include "utils.h"
 
 void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *mytree, int entry) {
 	dest.clear();
@@ -87,11 +88,10 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *mytree, int entry
 
 	std::cout<<"evenum "<<EveNum<<std::endl;
 	std::cout<<"Vertex coord "<<Vertex[0]<<" "<<Vertex[1]<<" "<<Vertex[2]<<std::endl;
+	
+	TLorentzVector vertex(Vertex[0],Vertex[1],Vertex[2],0.0);            //in fluka all events are at T=0
 
-	vtx.Position.SetX(Vertex[0]);
-	vtx.Position.SetY(Vertex[1]);
-	vtx.Position.SetZ(Vertex[2]);
-	vtx.Position.SetT(0);             //in fluka all events are at T=0
+	vtx.Position=GlobalCoordinates(vertex); 
 
 	int NParticle=NumLep+NumPhot+NumHeavy+NumHad;
 
