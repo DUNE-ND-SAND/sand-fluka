@@ -28,6 +28,8 @@ endif
 
 #------------------------------------------------------------------------------
 
+LIBS += -lEG
+
 VPATH 		 =../src/
 
 TG4EVENTO        = TG4Event.$(ObjSuf) TG4EventDict.$(ObjSuf)

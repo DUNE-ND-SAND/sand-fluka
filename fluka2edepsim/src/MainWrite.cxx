@@ -2,6 +2,10 @@
 #include "TFile.h"
 #include "TH1F.h"
 #include "TG4Event.h"
+#include "TNamed.h"
+#include "TDatabasePDG.h"
+#include "THashList.h"
+//#include "TParticlePDG.h"
 //#include "FillPrimaries.h"
 //#include "FillTrajectories.h"
 

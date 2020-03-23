@@ -6,7 +6,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree) {
         // Making another container to appened the unordered Info
         std::map<Int_t,Float_t> TrInDest;
 	TG4Trajectory *tx = 0;
-        
 
 	for (int j=0; j< NIncHits; j++) {
                 std::cout<< " TrInc : "<<j <<" "<< TrInc[j] <<std::endl;	
@@ -33,9 +32,16 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree) {
 				tx->TrackId  = TrInc[j];
 				tx->ParentId = IdParInc[j];
 				tx->PDGCode  = IdInc[j];
-                                std::cout<< " ********** Track Id ***********"<< tx->TrackId<<std::endl;
+                                if (TDatabasePDG::Instance()->GetParticle(IdInc[j])){
+                                    tx->Name     = TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
+                                }
+                                else {tx->Name = "Unkown";}
+                                //TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
+                                //std::cout<< " Number of entries in partcile list : "<< TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName()<<std::endl;
+                                //std::cout<< " ********** Name      ************ "<< Name.GetParticle(tx->PDGCode)->GetName() <<std::endl;
+                                std::cout<< " ********** Track Id  ***********"<< tx->TrackId<<std::endl;
+                                std::cout<< " ********** PDG Code  ***********"<< tx->PDGCode<<std::endl;
                                 std::cout<< " ********** Parent Id ***********"<< tx->ParentId<<std::endl;
-                                std::cout<< " ********** PDG Code ***********"<< tx->PDGCode<<std::endl;
 				//tx->Name = "prova";
 				//tx->PDGCode= 10;
 
