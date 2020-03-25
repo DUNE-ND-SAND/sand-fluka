@@ -56,15 +56,17 @@ void loadEDepSim() {
     }
     
     // Dynamically load the event tree definition
+    std::cout<<"lancio MakeProject"<<std::endl;	
     gFile->MakeProject("EDepSimEvents","*","recreate++");
     // Add the directory of this file to the macro path.
+    std::cout<<"ecco il path "<<thisFileDirectory.c_str()<<std::endl;	
     gSystem->AddIncludePath(("-I"+thisFileDirectory+"/EDepSimEvents").c_str());
 
     // Get the geometry.
     gFile->Get("EDepSimGeometry");
 
     // Load the rest of the tools.
-    gROOT->ProcessLine(".x readEDepSim.C+");
+//    gROOT->ProcessLine(".x readEDepSim.C+");
     //gROOT->ProcessLine(".x plotEDepSim.C+");
 
 }

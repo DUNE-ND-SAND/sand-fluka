@@ -1,4 +1,15 @@
-2-3-2020
+25-3-2020
+
+
+-- for downloading the code
+git clone git@baltig.infn.it:dune/sand-fluka.git
+
+--for going to the right work folder
+cd sand-fluka/fluka2edepsim
+
+
+
+-----fluka2edepsim code description------------------------------------------
 
 In src/ folder there are the files .cxx and .h for MainWrite program.
 MainWrite program read a fluka file and convert the data in the EDepSim format output.
@@ -10,6 +21,22 @@ make (in this way the .o and the TG4Event.so library is produced)
 to run
 ./Main
 in this way a default fluka file is converted in a Provadep.root file
+
+
+
+--for reading an edepsim file------------------------------------------------------------------------------------
+
+root -q /eos/user/l/ldinoto/Edepsim_file/ECALSTT_FHC_Horn1Y_r1_001_5e16.200102.edep.root loadEDepSim.C readEdepSim.C++
+
+with loadEDepSim.C the software generates each time the library for a typical EDepSim File (I give him the ECALSTT...root file so we are sure it is right and the library is well generated)
+
+then readEDepSim.C macro is called by loadEDepSim  and a file (ECALSTT..... or Provadep.root accordingly to the variable flukafile=true or false in readEDepSim.C) is read.
+
+By readEDepSim.C macro the Primaries, the Trajectories and the Segment object are read and some infos are printed out.
+
+
+
+
 
 
 /////////////////////////////////////////////////////////////////////////
