@@ -30,12 +30,13 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree) {
 			}else{
 				tx           = new TG4Trajectory;
 				tx->TrackId  = TrInc[j];
-				tx->ParentId = IdParInc[j];
+				//tx->ParentId = IdParInc[j];
+				tx->ParentId = LatStt[j];
 				tx->PDGCode  = IdInc[j];
                                 if (TDatabasePDG::Instance()->GetParticle(IdInc[j])){
                                     tx->Name     = TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
                                 }
-                                else {tx->Name = "Unkown";}
+                                else {tx->Name = "Ion";}
                                 //TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
                                 //std::cout<< " Number of entries in partcile list : "<< TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName()<<std::endl;
                                 //std::cout<< " ********** Name      ************ "<< Name.GetParticle(tx->PDGCode)->GetName() <<std::endl;

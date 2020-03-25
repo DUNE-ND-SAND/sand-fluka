@@ -18,7 +18,7 @@ const int MaxNTr    = 10000; //Max Number of hits
 //Global variables
 Int_t  NumTracks, IdTrck[MaxNTr], NumLep, IdLep[MaxNLep], TrLep[MaxNLep], NumHad, IdHad[MaxNHad], TrHad[MaxNHad], NumHeavy, IdHeavy[MaxNHeavy], TrHeavy[MaxNHeavy], NumPhot, IdPhot[MaxNPhot], TrPhot[MaxNPhot];
 Float_t P_Lep[MaxNLep]  , P_Had[MaxNHad], P_Heavy[MaxNHeavy], P_Phot[MaxNPhot];
-Int_t   RunNum, EveNum  , NIncHits, IdTrack     , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit];
+Int_t   RunNum, EveNum  , NIncHits, IdTrack , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit], LatStt[MaxNhit];
 Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
 Float_t PosInc[MaxNhit][3];
 
@@ -50,9 +50,10 @@ int  main() {
 
 	//Opening FLUKA FILE
 	
-	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_numu001_Out.root");
+	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_nocube_tr_numu_001_Out.root");
     	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
     	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
+    	TTree *SttTree = (TTree*)fInput->Get("SttTree");
         //HeaderTree Info
     	//**********************************************
         HeaderTree->SetBranchAddress("NumTracks",&NumTracks);
@@ -81,13 +82,17 @@ int  main() {
         //HitTree Info
         HitsTree->SetBranchAddress("RunNum",&RunNum);
         HitsTree->SetBranchAddress("EveNum",&EveNum);
-        HitsTree->SetBranchAddress("NIncHits",&NIncHits);             //Number of hits for each particles , Mc hit
+        HitsTree->SetBranchAddress("NIncHits",&NIncHits);   //Number of hits for each particles , Mc hit
         HitsTree->SetBranchAddress("IdInc",&IdInc);         //particle ID                       , Mc hit
         HitsTree->SetBranchAddress("IdParInc",&IdParInc);   //Parent ID                         , MC hit
+        //HitsTree->SetBranchAddress("ParTrInc",&ParTrInc);   //Parent ID                         , MC hit
         HitsTree->SetBranchAddress("TrInc",&TrInc);         //Track Num                         , MC hit
-        HitsTree->SetBranchAddress("PosInc",&PosInc);    //Position[3]   (x,y,z)             , Mc hit
-        HitsTree->SetBranchAddress("PInc",&PInc);        //Energy-Mom[5] (px,py,pz,E,P)      , Mc hit
+        HitsTree->SetBranchAddress("PosInc",&PosInc);       //Position[3]   (x,y,z)             , Mc hit
+        HitsTree->SetBranchAddress("PInc",&PInc);           //Energy-Mom[5] (px,py,pz,E,P)      , Mc hit
         HitsTree->SetBranchAddress("TimeInc",&TimeInc);     //Time                              , Mc hit
+    	//*************************************************
+        //SttTree Info
+        SttTree->SetBranchAddress("LatStt",&LatStt);        //Last Parent of the particle                    
         /*
 	Int_t fRun,fEvent;
     	Float_t fx,fy,fz;
