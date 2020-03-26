@@ -56,7 +56,8 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			TG4HitSegment hit;
 			TG4HitSegment::Contributors Contrib;
 		
-			hit.PrimaryId = IdStt[j];
+			hit.PrimaryId = IdParStt[j];
+			if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = IdStt[j];
 			hit.EnergyDeposit = EdepStt[j];
 			hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 			float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
@@ -68,15 +69,15 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]);
 			
 			hit.Start=GlobalCoordinates(pos_in);
-        		hit.Stop=GlobalCoordinates(pos_out);
+        	hit.Stop=GlobalCoordinates(pos_out);
 			
 			NSttHits++;
 //
-                	if (segLen == 0.0) {
-	         	  std::cout<<" ... hit-Loop .. segLen: "<<segLen<<" ... j: "<<j<<std::endl;
-		 	  std::cout<<" ... xin: "<<PosInStt[j][0]<<" yin: "<<PosInStt[j][1]<<" zin: "<<PosInStt[j][2]<<std::endl;
-		 	  std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
-	        	}
+            if (segLen == 0.0) {
+	            std::cout<<" ... hit-Loop .. segLen: "<<segLen<<" ... j: "<<j<<std::endl;
+		 	    std::cout<<" ... xin: "<<PosInStt[j][0]<<" yin: "<<PosInStt[j][1]<<" zin: "<<PosInStt[j][2]<<std::endl;
+		 	    std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
+	        }
 //
 			dest.push_back(hit);
 		}
@@ -93,7 +94,8 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			TG4HitSegment hit;
 			TG4HitSegment::Contributors Contrib;
 		
-			hit.PrimaryId = IdStt[j];
+			hit.PrimaryId = IdParStt[j];
+			if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = IdStt[j];
 			hit.EnergyDeposit = EdepStt[j];
 			hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 			float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
@@ -101,21 +103,19 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 
 			(hit.Contrib).push_back(TrStt[j]);
 
-			hit.Start.SetXYZT(PosInStt[j][0],
-					PosInStt[j][1] -238.473,
-					PosInStt[j][2] +2391.0,
-					TimeStt[j]);
-        		hit.Stop.SetXYZT(PosOuStt[j][0],
-					PosOuStt[j][1] -238.473,
-					PosOuStt[j][2] +2391.0,
-					TimeStt[j]);
+			TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]);
+			TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]);
+
+			hit.Start=GlobalCoordinates(pos_in);
+        	hit.Stop=GlobalCoordinates(pos_out);
+
 			NCalHits++;
 //
-                	if (segLen == 0.0) {
-	          	  std::cout<<" ... hit-Loop .. segLen: "<<segLen<<" ... j: "<<j<<std::endl;
-		  	  std::cout<<" ... xin: "<<PosInStt[j][0]<<" yin: "<<PosInStt[j][1]<<" zin: "<<PosInStt[j][2]<<std::endl;
-		  	  std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
-	        	}
+            if (segLen == 0.0) {
+	            std::cout<<" ... hit-Loop .. segLen: "<<segLen<<" ... j: "<<j<<std::endl;
+		  	    std::cout<<" ... xin: "<<PosInStt[j][0]<<" yin: "<<PosInStt[j][1]<<" zin: "<<PosInStt[j][2]<<std::endl;
+		  	    std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
+	        }
 //
 			dest.push_back(hit);
 		}
@@ -143,7 +143,9 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 		TG4HitSegment hit;
 		TG4HitSegment::Contributors Contrib;
 		
-		hit.PrimaryId = IdCell[j];
+		//hit.PrimaryId = IdCell[j];
+		hit.PrimaryId = IdParCell[j];
+		
 		hit.EnergyDeposit = EdepCell[j];
 		hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 		float segLen = 0.0;
@@ -151,14 +153,12 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 
 		(hit.Contrib).push_back(IdParCell[j]);
 
-		hit.Start.SetXYZT(PosCell[j][0],
-				PosCell[j][1] -238.473,
-				PosCell[j][2] +2391.0,
-				TimeCell[j]);
-        	hit.Stop.SetXYZT(PosCell[j][0],
-				PosCell[j][1] -238.473,
-				PosCell[j][2] +2391.0,
-				TimeCell[j]);
+		TLorentzVector pos_in(PosCell[j][0],PosCell[j][1],PosCell[j][2],TimeStt[j]);
+		TLorentzVector pos_out(PosCell[j][0],PosCell[j][1],PosCell[j][2],TimeStt[j]);
+
+		hit.Start=GlobalCoordinates(pos_in);
+        hit.Stop=GlobalCoordinates(pos_out);
+
 		NDetHits++;
 		dest.push_back(hit);
 	}
