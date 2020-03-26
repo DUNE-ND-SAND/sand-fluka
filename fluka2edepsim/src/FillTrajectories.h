@@ -1,5 +1,24 @@
-void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree) {
-	dest.clear();
+void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, TTree *SttTree,  int iEntry) {
+       //Variables
+       Int_t   RunNum, EveNum  , NIncHits, IdTrack , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit], LatStt[MaxNhit];
+       Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
+       Float_t PosInc[MaxNhit][3];
+       //HitTree Info
+        HitsTree->SetBranchAddress("RunNum",&RunNum);
+        HitsTree->SetBranchAddress("EveNum",&EveNum);
+        HitsTree->SetBranchAddress("NIncHits",&NIncHits);   //Number of hits for each particles , Mc hit
+        HitsTree->SetBranchAddress("IdInc",&IdInc);         //particle ID                       , Mc hit
+        HitsTree->SetBranchAddress("IdParInc",&IdParInc);   //Parent ID                         , MC hit
+        //HitsTree->SetBranchAddress("ParTrInc",&ParTrInc);   //Parent ID                         , MC hit
+        HitsTree->SetBranchAddress("TrInc",&TrInc);         //Track Num                         , MC hit
+        HitsTree->SetBranchAddress("PosInc",&PosInc);       //Position[3]   (x,y,z)             , Mc hit
+        HitsTree->SetBranchAddress("PInc",&PInc);           //Energy-Mom[5] (px,py,pz,E,P)      , Mc hit
+        HitsTree->SetBranchAddress("TimeInc",&TimeInc);     //Time                              , Mc hit
+    	//*************************************************
+        //SttTree Info
+        SttTree->SetBranchAddress("LatStt",&LatStt);        //Last Parent of the particle 	
+        dest.clear();
+        HitsTree->GetEntry(iEntry);
         // HeaderTree->GetEntries();  FIXME
         // ntrack->GetEntries()
 	Double_t PrTrInc = -1;

@@ -16,11 +16,11 @@ const int MaxNHeavy = 10000; //Max Number of hits
 const int MaxNPhot  = 10000; //Max Number of hits
 const int MaxNTr    = 10000; //Max Number of hits
 //Global variables
-Int_t  NumTracks, IdTrck[MaxNTr], NumLep, IdLep[MaxNLep], TrLep[MaxNLep], NumHad, IdHad[MaxNHad], TrHad[MaxNHad], NumHeavy, IdHeavy[MaxNHeavy], TrHeavy[MaxNHeavy], NumPhot, IdPhot[MaxNPhot], TrPhot[MaxNPhot];
+Int_t  IdTrack, NumTracks, IdTrck[MaxNTr], NumLep, IdLep[MaxNLep], TrLep[MaxNLep], NumHad, IdHad[MaxNHad], TrHad[MaxNHad], NumHeavy, IdHeavy[MaxNHeavy], TrHeavy[MaxNHeavy], NumPhot, IdPhot[MaxNPhot], TrPhot[MaxNPhot];
 Float_t P_Lep[MaxNLep]  , P_Had[MaxNHad], P_Heavy[MaxNHeavy], P_Phot[MaxNPhot];
-Int_t   RunNum, EveNum  , NIncHits, IdTrack , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit], LatStt[MaxNhit];
-Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
-Float_t PosInc[MaxNhit][3];
+//Int_t   RunNum, EveNum  , NIncHits, IdTrack , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit], LatStt[MaxNhit];
+//Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
+//Float_t PosInc[MaxNhit][3];
 
 TH1F* PosX;
 #include "FillPrimaries.h"
@@ -79,20 +79,7 @@ int  main() {
         HeaderTree->SetBranchAddress("TrPhot",&TrPhot);
         HeaderTree->SetBranchAddress("P_Phot",&P_Phot);
     	//*************************************************
-        //HitTree Info
-        HitsTree->SetBranchAddress("RunNum",&RunNum);
-        HitsTree->SetBranchAddress("EveNum",&EveNum);
-        HitsTree->SetBranchAddress("NIncHits",&NIncHits);   //Number of hits for each particles , Mc hit
-        HitsTree->SetBranchAddress("IdInc",&IdInc);         //particle ID                       , Mc hit
-        HitsTree->SetBranchAddress("IdParInc",&IdParInc);   //Parent ID                         , MC hit
-        //HitsTree->SetBranchAddress("ParTrInc",&ParTrInc);   //Parent ID                         , MC hit
-        HitsTree->SetBranchAddress("TrInc",&TrInc);         //Track Num                         , MC hit
-        HitsTree->SetBranchAddress("PosInc",&PosInc);       //Position[3]   (x,y,z)             , Mc hit
-        HitsTree->SetBranchAddress("PInc",&PInc);           //Energy-Mom[5] (px,py,pz,E,P)      , Mc hit
-        HitsTree->SetBranchAddress("TimeInc",&TimeInc);     //Time                              , Mc hit
-    	//*************************************************
-        //SttTree Info
-        SttTree->SetBranchAddress("LatStt",&LatStt);        //Last Parent of the particle                    
+                          
         /*
 	Int_t fRun,fEvent;
     	Float_t fx,fy,fz;
@@ -132,10 +119,6 @@ int  main() {
 		pEvent->RunId = 0;
 		pEvent->EventId = i;
 		HeaderTree->GetEntry(i);
-		HitsTree->GetEntry(i);
-		std::cout<<"Event for run " << pEvent->RunId	<< " event " << pEvent->EventId<<std::endl;
-                std::cout<< " TrInc : "<< TrInc[0] <<std::endl;	
-                std::cout<< " TrInc : "<< TrInc[2] <<std::endl;	
 
 		// Summarize the trajectories first so that fTrackIdMap is filled.
 		//MarkTrajectories(event);
@@ -143,7 +126,7 @@ int  main() {
 		//FillPrimaries(pEvent->Primaries, HeaderTree);
 		//std::cout<<"   Primaries " << pEvent->Primaries.size()<<endl;
 
-		FillTrajectories(pEvent->Trajectories,HitsTree);
+		FillTrajectories(pEvent->Trajectories,HitsTree, SttTree, i);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
 
 		//FillSegmentDetectors(fEventSummary.SegmentDetectors, event);
