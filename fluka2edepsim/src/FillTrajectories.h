@@ -1,16 +1,32 @@
-void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree) {
-	dest.clear();
-	
+void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, TTree *SttTree,  int iEntry) {
+       //Variables
+       Int_t   RunNum, EveNum  , NIncHits, IdTrack , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit], LatStt[MaxNhit];
+       Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
+       Float_t PosInc[MaxNhit][3];
+       //HitTree Info
+        HitsTree->SetBranchAddress("RunNum",&RunNum);
+        HitsTree->SetBranchAddress("EveNum",&EveNum);
+        HitsTree->SetBranchAddress("NIncHits",&NIncHits);   //Number of hits for each particles , Mc hit
+        HitsTree->SetBranchAddress("IdInc",&IdInc);         //particle ID                       , Mc hit
+        HitsTree->SetBranchAddress("IdParInc",&IdParInc);   //Parent ID                         , MC hit
+        //HitsTree->SetBranchAddress("ParTrInc",&ParTrInc);   //Parent ID                         , MC hit
+        HitsTree->SetBranchAddress("TrInc",&TrInc);         //Track Num                         , MC hit
+        HitsTree->SetBranchAddress("PosInc",&PosInc);       //Position[3]   (x,y,z)             , Mc hit
+        HitsTree->SetBranchAddress("PInc",&PInc);           //Energy-Mom[5] (px,py,pz,E,P)      , Mc hit
+        HitsTree->SetBranchAddress("TimeInc",&TimeInc);     //Time                              , Mc hit
+    	//*************************************************
+        //SttTree Info
+        SttTree->SetBranchAddress("LatStt",&LatStt);        //Last Parent of the particle 	
+        dest.clear();
+        HitsTree->GetEntry(iEntry);
 	Double_t PrTrInc = -1;
         // Making another container to appened the unordered Info
         std::map<Int_t,Float_t> TrInDest;
 	TG4Trajectory *tx = 0;
-        
 
 	for (int j=0; j< NIncHits; j++) {
                 std::cout<< " TrInc : "<<j <<" "<< TrInc[j] <<std::endl;	
 		if(TrInc[j] != PrTrInc){
-                        //------- New
                         //If it doesnt find it --> add
                         if(tx != 0 && TrInDest.find(PrTrInc)==TrInDest.end()){
                         //if(tx != 0){
@@ -21,7 +37,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree) {
 				//break;
                         }
 			PrTrInc = TrInc[j];
-                        //------- New
                         //If it finds it let it be
 			if(TrInDest.find(TrInc[j])!=TrInDest.end()){
 				tx = &(dest[TrInDest[TrInc[j]]]);
@@ -30,11 +45,19 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree) {
 			}else{
 				tx           = new TG4Trajectory;
 				tx->TrackId  = TrInc[j];
-				tx->ParentId = IdParInc[j];
+				//tx->ParentId = IdParInc[j];
+				tx->ParentId = LatStt[j];
 				tx->PDGCode  = IdInc[j];
-                                std::cout<< " ********** Track Id ***********"<< tx->TrackId<<std::endl;
+                                if (TDatabasePDG::Instance()->GetParticle(IdInc[j])){
+                                    tx->Name     = TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
+                                }
+                                else {tx->Name = "Ion";}
+                                //TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
+                                //std::cout<< " Number of entries in partcile list : "<< TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName()<<std::endl;
+                                //std::cout<< " ********** Name      ************ "<< Name.GetParticle(tx->PDGCode)->GetName() <<std::endl;
+                                std::cout<< " ********** Track Id  ***********"<< tx->TrackId<<std::endl;
+                                std::cout<< " ********** PDG Code  ***********"<< tx->PDGCode<<std::endl;
                                 std::cout<< " ********** Parent Id ***********"<< tx->ParentId<<std::endl;
-                                std::cout<< " ********** PDG Code ***********"<< tx->PDGCode<<std::endl;
 				//tx->Name = "prova";
 				//tx->PDGCode= 10;
 

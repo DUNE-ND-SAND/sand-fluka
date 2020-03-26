@@ -2,6 +2,10 @@
 #include "TFile.h"
 #include "TH1F.h"
 #include "TG4Event.h"
+#include "TNamed.h"
+#include "TDatabasePDG.h"
+#include "THashList.h"
+//#include "TParticlePDG.h"
 //#include "FillPrimaries.h"
 //#include "FillTrajectories.h"
 
@@ -12,11 +16,11 @@ const int MaxNHeavy = 10000; //Max Number of hits
 const int MaxNPhot  = 10000; //Max Number of hits
 const int MaxNTr    = 10000; //Max Number of hits
 //Global variables
-//Int_t  NumTracks, IdTrack[MaxNTr], NumLep, IdLep[MaxNLep], TrLep[MaxNLep], NumHad, IdHad[MaxNHad], TrHad[MaxNHad], NumHeavy, IdHeavy[MaxNHeavy], TrHeavy[MaxNHeavy], NumPhot, IdPhot[MaxNPhot], TrPhot[MaxNPhot];
+//Int_t  IdTrack, NumTracks, IdTrck[MaxNTr], NumLep, IdLep[MaxNLep], TrLep[MaxNLep], NumHad, IdHad[MaxNHad], TrHad[MaxNHad], NumHeavy, IdHeavy[MaxNHeavy], TrHeavy[MaxNHeavy], NumPhot, IdPhot[MaxNPhot], TrPhot[MaxNPhot];
 //Float_t P_Lep[MaxNLep]  , P_Had[MaxNHad], P_Heavy[MaxNHeavy], P_Phot[MaxNPhot];
-Int_t   RunNum, EveNum  , NIncHits, IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit];
-Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
-Float_t PosInc[MaxNhit][3];
+//Int_t   RunNum, EveNum  , NIncHits, IdTrack , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit], LatStt[MaxNhit];
+//Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
+//Float_t PosInc[MaxNhit][3];
 
 TH1F* PosX;
 #include "FillPrimaries.h"
@@ -35,23 +39,13 @@ int  main() {
 
 	//Opening FLUKA FILE
 	
-	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_numu001_Out.root");
+	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_nocube_tr_numu_001_Out.root");
     	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
     	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
-	    TTree *SttTree = (TTree*)fInput->Get("SttTree");
-	    TTree *CellTree = (TTree*)fInput->Get("CellTree");
+        TTree *SttTree = (TTree*)fInput->Get("SttTree");
+	TTree *CellTree = (TTree*)fInput->Get("CellTree");
     	
 	//*************************************************
-        //HitTree Info
-        HitsTree->SetBranchAddress("RunNum",&RunNum);
-        HitsTree->SetBranchAddress("EveNum",&EveNum);
-        HitsTree->SetBranchAddress("NIncHits",&NIncHits);             //Number of hits for each particles , Mc hit
-        HitsTree->SetBranchAddress("IdInc",&IdInc);         //particle ID                       , Mc hit
-        HitsTree->SetBranchAddress("IdParInc",&IdParInc);   //Parent ID                         , MC hit
-        HitsTree->SetBranchAddress("TrInc",&TrInc);         //Track Num                         , MC hit
-        HitsTree->SetBranchAddress("PosInc",&PosInc);    //Position[3]   (x,y,z)             , Mc hit
-        HitsTree->SetBranchAddress("PInc",&PInc);        //Energy-Mom[5] (px,py,pz,E,P)      , Mc hit
-        HitsTree->SetBranchAddress("TimeInc",&TimeInc);     //Time                              , Mc hit
 
 	//Opening EDEPSIM OUTPUT FILE	
 	fOutput = TFile::Open("Provadep.root", "RECREATE", "EDepSim Root Output");
@@ -76,15 +70,12 @@ int  main() {
 		pEvent->EventId = i;
 		
 		std::cout<<"Event for run " << pEvent->RunId	<< " event " << pEvent->EventId<<std::endl;
-                std::cout<< " TrInc : "<< TrInc[0] <<std::endl;	
-                std::cout<< " TrInc : "<< TrInc[2] <<std::endl;	
 
 		FillPrimaries(pEvent->Primaries, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
-		HitsTree->GetEntry(i);
 	
-		FillTrajectories(pEvent->Trajectories,HitsTree);
+		FillTrajectories(pEvent->Trajectories,HitsTree, SttTree, i);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
 
 		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
