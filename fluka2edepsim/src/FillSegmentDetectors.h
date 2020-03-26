@@ -57,7 +57,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			TG4HitSegment::Contributors Contrib;
 		
 			hit.PrimaryId = IdParStt[j];
-			if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = IdStt[j];
+			if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = TrStt[j];
 			hit.EnergyDeposit = EdepStt[j];
 			hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 			float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
@@ -95,7 +95,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			TG4HitSegment::Contributors Contrib;
 		
 			hit.PrimaryId = IdParStt[j];
-			if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = IdStt[j];
+			if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = TrStt[j];
 			hit.EnergyDeposit = EdepStt[j];
 			hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 			float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
