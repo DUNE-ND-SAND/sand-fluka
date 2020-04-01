@@ -73,8 +73,9 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEn
 		// Make sure they are ordered...etc ...see code /src/EDepSimPersistencyManager.cc at line 437
 		TG4TrajectoryPoint point;
 		PosX->Fill(PosInc[j][0]);
+                TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosInc[j][0], PosInc[j][1], PosInc[j][2], TimeInc[j]));
 
-		point.Position.SetXYZT(PosInc[j][0], PInc[j][1], PInc[j][2], TimeInc[j]);
+		point.Position.SetXYZT(pos.X(), pos.Y(), pos.Z(), pos.T());
 		point.Momentum.SetXYZ (PInc[j][0], PInc[j][1], PInc[j][2]);
 	        //std::cout<< " Pos(x) , Pos(y) , Pos(z) , Time : "<< PosInc[j][0]<<" , "<< PosInc[j][1] <<" , "<<PosInc[j][2]<<" , "<< TimeInc[j]<<std::endl; 
                 //std::cout<< " Px  , Py , Pz : "<< PInc[j][0] <<" , "<< PInc[j][1] <<" , "<< PInc[j][2] <<std::endl;	
