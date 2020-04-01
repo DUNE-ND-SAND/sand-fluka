@@ -5,6 +5,7 @@
 #include "TNamed.h"
 #include "TDatabasePDG.h"
 #include "THashList.h"
+#include "utils.h"
 //#include "TParticlePDG.h"
 //#include "FillPrimaries.h"
 //#include "FillTrajectories.h"
@@ -75,7 +76,7 @@ int  main() {
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
 	
-		FillTrajectories(pEvent->Trajectories,HitsTree, SttTree, i);
+		FillTrajectories(pEvent->Trajectories, HitsTree, i);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
 
 		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
