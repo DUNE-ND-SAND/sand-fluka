@@ -10,10 +10,10 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	dest.clear();
 
 	const int NhitMax=50000, NCellMax=50000;
-	Int_t NStt;
+	//Int_t NStt;
 	Int_t IdStt[NhitMax];
 	Int_t IdParStt[NhitMax];
-	Int_t TrStt[NhitMax];
+	//Int_t TrStt[NhitMax];
 	Int_t IntParStt[NhitMax];
 	Int_t RegStt[NhitMax];
 	Float_t PosInStt[NhitMax][3];

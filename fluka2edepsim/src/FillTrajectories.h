@@ -1,6 +1,7 @@
 void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEntry) {
        //Variables
-       Int_t   RunNum, EveNum  , NIncHits, IdInc[MaxNhit], TrInc[MaxNhit], ParTrInc[MaxNhit];
+       Int_t   RunNum, EveNum  , IdInc[MaxNhit], ParTrInc[MaxNhit];
+       //Int_t   TrInc[MaxNhit];
        Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
        Float_t PosInc[MaxNhit][3];
        //Int_t IdParInc[MaxNhit], IdTrack;
@@ -33,7 +34,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEn
                         //if(tx != 0){
                                 TrInDest.insert(std::make_pair(PrTrInc,dest.size()));
 				dest.push_back(*tx);
-                                std::cout<<" ************* Track is not there ***********"<<std::endl;
+                                //std::cout<<" ************* Track is not there ***********"<<std::endl;
                                 std::cout<<dest.size()<<std::endl;
 				//break;
                         }
@@ -41,7 +42,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEn
                         //If it finds it let it be
 			if(TrInDest.find(TrInc[j])!=TrInDest.end()){
 				tx = &(dest[TrInDest[TrInc[j]]]);
-                                std::cout<<" ************* Track is there ***********"<<std::endl;
+                         //       std::cout<<" ************* Track is there ***********"<<std::endl;
                         //If it doesnt exist make it
 			}else{
 				tx           = new TG4Trajectory;

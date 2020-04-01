@@ -10,7 +10,7 @@
 //#include "FillPrimaries.h"
 //#include "FillTrajectories.h"
 
-const int MaxNhit   = 10000; //Max Number of hits
+const int MaxNhit   = 50000; //Max Number of hits
 const int MaxNLep   = 10000; //Max Number of hits
 const int MaxNHad   = 10000; //Max Number of hits
 const int MaxNHeavy = 10000; //Max Number of hits
@@ -22,11 +22,13 @@ const int MaxNTr    = 10000; //Max Number of hits
 //Int_t   RunNum, EveNum  , NIncHits, IdTrack , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit], LatStt[MaxNhit];
 //Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
 //Float_t PosInc[MaxNhit][3];
-
+Int_t NIncHits, NStt;
+Int_t   TrInc[MaxNhit], TrStt[MaxNhit];
 TH1F* PosX;
 #include "FillPrimaries.h"
 #include "FillTrajectories.h"
 #include "FillSegmentDetectors.h"
+#include "Check.h"
 
 int  main() {
 	/// The ROOT output file that events are saved into.
@@ -69,7 +71,6 @@ int  main() {
 	for(int i=0; i<NEVENT; i++){  
 		pEvent->RunId = 0;
 		pEvent->EventId = i;
-		
 		std::cout<<"Event for run " << pEvent->RunId	<< " event " << pEvent->EventId<<std::endl;
 
 		FillPrimaries(pEvent->Primaries, HeaderTree, i);
@@ -81,6 +82,8 @@ int  main() {
 
 		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
+                
+                Check();
 
 		fEventTree->Fill();
 		//break;
