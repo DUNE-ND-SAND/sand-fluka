@@ -2,14 +2,33 @@
 #define test2
 void  Check(){
 	bool check;
+	int  counter = 0;
+	std::vector<Int_t> st;
 	std::cout<< "Nhits From hitstree and Stttree: "<< NIncHits<< " , "<< NStt <<std::endl;
+
 	for (int i=0; i< NStt; i++){
 		check = false;
-		for(int j=0; j< NIncHits; j++){
-			if (TrInc[j] == TrStt[i]) check = true;;
+		for(int j=0; j< st.size(); j++){
+			if (st[j] == TrStt[i]){
+				check = true;
+			}
 		}
-		if (check != true) std::cout<<" Track Id is not consistent"<<std::endl;
+		if (!check)
+			st.push_back(TrStt[i]);
+		else  continue;
+		check = false;
+		for(int j=0; j< NIncHits; j++){
+			if (TrInc[j] == TrStt[i]){
+				check = true;
+			}
+		}
+                //std::cout<< "Track Id of Stt, Check : "<< TrStt[i]<< " , "<< check << std::endl;
+		if (!check){
+			counter ++;
+			std::cout<<"Warning! Track ID is not consistent"<<std::endl;
+		}
 		//else std::cout<<" Warning, Track Id is not consistent "<<std::endl;
 	}
+	std::cout<<" Number of Track Id Missing : "<< counter<<std::endl;
 }
 #endif
