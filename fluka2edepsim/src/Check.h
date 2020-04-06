@@ -25,10 +25,10 @@ void  Check(){
                 //std::cout<< "Track Id of Stt, Check : "<< TrStt[i]<< " , "<< check << std::endl;
 		if (!check){
 			counter ++;
-			std::cout<<"Warning! Track ID is not consistent"<<std::endl;
+			std::cout<<"Warning! The Track ID : "<<TrStt[i]<< " is missing in SttTree "<<std::endl;
 		}
 		//else std::cout<<" Warning, Track Id is not consistent "<<std::endl;
 	}
-	std::cout<<" Number of Track Id Missing : "<< counter<<std::endl;
+	std::cout<<" Total Number of Track ID Missing : "<< counter<<std::endl;
 }
 #endif
