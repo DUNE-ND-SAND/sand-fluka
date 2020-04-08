@@ -4,8 +4,9 @@ void  Check(){
 	bool check;
 	int  counter = 0;
 	std::vector<Int_t> st;
-	std::cout<< "Nhits From hitstree and Stttree: "<< NIncHits<< " , "<< NStt <<std::endl;
-
+	//std::cout<< "Nhits From hitstree and Stttree: "<< NIncHits<< " , "<< NStt <<std::endl;
+        
+	std::cout<<"Warning! The Following TrackId are missing in SttTree : "<<std::endl;
 	for (int i=0; i< NStt; i++){
 		check = false;
 		for(int j=0; j< st.size(); j++){
@@ -25,7 +26,7 @@ void  Check(){
                 //std::cout<< "Track Id of Stt, Check : "<< TrStt[i]<< " , "<< check << std::endl;
 		if (!check){
 			counter ++;
-			std::cout<<"Warning! The Track ID : "<<TrStt[i]<< " is missing in SttTree "<<std::endl;
+			std::cout<<" - - - - - -  :  "<<TrStt[i]<<std::endl;
 		}
 		//else std::cout<<" Warning, Track Id is not consistent "<<std::endl;
 	}
