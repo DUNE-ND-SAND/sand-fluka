@@ -28,6 +28,7 @@ TH1F* PosX;
 #include "FillPrimaries.h"
 #include "FillTrajectories.h"
 #include "FillSegmentDetectors.h"
+#include "Fillrootracker.h"
 #include "Check.h"
 
 int  main() {
@@ -57,6 +58,14 @@ int  main() {
         PosX = new TH1F("PosX","PosX",100,-250,250);
 	fEventTree = new TTree("EDepSimEvents",
 			"Energy Deposition for Simulated Events");
+        TTree *rootracker;
+	rootracker = new TTree("rootracker", "Genie Rootracker");
+	rootracker->Branch("EvtNum"    ,0, "EvtNum/I");
+	rootracker->Branch("StdHepN"   ,0, "StdHepN/I");
+	rootracker->Branch("StdHepPdg"     ,0,  "StdHepPdg[StdHepN]/I");
+	rootracker->Branch("StdHepP4"   ,0, "StdHepP4[StdHepN][4]/D");
+
+
 
 	TG4Event *pEvent=new TG4Event();
 	fEventTree->Branch("Event","TG4Event",&pEvent);
@@ -74,16 +83,17 @@ int  main() {
 		std::cout<<"Event for run " << pEvent->RunId	<< " event " << pEvent->EventId<<std::endl;
                 Check();
 
-		FillPrimaries(pEvent->Primaries, HeaderTree, i);
+		//FillPrimaries(pEvent->Primaries, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
 	
 		FillTrajectories(pEvent->Trajectories, HitsTree, i);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
 
-		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
+		//FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
-                
+
+                Fillrootracker(rootracker, HeaderTree, i); 
 
 		fEventTree->Fill();
 		//break;
