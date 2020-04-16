@@ -83,14 +83,14 @@ int  main() {
 		std::cout<<"Event for run " << pEvent->RunId	<< " event " << pEvent->EventId<<std::endl;
                 Check();
 
-		//FillPrimaries(pEvent->Primaries, HeaderTree, i);
+		FillPrimaries(pEvent->Primaries, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
 	
 		FillTrajectories(pEvent->Trajectories, HitsTree, i);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
 
-		//FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
+		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
 
                 Fillrootracker(rootracker, HeaderTree, i); 
