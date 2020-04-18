@@ -5,9 +5,10 @@ void  Check(){
 	int  counter = 0;
 	std::vector<Int_t> st;
 	//std::cout<< "Nhits From hitstree and Stttree: "<< NIncHits<< " , "<< NStt <<std::endl;
+	std::cout<< "Nhits From hitstree and Stttree: "<< NIncHits<< " , "<< NSttHits <<std::endl;
         
 	std::cout<<"Warning! The Following TrackId are missing in SttTree : "<<std::endl;
-	for (int i=0; i< NStt; i++){
+	for (int i=0; i< NSttHits; i++){
 		check = false;
 		for(int j=0; j< st.size(); j++){
 			if (st[j] == TrStt[i]){
