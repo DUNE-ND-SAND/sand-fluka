@@ -6,16 +6,17 @@
 #include "TDatabasePDG.h"
 #include "THashList.h"
 #include "utils.h"
+
 //#include "TParticlePDG.h"
 //#include "FillPrimaries.h"
 //#include "FillTrajectories.h"
 
 const int MaxNhit   = 50000; //Max Number of hits
-const int MaxNLep   = 10000; //Max Number of hits
-const int MaxNHad   = 10000; //Max Number of hits
-const int MaxNHeavy = 10000; //Max Number of hits
-const int MaxNPhot  = 10000; //Max Number of hits
-const int MaxNTr    = 10000; //Max Number of hits
+const int MaxN   = 1000; //Max Number of hits
+//const int MaxNHad   = 10000; //Max Number of hits
+//const int MaxNHeavy = 10000; //Max Number of hits
+//const int MaxNPhot  = 10000; //Max Number of hits
+//const int MaxNTr    = 10000; //Max Number of hits
 //Global variables
 //Int_t  IdTrack, NumTracks, IdTrck[MaxNTr], NumLep, IdLep[MaxNLep], TrLep[MaxNLep], NumHad, IdHad[MaxNHad], TrHad[MaxNHad], NumHeavy, IdHeavy[MaxNHeavy], TrHeavy[MaxNHeavy], NumPhot, IdPhot[MaxNPhot], TrPhot[MaxNPhot];
 //Float_t P_Lep[MaxNLep]  , P_Had[MaxNHad], P_Heavy[MaxNHeavy], P_Phot[MaxNPhot];
@@ -24,11 +25,11 @@ const int MaxNTr    = 10000; //Max Number of hits
 //Float_t PosInc[MaxNhit][3];
 Int_t NIncHits, NStt;
 Int_t   TrInc[MaxNhit], TrStt[MaxNhit];
-TH1F* PosX;
 #include "FillPrimaries.h"
 #include "FillTrajectories.h"
 #include "FillSegmentDetectors.h"
 #include "Check.h"
+#include "FillPProva.h"
 
 int  main() {
 	/// The ROOT output file that events are saved into.
@@ -42,7 +43,7 @@ int  main() {
 
 	//Opening FLUKA FILE
 	
-	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_nocube_tr_numu_001_Out.root");
+	TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/sand_numu001_Out.root");
     	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
     	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
         TTree *SttTree = (TTree*)fInput->Get("SttTree");
@@ -54,7 +55,6 @@ int  main() {
 	fOutput = TFile::Open("Provadep.root", "RECREATE", "EDepSim Root Output");
 	fOutput->cd();
 
-        PosX = new TH1F("PosX","PosX",100,-250,250);
 	fEventTree = new TTree("EDepSimEvents",
 			"Energy Deposition for Simulated Events");
 
@@ -66,18 +66,23 @@ int  main() {
 	int NEVENT=HeaderTree->GetEntries();
 	std::cout<<"Number of event to rewrite: "<<NEVENT<<std::endl;
 
-	NEVENT=3;	
+
+	//Int_t RunNum, EveNum;
+	//HeaderTree->SetBranchAddress("RunNum",&RunNum);
+        //HeaderTree->SetBranchAddress("EveNum",&EveNum);
+	
 	//scrivo dentro EDEPSIM
 	for(int i=0; i<NEVENT; i++){  
 		pEvent->RunId = 0;
 		pEvent->EventId = i;
-		std::cout<<"Event for run " << pEvent->RunId	<< " event " << pEvent->EventId<<std::endl;
-                Check();
-
-		FillPrimaries(pEvent->Primaries, HeaderTree, i);
+		std::cout<<"Run " << pEvent->RunId	<< " Event " << pEvent->EventId<<std::endl;
+//                Check();
+		//std::cout<<"chiamo il nuovo getentry "<<i<<std::endl;
+		//HeaderTree->GetEntry(i);
+		
+		//FillPrimaries(pEvent->Primaries, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
-	
 		FillTrajectories(pEvent->Trajectories, HitsTree, i);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
 
@@ -85,7 +90,7 @@ int  main() {
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
                 
 
-		fEventTree->Fill();
+//		fEventTree->Fill();
 		//break;
 	}
 	fOutput->Write();            // Write the file header

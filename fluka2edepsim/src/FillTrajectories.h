@@ -5,24 +5,26 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEn
        Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
        Float_t PosInc[MaxNhit][3];
        //Int_t IdParInc[MaxNhit], IdTrack;
-       //HitTree Info
+       
+	//HitTree Info
         HitsTree->SetBranchAddress("RunNum",&RunNum);
         HitsTree->SetBranchAddress("EveNum",&EveNum);
         HitsTree->SetBranchAddress("NIncHits",&NIncHits);   //Number of hits for each particles , Mc hit
         HitsTree->SetBranchAddress("IdInc",&IdInc);         //particle ID                       , Mc hit
         //HitsTree->SetBranchAddress("IdParInc",&IdParInc);   //Parent ID                         , MC hit
-        HitsTree->SetBranchAddress("ParTrInc",&ParTrInc);   //Parent ID                         , MC hit
+       // HitsTree->SetBranchAddress("ParTrInc",&ParTrInc);   //Parent ID                         , MC hit
         HitsTree->SetBranchAddress("TrInc",&TrInc);         //Track Num                         , MC hit
         HitsTree->SetBranchAddress("PosInc",&PosInc);       //Position[3]   (x,y,z)             , Mc hit
         HitsTree->SetBranchAddress("PInc",&PInc);           //Energy-Mom[5] (px,py,pz,E,P)      , Mc hit
         HitsTree->SetBranchAddress("TimeInc",&TimeInc);     //Time                              , Mc hit
     	//*************************************************
-        //SttTree Info
-        //SttTree->SetBranchAddress("LatStt",&LatStt);        //Last Parent of the particle 	
+        
         dest.clear();
-        HitsTree->GetEntry(iEntry);
+        
+	HitsTree->GetEntry(iEntry);
 	Double_t PrTrInc = -1;
-        // Making another container to appened the unordered Info
+        
+	// Making another container to appened the unordered Info
         std::map<Int_t,Float_t> TrInDest;
 	TG4Trajectory *tx = 0;
 
@@ -35,7 +37,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEn
                                 TrInDest.insert(std::make_pair(PrTrInc,dest.size()));
 				dest.push_back(*tx);
                                 //std::cout<<" ************* Track is not there ***********"<<std::endl;
-                                std::cout<<dest.size()<<std::endl;
+                                //std::cout<<dest.size()<<std::endl;
 				//break;
                         }
 			PrTrInc = TrInc[j];
@@ -57,9 +59,9 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEn
                                 //TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
                                 //std::cout<< " Number of entries in partcile list : "<< TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName()<<std::endl;
                                 //std::cout<< " ********** Name      ************ "<< Name.GetParticle(tx->PDGCode)->GetName() <<std::endl;
-                                std::cout<< " ********** Track Id  ***********"<< tx->TrackId<<std::endl;
-                                std::cout<< " ********** PDG Code  ***********"<< tx->PDGCode<<std::endl;
-                                std::cout<< " ********** Parent Id ***********"<< tx->ParentId<<std::endl;
+                                //std::cout<< " ********** Track Id  ***********"<< tx->TrackId<<std::endl;
+                                //std::cout<< " ********** PDG Code  ***********"<< tx->PDGCode<<std::endl;
+                                //std::cout<< " ********** Parent Id ***********"<< tx->ParentId<<std::endl;
 				//tx->Name = "prova";
 				//tx->PDGCode= 10;
 
@@ -73,7 +75,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEn
 		// Add the particles associated with the vertex to the summary.
 		// Make sure they are ordered...etc ...see code /src/EDepSimPersistencyManager.cc at line 437
 		TG4TrajectoryPoint point;
-		PosX->Fill(PosInc[j][0]);
                 TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosInc[j][0], PosInc[j][1], PosInc[j][2], TimeInc[j]));
 
 		point.Position.SetXYZT(pos.X(), pos.Y(), pos.Z(), pos.T());

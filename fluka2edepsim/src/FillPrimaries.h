@@ -1,47 +1,47 @@
 #include "TTree.h"
 #include <iostream>
 #include "utils.h"
+//extern MaxN;
 
 void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *mytree, int entry) {
 	dest.clear();
 
-	//std::cout<<"Numero elementi "<<dest.size()<<std::endl;
-
-
 	//---Branch of HeaderTree
+std::cout<<"Ci sono "<<std::endl;
+    	//*************************************************
+       
+	Int_t RunNum;
+	Int_t EveNum;
 
-	int RunNum;
-	int EveNum;
-
-	int IntType;
-	int ReacType;
+	Int_t IntType;
+	Int_t ReacType;
 
 	//int Primary=0;
-	float Vertex[3];
-	float P_Primary[5];
-	int NumTracks=0;
-	int IdTrack[1000]; 	
+	Float_t Vertex[3];
+	Float_t P_Primary[5];
+	Int_t NumTracks;
+	Int_t IdTrack[MaxN]; 	
 
-	int NumLep=0;
-	int NumPhot=0;
-	int NumHad=0;
-	int NumHeavy=0;
+	Int_t NumLep;
+	Int_t NumPhot;
+	Int_t NumHad;
+	Int_t NumHeavy;
 
-	int IdLep[100000];
-	int TrLep[1000];
-	float P_Lep[1000][5];
+	Int_t IdLep[MaxN];
+	Int_t TrLep[MaxN];
+	Float_t P_Lep[MaxN][5];
 
-	int IdHad[100000];
-	int TrHad[1000];
-	float P_Had[1000][5];
+	Int_t IdHad[MaxN];
+	Int_t TrHad[MaxN];
+	Float_t P_Had[MaxN][5];
 
-	int IdHeavy[1000];
-	int TrHeavy[1000];
-	float P_Heavy[1000][5];
+	Int_t IdHeavy[MaxN];
+	Int_t TrHeavy[MaxN];
+	Float_t P_Heavy[MaxN][5];
 
-	int IdPhot[1000];
-	int TrPhot[1000];
-	float P_Phot[1000][5];
+	Int_t IdPhot[MaxN];
+	Int_t TrPhot[MaxN];
+	Float_t P_Phot[MaxN][5];
 
 	//int TargZ=0;
 	//int TargA=0;
@@ -53,41 +53,46 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *mytree, int entry
 	mytree->SetBranchAddress("ReacType",&ReacType);
 	//mytree->SetBranchAddress("Primary",&Primary);
 
-	mytree->SetBranchAddress("Vertex",Vertex);
-	mytree->SetBranchAddress("P_Primary",P_Primary);
+	mytree->SetBranchAddress("Vertex",&Vertex);
+	mytree->SetBranchAddress("P_Primary",&P_Primary);
 	mytree->SetBranchAddress("NumTracks",&NumTracks);
-	mytree->SetBranchAddress("IdTrack",IdTrack);
+	mytree->SetBranchAddress("IdTrack",&IdTrack);
 
 	mytree->SetBranchAddress("NumLep",&NumLep);
 	mytree->SetBranchAddress("NumPhot",&NumPhot);
 	mytree->SetBranchAddress("NumHeavy",&NumHeavy);
 	mytree->SetBranchAddress("NumHad",&NumHad);
 
-	mytree->SetBranchAddress("IdHad",IdHad);
-	mytree->SetBranchAddress("TrHad",TrHad);
-	mytree->SetBranchAddress("P_Had",P_Had);
+	mytree->SetBranchAddress("IdHad",&IdHad);
+	mytree->SetBranchAddress("TrHad",&TrHad);
+	mytree->SetBranchAddress("P_Had",&P_Had);
 
-	mytree->SetBranchAddress("IdLep",IdLep);
-	mytree->SetBranchAddress("TrLep",TrLep);
-	mytree->SetBranchAddress("P_Lep",P_Lep);
+	mytree->SetBranchAddress("IdLep",&IdLep);
+	mytree->SetBranchAddress("TrLep",&TrLep);
+	mytree->SetBranchAddress("P_Lep",&P_Lep);
 
-	mytree->SetBranchAddress("IdPhot",IdPhot);
-	mytree->SetBranchAddress("TrPhot",TrPhot);
-	mytree->SetBranchAddress("P_Phot",P_Phot);
+	mytree->SetBranchAddress("IdPhot",&IdPhot);
+	mytree->SetBranchAddress("TrPhot",&TrPhot);
+	mytree->SetBranchAddress("P_Phot",&P_Phot);
 
-	mytree->SetBranchAddress("IdHeavy",IdHeavy);
-	mytree->SetBranchAddress("TrHeavy",TrHeavy);
-	mytree->SetBranchAddress("P_Heavy",P_Heavy);
+	mytree->SetBranchAddress("IdHeavy",&IdHeavy);
+	mytree->SetBranchAddress("TrHeavy",&TrHeavy);
+	mytree->SetBranchAddress("P_Heavy",&P_Heavy);
 
 	//mytree->SetBranchAddress("TargZ",&TargZ);
 	//mytree->SetBranchAddress("TargA",&TargA);
 
-	//for(int i=0; i<nentries; i++){
+	std::cout<<"Prima di getentry"<<entry<<std::endl;
+
 	mytree->GetEntry(entry);
+	std::cout<<"Dopo di getentry"<<std::endl;
+
+
 	TG4PrimaryVertex vtx;
 
+
 	std::cout<<"evenum "<<EveNum<<std::endl;
-	std::cout<<"Vertex coord "<<Vertex[0]<<" "<<Vertex[1]<<" "<<Vertex[2]<<std::endl;
+	//std::cout<<"Vertex coord "<<Vertex[0]<<" "<<Vertex[1]<<" "<<Vertex[2]<<std::endl;
 	
 	TLorentzVector vertex(Vertex[0],Vertex[1],Vertex[2],0.0);            //in fluka all events are at T=0
 
@@ -95,7 +100,13 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *mytree, int entry
 
 	int NParticle=NumLep+NumPhot+NumHeavy+NumHad;
 
-	std::cout<<"Number of particle in vertex "<<NParticle<<std::endl;
+	std::cout<<"NParticle "<<NParticle<<std::endl;
+	if(NumLep>MaxN || NumPhot>MaxN ||NumHad>MaxN || NumHeavy>MaxN) {
+		std::cout<<"ERROR on MAX number of MaxN10000"<<std::endl;
+		exit;
+	}
+
+	//std::cout<<"Number of particle in vertex "<<NParticle<<std::endl;
 	// Add the particles associated with the vertex to the summary.
 	TG4PrimaryParticle prim;
 
