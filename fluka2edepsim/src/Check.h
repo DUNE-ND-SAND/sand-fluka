@@ -10,7 +10,7 @@ void  Check(){
 	std::cout<<"Warning! The Following TrackId are missing in SttTree : "<<std::endl;
 	for (int i=0; i< NSttHits; i++){
 		check = false;
-		for(int j=0; j< st.size(); j++){
+		for(unsigned int j=0; j< st.size(); j++){
 			if (st[j] == TrStt[i]){
 				check = true;
 			}
