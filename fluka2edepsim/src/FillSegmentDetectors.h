@@ -72,13 +72,13 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
         	hit.Stop=GlobalCoordinates(pos_out);
 			
 			NSttHits++;
-//
+/*
             if (segLen == 0.0) {
 	            std::cout<<" ... hit-Loop .. segLen: "<<segLen<<" ... j: "<<j<<std::endl;
 		 	    std::cout<<" ... xin: "<<PosInStt[j][0]<<" yin: "<<PosInStt[j][1]<<" zin: "<<PosInStt[j][2]<<std::endl;
 		 	    std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
 	        }
-//
+*/
 			dest.push_back(hit);
 		}
 	    }
@@ -110,13 +110,13 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
         	hit.Stop=GlobalCoordinates(pos_out);
 
 			NCalHits++;
-//
+/*
             if (segLen == 0.0) {
 	            std::cout<<" ... hit-Loop .. segLen: "<<segLen<<" ... j: "<<j<<std::endl;
 		  	    std::cout<<" ... xin: "<<PosInStt[j][0]<<" yin: "<<PosInStt[j][1]<<" zin: "<<PosInStt[j][2]<<std::endl;
 		  	    std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
 	        }
-//
+*/
 			dest.push_back(hit);
 		}
 	    }
