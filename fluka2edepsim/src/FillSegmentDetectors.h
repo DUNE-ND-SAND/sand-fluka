@@ -49,7 +49,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
         //if (entries>100) entries = 100;  // for debug
 
 	if (idet==1) {
-	    int NSttHits = 0;
+	    NSttHits = 0;
 	    for(int j=0; j<NStt; j++){
 		float rad2 = pow(PosOuStt[j][1],2) + pow(PosOuStt[j][2],2);
 // STT:
