@@ -29,7 +29,6 @@ Int_t   TrInc[MaxNhit], TrStt[MaxNhit];
 #include "FillTrajectories.h"
 #include "FillSegmentDetectors.h"
 #include "Check.h"
-#include "FillPProva.h"
 
 int  main() {
 	/// The ROOT output file that events are saved into.
@@ -43,7 +42,7 @@ int  main() {
 
 	//Opening FLUKA FILE
 	
-	TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/sand_numu001_Out.root");
+	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_numu001_Out.root");
     	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
     	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
         TTree *SttTree = (TTree*)fInput->Get("SttTree");
@@ -80,7 +79,7 @@ int  main() {
 		//std::cout<<"chiamo il nuovo getentry "<<i<<std::endl;
 		//HeaderTree->GetEntry(i);
 		
-		//FillPrimaries(pEvent->Primaries, HeaderTree, i);
+		FillPrimaries(pEvent->Primaries, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
 		FillTrajectories(pEvent->Trajectories, HitsTree, i);
