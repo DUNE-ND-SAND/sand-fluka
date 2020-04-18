@@ -11,7 +11,7 @@
 //#include "FillPrimaries.h"
 //#include "FillTrajectories.h"
 
-const int MaxNhit   = 50000; //Max Number of hits
+const int MaxNhit   = 100000; //Max Number of hits
 const int MaxN   = 1000; //Max Number of hits
 //const int MaxNHad   = 10000; //Max Number of hits
 //const int MaxNHeavy = 10000; //Max Number of hits
@@ -29,7 +29,6 @@ Int_t   TrInc[MaxNhit], TrStt[MaxNhit];
 #include "FillTrajectories.h"
 #include "FillSegmentDetectors.h"
 #include "Check.h"
-#include "FillPProva.h"
 
 int  main() {
 	/// The ROOT output file that events are saved into.
@@ -38,12 +37,9 @@ int  main() {
 	/// The event tree that contains the output events.
 	TTree *fEventTree;
 
-	/// The number of events saved to the output file since the last write.
-//	int fEventsNotSaved;
-
 	//Opening FLUKA FILE
 	
-	TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/sand_numu001_Out.root");
+	TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/sand_testflags001_Out.root");
     	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
     	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
         TTree *SttTree = (TTree*)fInput->Get("SttTree");
@@ -61,26 +57,18 @@ int  main() {
 	TG4Event *pEvent=new TG4Event();
 	fEventTree->Branch("Event","TG4Event",&pEvent);
 
-	//fEventsNotSaved = 0;
-
 	int NEVENT=HeaderTree->GetEntries();
 	std::cout<<"Number of event to rewrite: "<<NEVENT<<std::endl;
 
 
-	//Int_t RunNum, EveNum;
-	//HeaderTree->SetBranchAddress("RunNum",&RunNum);
-        //HeaderTree->SetBranchAddress("EveNum",&EveNum);
-	
 	//scrivo dentro EDEPSIM
 	for(int i=0; i<NEVENT; i++){  
 		pEvent->RunId = 0;
 		pEvent->EventId = i;
 		std::cout<<"Run " << pEvent->RunId	<< " Event " << pEvent->EventId<<std::endl;
 //                Check();
-		//std::cout<<"chiamo il nuovo getentry "<<i<<std::endl;
-		//HeaderTree->GetEntry(i);
 		
-		//FillPrimaries(pEvent->Primaries, HeaderTree, i);
+		FillPrimaries(pEvent->Primaries, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
 		FillTrajectories(pEvent->Trajectories, HitsTree, i);
@@ -90,7 +78,7 @@ int  main() {
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
                 
 
-//		fEventTree->Fill();
+		fEventTree->Fill();
 		//break;
 	}
 	fOutput->Write();            // Write the file header

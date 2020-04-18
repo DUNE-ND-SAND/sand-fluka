@@ -1,13 +1,11 @@
 #include "TTree.h"
 #include <iostream>
 #include "utils.h"
-//extern MaxN;
 
 void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *mytree, int entry) {
 	dest.clear();
 
 	//---Branch of HeaderTree
-std::cout<<"Ci sono "<<std::endl;
     	//*************************************************
        
 	Int_t RunNum;

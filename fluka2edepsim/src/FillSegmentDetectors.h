@@ -5,11 +5,14 @@
 #include <math.h>
 #include "utils.h"
 
+
 void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev, int entries, int idet) {
 
 	dest.clear();
 
-	const int NhitMax=50000, NCellMax=50000;
+	const int NhitMax=MaxNhit;
+	const int NCellMax=MaxNhit;
+
 	//Int_t NStt;
 	Int_t IdStt[NhitMax];
 	Int_t IdParStt[NhitMax];
@@ -26,7 +29,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	Int_t NCells,IdCell[NCellMax],IdParCell[NCellMax];
 	Float_t PosCell[NCellMax][3],EdepCell[NCellMax],EdepQCell[NCellMax],TimeCell[NCellMax];
 //
-    std::cout<<"  ... in SummarizeHitSegments ... iev: "<<iev<<" ... Idet: "<<idet<<std::endl;
+//    std::cout<<"  ... in SummarizeHitSegments ... iev: "<<iev<<" ... Idet: "<<idet<<std::endl;
 		
     if (idet < 3) {
 	DetHits->SetBranchAddress("NStt",&NStt);
@@ -74,15 +77,15 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			NSttHits++;
 //
             if (segLen == 0.0) {
-	            std::cout<<" ... hit-Loop .. segLen: "<<segLen<<" ... j: "<<j<<std::endl;
-		 	    std::cout<<" ... xin: "<<PosInStt[j][0]<<" yin: "<<PosInStt[j][1]<<" zin: "<<PosInStt[j][2]<<std::endl;
-		 	    std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
+	            //std::cout<<" ... hit-Loop .. segLen: "<<segLen<<" ... j: "<<j<<std::endl;
+		 //	    std::cout<<" ... xin: "<<PosInStt[j][0]<<" yin: "<<PosInStt[j][1]<<" zin: "<<PosInStt[j][2]<<std::endl;
+		 //	    std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
 	        }
 //
 			dest.push_back(hit);
 		}
 	    }
-	    std::cout<<" STT> NSttHits: "<<NSttHits<<std::endl;
+	   // std::cout<<" STT> NSttHits: "<<NSttHits<<std::endl;
 	}
 	else if (idet==2) {
 	    int NCalHits = 0;
@@ -112,15 +115,15 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			NCalHits++;
 //
             if (segLen == 0.0) {
-	            std::cout<<" ... hit-Loop .. segLen: "<<segLen<<" ... j: "<<j<<std::endl;
-		  	    std::cout<<" ... xin: "<<PosInStt[j][0]<<" yin: "<<PosInStt[j][1]<<" zin: "<<PosInStt[j][2]<<std::endl;
-		  	    std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
+	            //std::cout<<" ... hit-Loop .. segLen: "<<segLen<<" ... j: "<<j<<std::endl;
+		  //	    std::cout<<" ... xin: "<<PosInStt[j][0]<<" yin: "<<PosInStt[j][1]<<" zin: "<<PosInStt[j][2]<<std::endl;
+		  //	    std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
 	        }
 //
 			dest.push_back(hit);
 		}
 	    }
-	    std::cout<<" ECAL> NCalHits: "<<NCalHits<<std::endl;
+	   // std::cout<<" ECAL> NCalHits: "<<NCalHits<<std::endl;
 	}
     }
     else if (idet==3) {
