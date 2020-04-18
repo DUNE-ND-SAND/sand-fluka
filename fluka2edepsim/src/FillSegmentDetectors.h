@@ -29,7 +29,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	Int_t NCells,IdCell[NCellMax],IdParCell[NCellMax];
 	Float_t PosCell[NCellMax][3],EdepCell[NCellMax],EdepQCell[NCellMax],TimeCell[NCellMax];
 //
-//    std::cout<<"  ... in SummarizeHitSegments ... iev: "<<iev<<" ... Idet: "<<idet<<std::endl;
+    //std::cout<<"  ... in SummarizeHitSegments ... iev: "<<iev<<" ... Idet: "<<idet<<std::endl;
 		
     if (idet < 3) {
 	DetHits->SetBranchAddress("NStt",&NStt);
@@ -85,7 +85,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			dest.push_back(hit);
 		}
 	    }
-	   // std::cout<<" STT> NSttHits: "<<NSttHits<<std::endl;
+	    //std::cout<<" STT> NSttHits: "<<NSttHits<<std::endl;
 	}
 	else if (idet==2) {
 	    int NCalHits = 0;
@@ -165,7 +165,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 		NDetHits++;
 		dest.push_back(hit);
 	}
-	std::cout<<" 3DST> NDetHits: "<<NDetHits<<std::endl;
+	//std::cout<<" 3DST> NDetHits: "<<NDetHits<<std::endl;
 //
     }
 //
