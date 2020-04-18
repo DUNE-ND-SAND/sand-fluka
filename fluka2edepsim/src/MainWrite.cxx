@@ -22,7 +22,7 @@ const int MaxNTr    = 10000; //Max Number of hits
 //Int_t   RunNum, EveNum  , NIncHits, IdTrack , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit], LatStt[MaxNhit];
 //Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
 //Float_t PosInc[MaxNhit][3];
-Int_t NIncHits, NStt;
+Int_t NIncHits, NStt, NSttHits;
 Int_t   TrInc[MaxNhit], TrStt[MaxNhit];
 TH1F* PosX;
 #include "FillPrimaries.h"
@@ -42,7 +42,8 @@ int  main() {
 
 	//Opening FLUKA FILE
 	
-	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_nocube_tr_numu_001_Out.root");
+	//TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_nocube_tr_numu_001_Out.root");
+ 	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_testflags001_Out.root");
     	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
     	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
         TTree *SttTree = (TTree*)fInput->Get("SttTree");
@@ -66,18 +67,19 @@ int  main() {
 	int NEVENT=HeaderTree->GetEntries();
 	std::cout<<"Number of event to rewrite: "<<NEVENT<<std::endl;
 
-	NEVENT=3;	
+	NEVENT=10;	
 	//scrivo dentro EDEPSIM
 	for(int i=0; i<NEVENT; i++){  
 		pEvent->RunId = 0;
 		pEvent->EventId = i;
+
+        std::cout<<"------------------------------------------------------------------"<<std::endl;
 		std::cout<<"Event for run " << pEvent->RunId	<< " event " << pEvent->EventId<<std::endl;
-                Check();
+        Check();
 
 		FillPrimaries(pEvent->Primaries, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
-	
 		FillTrajectories(pEvent->Trajectories, HitsTree, i);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
 
