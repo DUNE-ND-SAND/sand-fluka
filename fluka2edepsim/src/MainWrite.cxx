@@ -75,7 +75,6 @@ int  main() {
 
         std::cout<<"------------------------------------------------------------------"<<std::endl;
 		std::cout<<"Event for run " << pEvent->RunId	<< " event " << pEvent->EventId<<std::endl;
-        Check();
 
 		FillPrimaries(pEvent->Primaries, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
@@ -86,6 +85,7 @@ int  main() {
 		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
                 
+        Check();
 
 		fEventTree->Fill();
 		//break;
