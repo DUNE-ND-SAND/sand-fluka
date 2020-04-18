@@ -99,10 +99,6 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *mytree, int entry
 	int NParticle=NumLep+NumPhot+NumHeavy+NumHad;
 
 	std::cout<<"NParticle "<<NParticle<<std::endl;
-	if(NumLep>MaxN || NumPhot>MaxN ||NumHad>MaxN || NumHeavy>MaxN) {
-		std::cout<<"ERROR on MAX number of MaxN10000"<<std::endl;
-		exit;
-	}
 
 	//std::cout<<"Number of particle in vertex "<<NParticle<<std::endl;
 	// Add the particles associated with the vertex to the summary.

@@ -8,8 +8,6 @@
 #include "utils.h"
 
 //#include "TParticlePDG.h"
-//#include "FillPrimaries.h"
-//#include "FillTrajectories.h"
 
 const int MaxNhit   = 100000; //Max Number of hits
 const int MaxN   = 1000; //Max Number of hits
@@ -30,7 +28,16 @@ Int_t   TrInc[MaxNhit], TrStt[MaxNhit];
 #include "FillSegmentDetectors.h"
 #include "Check.h"
 
-int  main() {
+int main(int argc, char* argv[])
+{
+/*  TO BE USED FOR INPUT FROM CALL and OUTPUT with the name INPUT.fluka2edepsim.root
+	*
+	if(argc != 2){
+		std::cout<<"./Fluka2Edepsim <inputfile>"<<std::endl;
+	}
+	const char* finname=argv[1];
+	std::cout<<"Input file : "<<finname<<std::endl;
+*/
 	/// The ROOT output file that events are saved into.
 	TFile *fOutput;
 
@@ -38,20 +45,34 @@ int  main() {
 	TTree *fEventTree;
 
 	//Opening FLUKA FILE
-	
+
 	//TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_nocube_tr_numu_001_Out.root");
- 	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_testflags001_Out.root");
-	//TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/sand_testflags001_Out.root");
-    	
+	//TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_testflags001_Out.root");
+	TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/sand_testflags001_Out.root");  //FIXME to be deleted for general inputfile
+
 	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
-    	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
-        TTree *SttTree = (TTree*)fInput->Get("SttTree");
+	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
+	TTree *SttTree = (TTree*)fInput->Get("SttTree");
 	TTree *CellTree = (TTree*)fInput->Get("CellTree");
-    	
+
 	//*************************************************
+/*  TO BE USED FOR INPUT FROM CALL and OUTPUT with the name INPUT.fluka2edepsim.root
+	TFile *fInput = new TFile(finname);
+	char* name2=argv[1];
+
+	strtok(name2, ".");
+	std::string name3=name2;
+	std::string nameout=name3 + ".fluka2edep.root";
+
+	const char*foutname=nameout.c_str();
+	std::cout<<"Output file in "<<foutname<<std::endl;
+	
 
 	//Opening EDEPSIM OUTPUT FILE	
-	fOutput = TFile::Open("Provadep.root", "RECREATE", "EDepSim Root Output");
+	//fOutput = TFile::Open(foutname, "RECREATE", "EDepSim Root Output");  
+*/
+	fOutput = TFile::Open("Prova.fluka2edep.root", "RECREATE", "EDepSim Root Output");  //FIXME to be deleted for output = input.fluka2edep.root
+
 	fOutput->cd();
 
 	fEventTree = new TTree("EDepSimEvents",
@@ -69,8 +90,8 @@ int  main() {
 		pEvent->EventId = i;
 
 		std::cout<<"Run " << pEvent->RunId	<< " Event " << pEvent->EventId<<std::endl;
-//                Check();
-		
+		//                Check();
+
 		FillPrimaries(pEvent->Primaries, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
@@ -79,15 +100,15 @@ int  main() {
 
 		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
-                
-        Check();
+
+		Check();
 
 		fEventTree->Fill();
 		//break;
 	}
 	fOutput->Write();            // Write the file header
 	//fEventTree->Print();           // Print the tree contents
-        fOutput->Close();
+	fOutput->Close();
 }
 
 
