@@ -15,6 +15,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	Int_t IdParStt[NhitMax];
 	//Int_t TrStt[NhitMax];
 	Int_t IntParStt[NhitMax];
+	Int_t PrimTrStt[NhitMax];
 	Int_t RegStt[NhitMax];
 	Float_t PosInStt[NhitMax][3];
 	Float_t PosOuStt[NhitMax][3];
@@ -34,6 +35,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	DetHits->SetBranchAddress("IdParStt",&IdParStt);
 	DetHits->SetBranchAddress("TrStt",&TrStt);
 	DetHits->SetBranchAddress("IntParStt",&IntParStt);
+	DetHits->SetBranchAddress("PrimTrStt",&PrimTrStt);
 	DetHits->SetBranchAddress("RegStt",&RegStt);
 	DetHits->SetBranchAddress("PosInStt",&PosInStt);
 	DetHits->SetBranchAddress("PStt",&PStt);
@@ -56,8 +58,9 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			TG4HitSegment hit;
 			TG4HitSegment::Contributors Contrib;
 		
-			hit.PrimaryId = IdParStt[j];
-			if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = TrStt[j];
+			//hit.PrimaryId = IdParStt[j];
+			//if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = TrStt[j];
+			hit.PrimaryId = PrimTrStt[j];
 			hit.EnergyDeposit = EdepStt[j];
 			hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 			float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
@@ -94,8 +97,9 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			TG4HitSegment hit;
 			TG4HitSegment::Contributors Contrib;
 		
-			hit.PrimaryId = IdParStt[j];
-			if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = TrStt[j];
+			//hit.PrimaryId = IdParStt[j];
+			//if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = TrStt[j];
+			hit.PrimaryId = PrimTrStt[j];
 			hit.EnergyDeposit = EdepStt[j];
 			hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 			float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
