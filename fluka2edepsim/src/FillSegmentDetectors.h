@@ -54,6 +54,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	DetHits->GetEntry(iev); // AS
 
         //if (entries>100) entries = 100;  // for debug
+	std::string det_str = "what";
 
 	if (idet==1) {
 	    NSttHits = 0;
@@ -83,9 +84,8 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			
 			TVector3 hitstart(hit.Start.X(),hit.Start.Y(),hit.Start.Z());
 		
-			std::string det_str = "what";
-			if (DirStt[j] == 1) std::string det_str = "stt_horizontal";
-			else if (DirStt[j] == 2) std::string det_str = "stt_vertical";
+			if (DirStt[j] == 1) det_str = "stt_horizontal";
+			else if (DirStt[j] == 2) det_str = "stt_vertical";
 			else std::cout<<" ... ??? det_str ???: "<<DirStt[j]<<std::endl;
 
 			//MapGeometry::Get()->AddPointToMap("prova", hitstart);			
@@ -132,8 +132,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	
 			TVector3 hitstart(hit.Start.X(),hit.Start.Y(),hit.Start.Z());
 		
-			std::string det_str = "what";
-			if (DirStt[j] == 0) std::string det_str = "ecal";
+			if (DirStt[j] == 0) det_str = "ecal";
 			else std::cout<<" ... ??? det_str ???: "<<DirStt[j]<<std::endl;
 
 			//MapGeometry::Get()->AddPointToMap("prova", hitstart);			
