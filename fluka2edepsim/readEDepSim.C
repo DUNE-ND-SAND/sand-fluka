@@ -2,10 +2,11 @@
 // THE VARIOUS CLASSES.
 #include <TFile.h>
 #include <TTree.h>
-#include <TH1F.h>
+#include <TH2F.h>
 
 #include <iostream>
-
+#include <string>
+#include "TVector3.h"
 #include "readEDepSim.h"
 
 TTree* gEDepSimTree = NULL;
@@ -13,20 +14,39 @@ TG4Event* gEDepSimEvent = NULL;
 bool flukafile=true; //put true to read Provadep.root
 bool traj=true;      //put true to read trajectories
 bool segm=true;      //put true to read segment	
-//TH1F* PosX;
+TH2F* PosCalYZ;
 
 void readEDepSim() {
 	std::cout<<"STARTING READ execution "<<std::endl;
-        //PosX = new TH1F("PosX","PosX",100,-250,250);
+
+	PosCalYZ = new TH2F("PosCalYZ","PosCalYZ",1000,-5000.0,0.0,1000,21500.0,26500.0);
 	if(flukafile==true){
-		TFile *ffile=new TFile("build/Provadep.root", "READ");
+		TFile *ffile=new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/build/Prova.fluka2edep.root", "READ");
 		gEDepSimTree = (TTree*) ffile->Get("EDepSimEvents");
+		vector<pair<string,TVector3>>* MapGeo= NULL;
+		ffile->GetObject("myGeometryMap",MapGeo);     //build by  WriteObjectAny(&map, "vector<pair<string,TVector3>>","myGeometryMap");
+
+		std::cout<<"Map Geo element"<<MapGeo->size()<<std::endl;
+
+		if(MapGeo->size()<1) {std::cout<<"Map Geo Empty"<<std::endl; }
+
+
+		for (auto i = MapGeo->begin(); i != MapGeo->end(); ++i){
+
+			pair<string, TVector3> val=(*i);
+
+			std::cout<<"det "<<val.first<<std::endl;
+			std::cout<<"point "<<val.second(0)<<" "<<val.second(1)<<" "<<val.second(2)<<std::endl;
+		}
+
 	}else	gEDepSimTree = (TTree*) gFile->Get("EDepSimEvents");
 
 	if (!gEDepSimTree) {
 		std::cout << "Missing the event tree" << std::endl;
 		return;
 	}
+
+
 
 	gEDepSimTree->SetBranchAddress("Event",&gEDepSimEvent);
 
@@ -39,7 +59,8 @@ void readEDepSim() {
 		EDepSimDumpEvent();
 		//gEDepSimTree->Print();
 	}
-//PosX->Draw();
+	TFile *outf=new TFile ("drawCalYZ.root", "RECREATE");	
+	PosCalYZ->Write();
 }
 TTree* EDepSimTree() {
 	return gEDepSimTree;
@@ -94,20 +115,20 @@ void EDepSimDumpEvent() {
 			std::cout << " Up to " << count << " points";
 			std::cout << std::endl;
 			/*
-			std::cout << " TRAJ POINTS:    ";
+			   std::cout << " TRAJ POINTS:    ";
 
-			for (std::vector<TG4TrajectoryPoint>::iterator
-					p = t->Points.begin();
-					p != t->Points.end();
-					++p) {
-				std::cout << " Time: " << p->Position.T();
-				std::cout << " Process: " << p->Process;
-                                //PosX->Fill(p->Position.X());
-				std::cout << " Subprocess: " << p->Subprocess;
-				std::cout << std::endl;
-				if (--count < 1) break;
+			   for (std::vector<TG4TrajectoryPoint>::iterator
+			   p = t->Points.begin();
+			   p != t->Points.end();
+			   ++p) {
+			   std::cout << " Time: " << p->Position.T();
+			   std::cout << " Process: " << p->Process;
+			//PosX->Fill(p->Position.X());
+			std::cout << " Subprocess: " << p->Subprocess;
+			std::cout << std::endl;
+			if (--count < 1) break;
 			}
-*/
+			*/
 		}
 	}
 	if(segm==true){	
@@ -118,18 +139,23 @@ void EDepSimDumpEvent() {
 			int count = d->second.size();
 			std::cout << " up to " << count << " segments";
 			std::cout << std::endl;
-			for (std::vector<TG4HitSegment>::iterator
-					h = d->second.begin();
-					h != d->second.end();
-					++h) {
-				std::cout << "      ";
-				std::cout << " PrimaryId: " << h->PrimaryId;
-				std::cout << " EnergyDeposit: " << h->EnergyDeposit;
-				//std::cout << " S: " << h->SecondaryDeposit;
-				std::cout << " Contrib: " << h->Contrib.size()<<" ["<<h->Contrib[0]<<"] ";
-				std::cout << " Track Length: " << h->TrackLength;
-				std::cout << std::endl;
-				if ((--count) < 1) break;
+
+			if(d->first=="EMCalSci"){
+				for (std::vector<TG4HitSegment>::iterator
+						h = d->second.begin();
+						h != d->second.end();
+						++h) {
+					//			std::cout << "      ";
+					//			std::cout << " Coordinates: " << h->Start.X()<<" "<<h->Start.Y()<<" "<<h->Start.Z()<<std::endl;
+					PosCalYZ->Fill(h->Start.Y(), h->Start.Z());
+					//			std::cout << " PrimaryId: " << h->PrimaryId;
+					//			std::cout << " EnergyDeposit: " << h->EnergyDeposit;
+					//std::cout << " S: " << h->SecondaryDeposit;
+					//			std::cout << " Contrib: " << h->Contrib.size()<<" ["<<h->Contrib[0]<<"] ";
+					//			std::cout << " Track Length: " << h->TrackLength;
+					//			std::cout << std::endl;
+					if ((--count) < 1) break;
+				}
 			}
 		}
 	}

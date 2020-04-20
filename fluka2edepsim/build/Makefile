@@ -51,10 +51,12 @@ TG4HITSEGS       =TG4HitSegment.$(SrcSuf)
 TG4PRIMO         =TG4PrimaryVertex.$(ObjSuf)
 TG4PRIMS         =TG4PrimaryVertex.$(SrcSuf)
 
-PRIMARIESO       =FillPrimaries.$(ObjSuf)
+MAPO       =MapGeometry.$(ObjSuf)
+MAPS       =MapGeometry.$(SrcSuf)
 
 
-OBJS          = $(TG4EVENTO) $(MAINWRITEO) $(TG4TRAJO) $(TG4HITSEGO) $(TG4PRIMO)
+
+OBJS          = $(TG4EVENTO) $(MAINWRITEO) $(TG4TRAJO) $(TG4HITSEGO) $(TG4PRIMO) $(MAPO)
 PROGRAMS      = $(MAIN) $(TG4EVENTSO)
 
 
@@ -93,7 +95,8 @@ MainWrite.$(ObjSuf): TG4Event.h  TG4PrimaryVertex.h TG4Trajectory.h TG4HitSegmen
 TG4Prim.$(ObjSuf): TG4PrimaryVertex.h
 TG4Traj.$(ObjSuf): TG4Trajectory.h
 TG4HitSegment.$(ObjSuf): TG4HitSegment.h
-FillPrimaries.$(ObjSuf): FillPrimaries.h
+MapGeometry.$(ObjSuf): MapGeometry.h
+
 
 
 TG4EventDict.$(SrcSuf): TG4Event.h  TG4PrimaryVertex.h TG4Trajectory.h TG4HitSegment.h edepsim_io_LinkDef.h

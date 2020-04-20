@@ -4,7 +4,8 @@
 #include <vector>
 #include <math.h>
 #include "utils.h"
-
+#include "MapGeometry.h"
+#include "TVector3.h"
 
 void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev, int entries, int idet) {
 
@@ -75,7 +76,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]);
 			
 			hit.Start=GlobalCoordinates(pos_in);
-        	hit.Stop=GlobalCoordinates(pos_out);
+        		hit.Stop=GlobalCoordinates(pos_out);
 			
 			NSttHits++;
 /*
@@ -114,7 +115,13 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]);
 
 			hit.Start=GlobalCoordinates(pos_in);
-        	hit.Stop=GlobalCoordinates(pos_out);
+	        	hit.Stop=GlobalCoordinates(pos_out);
+	
+			TVector3 hitstart(hit.Start.X(),hit.Start.Y(),hit.Start.Z());
+		
+			MapGeometry::Get()->AddPointToMap("prova", hitstart);			
+			//MapGeometry::Get()->AddPointToMap(idet, hit.Stop);			
+
 
 			NCalHits++;
 /*

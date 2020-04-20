@@ -12,7 +12,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEn
         HitsTree->SetBranchAddress("NIncHits",&NIncHits);   //Number of hits for each particles , Mc hit
         HitsTree->SetBranchAddress("IdInc",&IdInc);         //particle ID                       , Mc hit
         //HitsTree->SetBranchAddress("IdParInc",&IdParInc);   //Parent ID                         , MC hit
-       // HitsTree->SetBranchAddress("ParTrInc",&ParTrInc);   //Parent ID                         , MC hit
+        HitsTree->SetBranchAddress("ParTrInc",&ParTrInc);   //Parent ID                         , MC hit
         HitsTree->SetBranchAddress("TrInc",&TrInc);         //Track Num                         , MC hit
         HitsTree->SetBranchAddress("PosInc",&PosInc);       //Position[3]   (x,y,z)             , Mc hit
         HitsTree->SetBranchAddress("PInc",&PInc);           //Energy-Mom[5] (px,py,pz,E,P)      , Mc hit
@@ -49,10 +49,10 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEn
 			}else{
 				tx           = new TG4Trajectory;
 				tx->TrackId  = TrInc[j];
-				//tx->ParentId = IdParInc[j] ParTrInc;
 				tx->ParentId = ParTrInc[j];
 				tx->PDGCode  = IdInc[j];
-                                if (TDatabasePDG::Instance()->GetParticle(IdInc[j])){
+				std::cout<<"TrInc ParTr "<<TrInc[j]<<" "<<ParTrInc[j]<<std::endl;
+				if (TDatabasePDG::Instance()->GetParticle(IdInc[j])){
                                     tx->Name     = TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
                                 }
                                 else {tx->Name = "Ion";}

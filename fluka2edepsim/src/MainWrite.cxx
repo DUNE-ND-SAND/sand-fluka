@@ -27,6 +27,8 @@ Int_t   TrInc[MaxNhit], TrStt[MaxNhit];
 #include "FillTrajectories.h"
 #include "FillSegmentDetectors.h"
 #include "Check.h"
+//#include "MapGeometry.h"
+#include "MapGeometry.h"
 
 int main(int argc, char* argv[])
 {
@@ -48,7 +50,7 @@ int main(int argc, char* argv[])
 
 	//TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_nocube_tr_numu_001_Out.root");
 	//TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_testflags001_Out.root");
-	TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/sand_testflags001_Out.root");  //FIXME to be deleted for general inputfile
+	TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/DATA_mio/sand_testflags001_Out.root");  //FIXME to be deleted for general inputfile
 
 	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
 	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
@@ -84,6 +86,9 @@ int main(int argc, char* argv[])
 	int NEVENT=HeaderTree->GetEntries();
 	std::cout<<"Number of event to rewrite: "<<NEVENT<<std::endl;
 
+	MapGeometry::Get()->ClearMap();
+	
+	NEVENT=3;
 	//scrivo dentro EDEPSIM
 	for(int i=0; i<NEVENT; i++){  
 		pEvent->RunId = 0;
@@ -107,6 +112,12 @@ int main(int argc, char* argv[])
 		//break;
 	}
 	fOutput->Write();            // Write the file header
+	
+        vector<pair<string,TVector3>> map=MapGeometry::Get()->GetMap();
+
+
+	fOutput->WriteObjectAny(&map, "vector<pair<string,TVector3>>","myGeometryMap");
+
 	//fEventTree->Print();           // Print the tree contents
 	fOutput->Close();
 }
