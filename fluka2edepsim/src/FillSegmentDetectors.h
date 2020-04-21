@@ -32,6 +32,8 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 //
 	Int_t NCells,IdCell[NCellMax],IdParCell[NCellMax];
 	Float_t PosCell[NCellMax][3],EdepCell[NCellMax],EdepQCell[NCellMax],TimeCell[NCellMax];
+    Float_t hitPosX,hitPosY,hitPosZ;
+/
 //
     //std::cout<<"  ... in SummarizeHitSegments ... iev: "<<iev<<" ... Idet: "<<idet<<std::endl;
 		
@@ -82,14 +84,15 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			hit.Start=GlobalCoordinates(pos_in);
         	hit.Stop=GlobalCoordinates(pos_out);
 			
-			TVector3 hitstart(hit.Start.X(),hit.Start.Y(),hit.Start.Z());
+            hitPosX = 0.5*(hit.Start.X()+hit.Stop.X());
+            hitPosY = 0.5*(hit.Start.Y()+hit.Stop.Y());
+            hitPosZ = 0.5*(hit.Start.Z()+hit.Stop.Z());
+            TVector3 hitPos(hitPosX,hitPosY,hitPosZ);
 		
 			if (DirStt[j] == 1) det_str = "stt_horizontal";
 			else if (DirStt[j] == 2) det_str = "stt_vertical";
 			else std::cout<<" ... ??? det_str ???: "<<DirStt[j]<<std::endl;
-
-			//MapGeometry::Get()->AddPointToMap("prova", hitstart);			
-			MapGeometry::Get()->AddPointToMap(det_str, hitstart);			
+			MapGeometry::Get()->AddPointToMap(det_str, hitPos);			
 
     		NSttHits++;
 /*
@@ -130,14 +133,14 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			hit.Start=GlobalCoordinates(pos_in);
 	        	hit.Stop=GlobalCoordinates(pos_out);
 	
-			TVector3 hitstart(hit.Start.X(),hit.Start.Y(),hit.Start.Z());
-		
+            hitPosX = 0.5*(hit.Start.X()+hit.Stop.X());
+            hitPosY = 0.5*(hit.Start.Y()+hit.Stop.Y());
+            hitPosZ = 0.5*(hit.Start.Z()+hit.Stop.Z());
+            TVector3 hitPos(hitPosX,hitPosY,hitPosZ);
+
 			if (DirStt[j] == 0) det_str = "ecal";
 			else std::cout<<" ... ??? det_str ???: "<<DirStt[j]<<std::endl;
-
-			//MapGeometry::Get()->AddPointToMap("prova", hitstart);			
-			MapGeometry::Get()->AddPointToMap(det_str, hitstart);			
-			//MapGeometry::Get()->AddPointToMap(idet, hit.Stop);			
+			MapGeometry::Get()->AddPointToMap(det_str, hitPos);			
 
 			NCalHits++;
 /*
@@ -189,8 +192,11 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 		hit.Start=GlobalCoordinates(pos_in);
         hit.Stop=GlobalCoordinates(pos_out);
 
-		TVector3 hitstart(hit.Start.X(),hit.Start.Y(),hit.Start.Z());
-		MapGeometry::Get()->AddPointToMap("3dst", hitstart);			
+        hitPosX = 0.5*(hit.Start.X()+hit.Stop.X());
+        hitPosY = 0.5*(hit.Start.Y()+hit.Stop.Y());
+        hitPosZ = 0.5*(hit.Start.Z()+hit.Stop.Z());
+        TVector3 hitPos(hitPosX,hitPosY,hitPosZ);
+		MapGeometry::Get()->AddPointToMap("3dst", hitPos);			
 
 		NDetHits++;
 		dest.push_back(hit);
