@@ -29,7 +29,7 @@ TH1F* PosX;
 #include "FillPrimaries.h"
 #include "FillTrajectories.h"
 #include "FillSegmentDetectors.h"
-#include "Fillrootracker.h"
+//#include "Fillrootracker.h"
 #include "Check.h"
 
 int  main() {
@@ -83,9 +83,8 @@ int  main() {
 		pEvent->EventId = i;
 		std::cout<<"Event for run " << pEvent->RunId	<< " event " << pEvent->EventId<<std::endl;
 
-		FillPrimaries(pEvent->Primaries, HeaderTree, i);
+		FillPrimaries(pEvent->Primaries, rootracker, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
-
 	
 		FillTrajectories(pEvent->Trajectories, HitsTree, i);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
@@ -94,7 +93,7 @@ int  main() {
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
 
                 Check();
-                Fillrootracker(rootracker, HeaderTree, i); 
+                //Fillrootracker(rootracker, HeaderTree, i); 
 
 		fEventTree->Fill();
 		//break;
