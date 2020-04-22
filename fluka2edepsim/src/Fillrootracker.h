@@ -22,11 +22,11 @@ void Fillrootracker(TTree *rootracker, TTree *HeaderTree, int entry){
 	int NumHad=0;
 	int NumHeavy=0;
 
-	int IdLep[100000];
+	int IdLep[1000];
 	int TrLep[1000];
 	float P_Lep[1000][5];
 
-	int IdHad[100000];
+	int IdHad[1000];
 	int TrHad[1000];
 	float P_Had[1000][5];
 

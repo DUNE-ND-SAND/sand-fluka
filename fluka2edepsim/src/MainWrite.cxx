@@ -22,7 +22,8 @@ const int MaxNTr    = 10000; //Max Number of hits
 //Int_t   RunNum, EveNum  , NIncHits, IdTrack , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit], LatStt[MaxNhit];
 //Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
 //Float_t PosInc[MaxNhit][3];
-Int_t NIncHits, NStt;
+Int_t NIncHits, NStt; 
+int NSttHits;
 Int_t   TrInc[MaxNhit], TrStt[MaxNhit];
 TH1F* PosX;
 #include "FillPrimaries.h"
@@ -43,7 +44,7 @@ int  main() {
 
 	//Opening FLUKA FILE
 	
-	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_nocube_tr_numu_001_Out.root");
+	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_testflags001_Out.root");
     	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
     	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
         TTree *SttTree = (TTree*)fInput->Get("SttTree");
@@ -81,7 +82,6 @@ int  main() {
 		pEvent->RunId = 0;
 		pEvent->EventId = i;
 		std::cout<<"Event for run " << pEvent->RunId	<< " event " << pEvent->EventId<<std::endl;
-                Check();
 
 		FillPrimaries(pEvent->Primaries, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
@@ -93,6 +93,7 @@ int  main() {
 		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
 
+                Check();
                 Fillrootracker(rootracker, HeaderTree, i); 
 
 		fEventTree->Fill();
