@@ -26,6 +26,7 @@ Int_t   TrInc[MaxNhit], TrStt[MaxNhit];
 #include "FillPrimaries.h"
 #include "FillTrajectories.h"
 #include "FillSegmentDetectors.h"
+//#include "Fillrootracker.h"
 #include "Check.h"
 //#include "MapGeometry.h"
 #include "MapGeometry.h"
@@ -49,8 +50,8 @@ int main(int argc, char* argv[])
 	//Opening FLUKA FILE
 
 	//TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_nocube_tr_numu_001_Out.root");
-	//TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_testflags001_Out.root");
-	TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/DATA_mio/sand_testflags001_Out.root");  //FIXME to be deleted for general inputfile
+	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_testflags001_Out.root");
+	//TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/DATA_mio/sand_testflags001_Out.root");  //FIXME to be deleted for general inputfile
 
 	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
 	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
@@ -79,6 +80,14 @@ int main(int argc, char* argv[])
 
 	fEventTree = new TTree("EDepSimEvents",
 			"Energy Deposition for Simulated Events");
+        TTree *rootracker;
+	rootracker = new TTree("rootracker", "Genie Rootracker");
+	rootracker->Branch("EvtNum"    ,0, "EvtNum/I");
+	rootracker->Branch("StdHepN"   ,0, "StdHepN/I");
+	rootracker->Branch("StdHepPdg"     ,0,  "StdHepPdg[StdHepN]/I");
+	rootracker->Branch("StdHepP4"   ,0, "StdHepP4[StdHepN][4]/D");
+
+
 
 	TG4Event *pEvent=new TG4Event();
 	fEventTree->Branch("Event","TG4Event",&pEvent);
@@ -95,9 +104,8 @@ int main(int argc, char* argv[])
 		pEvent->EventId = i;
 
 		std::cout<<"Run " << pEvent->RunId	<< " Event " << pEvent->EventId<<std::endl;
-		//                Check();
 
-		FillPrimaries(pEvent->Primaries, HeaderTree, i);
+		FillPrimaries(pEvent->Primaries, rootracker, HeaderTree, i);
 		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
 		FillTrajectories(pEvent->Trajectories, HitsTree, i);
@@ -106,7 +114,7 @@ int main(int argc, char* argv[])
 		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
 
-		Check();
+                Check();
 
 		fEventTree->Fill();
 		//break;

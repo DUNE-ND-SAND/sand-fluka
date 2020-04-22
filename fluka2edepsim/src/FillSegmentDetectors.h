@@ -22,7 +22,6 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	Int_t PrimTrStt[NhitMax];
 	Int_t RegStt[NhitMax];
 	Int_t DirStt[NhitMax];
-	Int_t DirStt[NhitMax];
 	Float_t PosInStt[NhitMax][3];
 	Float_t PosOuStt[NhitMax][3];
 	Float_t PStt[NhitMax][5];
@@ -33,7 +32,6 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	Int_t NCells,IdCell[NCellMax],IdParCell[NCellMax];
 	Float_t PosCell[NCellMax][3],EdepCell[NCellMax],EdepQCell[NCellMax],TimeCell[NCellMax];
     Float_t hitPosX,hitPosY,hitPosZ;
-/
 //
     //std::cout<<"  ... in SummarizeHitSegments ... iev: "<<iev<<" ... Idet: "<<idet<<std::endl;
 		
