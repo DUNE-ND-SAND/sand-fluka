@@ -46,8 +46,8 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
         Int_t    StdHepN;
 	Int_t EvtNum;
 
-	//int TargZ=0;
-	//int TargA=0;
+	Int_t TargZ=0;
+	Int_t TargA=0;
 
 	mytree->SetBranchAddress("RunNum",&RunNum);
 	mytree->SetBranchAddress("EveNum",&EveNum);
@@ -82,8 +82,9 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 	mytree->SetBranchAddress("TrHeavy",&TrHeavy);
 	mytree->SetBranchAddress("P_Heavy",&P_Heavy);
 
-	//mytree->SetBranchAddress("TargZ",&TargZ);
-	//mytree->SetBranchAddress("TargA",&TargA);
+	mytree->SetBranchAddress("TargZ",&TargZ);
+	mytree->SetBranchAddress("TargA",&TargA);
+	
 	EvtNum = EveNum;
 	//-------------------------------------------------------------------------- RootrackerTree, some variables are still unknown
 	
@@ -125,6 +126,8 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 
 	vtx.Position=GlobalCoordinates(vertex); 
 
+        vtx.GeneratorName="FLUKA";
+
 	int NParticle=NumLep+NumPhot+NumHeavy+NumHad;
 
 	std::cout<<"NParticle "<<NParticle<<std::endl;
@@ -135,17 +138,39 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
         //EvtCode     = new TObjString(ReacType);
         //EvtCode  = ReacType;      //which one is correct to be filled? it should be a string or int? in fluka it's int
         //EvtCode  = IntType;
+ 	StdHepN = NParticle+2;
  
-        int nPart= 0;
-
-	StdHepPdg[nPart] = Primary; 
+	StdHepPdg[0] = Primary; 
         //Adding the Neutrino
-	StdHepP4[nPart][0]=P_Primary[0];
-	StdHepP4[nPart][1]=P_Primary[1];
-	StdHepP4[nPart][2]=P_Primary[2];
-	StdHepP4[nPart][3]=P_Primary[3];
-        nPart ++;
+	StdHepP4[0][0]=P_Primary[0];
+	StdHepP4[0][1]=P_Primary[1];
+	StdHepP4[0][2]=P_Primary[2];
+	StdHepP4[0][3]=P_Primary[3];
 
+
+	 //Adding the target
+	int Target_genie_code=0;
+        if(TargA==12 && TargZ==6) Target_genie_code= 1000060120;  //#C12
+        else if(TargA==20 && TargZ==10 ) Target_genie_code=  1000100200; //, #Ne20
+        else if(TargA==27 && TargZ==13 ) Target_genie_code=     1000130270; //, #Al27
+        else if(TargA==30 && TargZ==14 ) Target_genie_code=     1000140300; //, #Si30
+        else if(TargA==40 && TargZ==18 ) Target_genie_code=     1000180400; //, #Ar40
+        else if(TargA==56 && TargZ==26 ) Target_genie_code=     1000260560; // #Fe56
+        else if(TargA==207 && TargZ==82) Target_genie_code=     1000822070; // #Pb207
+        else{ std::cout<<"ERROR Target genie code not found-- TarggZ and TargA : "<<TargZ<<" "<<TargA<<std::endl;}
+
+//per altri nuclei si puo' leggere la pdg_table in genie library..ma non la trovo
+//
+
+	StdHepPdg[0] = Target_genie_code;
+
+	StdHepP4[1][1]=0.0;
+	StdHepP4[1][2]=0.0;
+	StdHepP4[1][3]=0.0;
+
+
+	int nPart=2;
+		
 	for(int k=0; k<NumLep; k++){
                 StdHepPdg[nPart] = IdLep[k]; 
 		StdHepP4[nPart][0]=P_Lep[0][k];
@@ -213,12 +238,66 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 		prim.Momentum.SetE(P_Heavy[3][k]);
 		vtx.Particles.push_back(prim);
 	}
-        StdHepN = nPart;
-        rootracker->Print();
+       
+	if(StdHepN!=nPart) std::cout<<"ERROR on number of particles in rootracker"<<std::endl;
+       //rootracker->Print();
 	rootracker->Fill();
 
-	//vtx.Reaction = char(222);   //FIXME
 
+
+/*
+ // basic GENIE reaction types
+      string genie_code = EvtCode->GetString().Data();
+      bool is_cc    = (genie_code.find("Weak[CC]") != string::npos);
+      bool is_nc    = (genie_code.find("Weak[NC]") != string::npos);
+      bool is_charm = (genie_code.find("charm")    != string::npos);  //charm production
+      bool is_qel   = (genie_code.find("QES")      != string::npos);
+      bool is_dis   = (genie_code.find("DIS")      != string::npos);
+      bool is_res   = (genie_code.find("RES")      != string::npos);
+      bool is_cohpi = (genie_code.find("COH")      != string::npos);
+      bool is_ve    = (genie_code.find("NuEEL")    != string::npos);
+      bool is_imd   = (genie_code.find("IMD")      != string::npos);  //inverse muon decay
+  */ 
+
+ // nuclear target can be at slot 2 (for nuclear targets), slot 1 (for free nuc targets) or undefined (for ve-, IMD, coherent etc)
+// bool nuclear_target = (target_code > 1000000000);
+
+/*
+GENIE target CODES
+		1000060120, #C12
+             1000100200, #Ne20
+             1000130270, #Al27
+             1000140300, #Si30
+	     1000180400, #Ar40
+             1000260560, #Fe56
+             1000822070, #Pb207  
+*/
+
+
+             //nu:14;tgt:1000822070;N:2112;proc:Weak[CC],QES;
+        char* QES_RES_DIS=NULL;
+        if(IntType==1) QES_RES_DIS=(char *)"QES"; 
+        else if(IntType==2) QES_RES_DIS=(char *)"RES"; 
+        else if(IntType==3) QES_RES_DIS=(char *)"DIS"; 
+       	else{ std::cout<<"ERROR IntType type not found-- IntType : "<<IntType<<std::endl;}
+
+        char* CC_NC=NULL;
+	if(ReacType==1) CC_NC=(char *)"proc:Weak[CC]";
+	else{ std::cout<<"ERROR Reaction type not found-- ReacType : "<<ReacType<<std::endl;}
+
+	char* nu_type=NULL;
+	if(Primary==12) nu_type=(char *)"nu_bar";
+	if(Primary==14) nu_type=(char *)"nu";
+	else{ std::cout<<"ERROR nu type not found-- Primary : "<<Primary<<std::endl;}
+
+	//int Nboh=111111; //nucleone con cui ha interagito il neutrino non abbiamo questa info in FLUKA e quindi non la mettiamo
+
+	char genie_format_reaction[100];
+//	sprintf( genie_format_reaction, "%s:%i;tgt:%i;N:%i;%s;%s,%s",nu_type,Primary,Target_genie_code,Nboh,CC_NC,QES_RES_DIS);
+	sprintf( genie_format_reaction, "%s:%i;tgt:%i;%s;%s,%s",nu_type,Primary,Target_genie_code,CC_NC,QES_RES_DIS);
+
+
+	vtx.Reaction = genie_format_reaction;   
 	dest.push_back(vtx);
 //	std::cout<<"Ho riempito "<<dest.size()<<std::endl;
 

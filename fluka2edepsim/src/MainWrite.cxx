@@ -50,8 +50,8 @@ int main(int argc, char* argv[])
 	//Opening FLUKA FILE
 
 	//TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_nocube_tr_numu_001_Out.root");
-	TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_testflags001_Out.root");
-	//TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/DATA_mio/sand_testflags001_Out.root");  //FIXME to be deleted for general inputfile
+	//TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_testflags001_Out.root");
+	TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/DATA_mio/sand_testflags001_Out.root");  //FIXME to be deleted for general inputfile
 
 	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
 	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
 	fEventTree = new TTree("EDepSimEvents",
 			"Energy Deposition for Simulated Events");
         TTree *rootracker;
-	rootracker = new TTree("rootracker", "Genie Rootracker");
+	rootracker = new TTree("gRooTracker", "Genie Rootracker");
 	rootracker->Branch("EvtNum"    ,0, "EvtNum/I");
 	rootracker->Branch("StdHepN"   ,0, "StdHepN/I");
 	rootracker->Branch("StdHepPdg"     ,0,  "StdHepPdg[StdHepN]/I");
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 
 	MapGeometry::Get()->ClearMap();
 	
-	NEVENT=3;
+	NEVENT=20;
 	//scrivo dentro EDEPSIM
 	for(int i=0; i<NEVENT; i++){  
 		pEvent->RunId = 0;
