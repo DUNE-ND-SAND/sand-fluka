@@ -51,7 +51,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEn
 				tx->TrackId  = TrInc[j];
 				tx->ParentId = ParTrInc[j];
 				tx->PDGCode  = IdInc[j];
-				std::cout<<"TrInc ParTr "<<TrInc[j]<<" "<<ParTrInc[j]<<std::endl;
+				//std::cout<<"TrInc ParTr "<<TrInc[j]<<" "<<ParTrInc[j]<<std::endl;
 				if (TDatabasePDG::Instance()->GetParticle(IdInc[j])){
                                     tx->Name     = TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
                                 }

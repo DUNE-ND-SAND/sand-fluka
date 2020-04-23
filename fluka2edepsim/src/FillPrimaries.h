@@ -54,7 +54,7 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 
 	mytree->SetBranchAddress("IntType",&IntType);
 	mytree->SetBranchAddress("ReacType",&ReacType);
-	//mytree->SetBranchAddress("Primary",&Primary);
+	mytree->SetBranchAddress("Primary",&Primary);
 
 	mytree->SetBranchAddress("Vertex",&Vertex);
 	mytree->SetBranchAddress("P_Primary",&P_Primary);
@@ -148,21 +148,37 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 	StdHepP4[0][3]=P_Primary[3];
 
 
+	char Target_genie_code[100]; 
+
+	char Anumber[3];
+
+	if(TargA>99)  sprintf(Anumber,"%i",TargA);
+	if(TargA<100) sprintf(Anumber,"0%i",TargA);
+	if(TargA<10)  sprintf(Anumber,"00%i",TargA);
+	
+	char Znumber[3];
+	if(TargZ>99)  sprintf(Znumber,"%i",TargZ);
+	if(TargZ<100) sprintf(Znumber,"0%i",TargZ);
+	if(TargZ<10)  sprintf(Znumber,"0%i",TargZ);
+	
+	sprintf(Target_genie_code,"100%s%s0",Znumber,Anumber);
+	std::cout<<"Target_genie_code"<<Target_genie_code<<std::endl;
+/*
+ESEMPI di GENIE target CODES
+	
+		1000060120, #C12
+             1000100200, #Ne20
+             1000130270, #Al27
+             1000140300, #Si30
+	     1000180400, #Ar40
+             1000260560, #Fe56
+             1000822070, #Pb207  
+*/
+
+
 	 //Adding the target
-	int Target_genie_code=0;
-        if(TargA==12 && TargZ==6) Target_genie_code= 1000060120;  //#C12
-        else if(TargA==20 && TargZ==10 ) Target_genie_code=  1000100200; //, #Ne20
-        else if(TargA==27 && TargZ==13 ) Target_genie_code=     1000130270; //, #Al27
-        else if(TargA==30 && TargZ==14 ) Target_genie_code=     1000140300; //, #Si30
-        else if(TargA==40 && TargZ==18 ) Target_genie_code=     1000180400; //, #Ar40
-        else if(TargA==56 && TargZ==26 ) Target_genie_code=     1000260560; // #Fe56
-        else if(TargA==207 && TargZ==82) Target_genie_code=     1000822070; // #Pb207
-        else{ std::cout<<"ERROR Target genie code not found-- TarggZ and TargA : "<<TargZ<<" "<<TargA<<std::endl;}
-
-//per altri nuclei si puo' leggere la pdg_table in genie library..ma non la trovo
-//
-
-	StdHepPdg[0] = Target_genie_code;
+	
+	StdHepPdg[1] = atoi(Target_genie_code);
 
 	StdHepP4[1][1]=0.0;
 	StdHepP4[1][2]=0.0;
@@ -262,17 +278,6 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
  // nuclear target can be at slot 2 (for nuclear targets), slot 1 (for free nuc targets) or undefined (for ve-, IMD, coherent etc)
 // bool nuclear_target = (target_code > 1000000000);
 
-/*
-GENIE target CODES
-		1000060120, #C12
-             1000100200, #Ne20
-             1000130270, #Al27
-             1000140300, #Si30
-	     1000180400, #Ar40
-             1000260560, #Fe56
-             1000822070, #Pb207  
-*/
-
 
              //nu:14;tgt:1000822070;N:2112;proc:Weak[CC],QES;
         char* QES_RES_DIS=NULL;
@@ -294,7 +299,7 @@ GENIE target CODES
 
 	char genie_format_reaction[100];
 //	sprintf( genie_format_reaction, "%s:%i;tgt:%i;N:%i;%s;%s,%s",nu_type,Primary,Target_genie_code,Nboh,CC_NC,QES_RES_DIS);
-	sprintf( genie_format_reaction, "%s:%i;tgt:%i;%s;%s,%s",nu_type,Primary,Target_genie_code,CC_NC,QES_RES_DIS);
+	sprintf( genie_format_reaction, "%s:%i;tgt:%s;%s;%s",nu_type,Primary,Target_genie_code,CC_NC,QES_RES_DIS);
 
 
 	vtx.Reaction = genie_format_reaction;   
