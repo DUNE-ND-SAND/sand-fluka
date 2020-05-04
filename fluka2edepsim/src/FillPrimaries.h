@@ -110,14 +110,9 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 	//rootracker->SetBranchAddress("StdHepLm[StdHepN]",&StdHepLm, "StdHepLm[StdHepN]/D");
 	//-------------------------------------------------------------------------- RootrackerTree
 
-	std::cout<<"Prima di getentry"<<entry<<std::endl;
-
 	mytree->GetEntry(entry);
-	std::cout<<"Dopo di getentry"<<std::endl;
-
 
 	TG4PrimaryVertex vtx;
-
 
 	std::cout<<"evenum "<<EveNum<<std::endl;
 	//std::cout<<"Vertex coord "<<Vertex[0]<<" "<<Vertex[1]<<" "<<Vertex[2]<<std::endl;

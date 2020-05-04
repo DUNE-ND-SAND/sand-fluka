@@ -11,16 +11,20 @@
 
 TTree* gEDepSimTree = NULL;
 TG4Event* gEDepSimEvent = NULL;
-bool flukafile=true; //put true to read Provadep.root
-bool traj=true;      //put true to read trajectories
-bool segm=true;      //put true to read segment	
-TH2F* PosCalYZ;
+bool flukafile=false; //put true to read Provadep.root
+bool traj=false;      //put true to read trajectories
+bool segm=false;      //put true to read segment	
+TH2F* PosCalZY;
+TH2F* PosCalXY;
+TH1F* PosCalX;
 
 void readEDepSim() {
 	std::cout<<"STARTING READ execution "<<std::endl;
 
-	PosCalYZ = new TH2F("PosCalYZ","PosCalYZ",1000,-5000.0,0.0,1000,21500.0,26500.0);
+	PosCalZY = new TH2F("PosCalZY","PosCalZY",1000,21500,26500,1000,-5000,0); //-5000.0,0.0,1000,21500.0,26500.0);
+	PosCalXY = new TH2F("PosCalXY","PosCalXY",1000,-2500,2500,1000,-5000,0); //-5000.0,0.0,1000,21500.0,26500.0);
 	if(flukafile==true){
+	//	TFile *ffile=new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/build/Prova.fluka2edep.root", "READ");
 		TFile *ffile=new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/build/Prova.fluka2edep.root", "READ");
 		gEDepSimTree = (TTree*) ffile->Get("EDepSimEvents");
 		vector<pair<string,TVector3>>* MapGeo= NULL;
@@ -35,8 +39,8 @@ void readEDepSim() {
 
 			pair<string, TVector3> val=(*i);
 
-			std::cout<<"det "<<val.first<<std::endl;
-			std::cout<<"point "<<val.second(0)<<" "<<val.second(1)<<" "<<val.second(2)<<std::endl;
+//			std::cout<<"det "<<val.first<<std::endl;
+//			std::cout<<"point "<<val.second(0)<<" "<<val.second(1)<<" "<<val.second(2)<<std::endl;
 		}
 
 	}else	gEDepSimTree = (TTree*) gFile->Get("EDepSimEvents");
@@ -52,15 +56,16 @@ void readEDepSim() {
 
 	int N=gEDepSimTree->GetEntries();
 	std::cout<<"number of entries "<<N<<std::endl;
-
+	N=321;
 	for (int i=0; i<N; i++){
 
 		gEDepSimTree->GetEntry(i);
 		EDepSimDumpEvent();
 		//gEDepSimTree->Print();
 	}
-	TFile *outf=new TFile ("drawCalYZ.root", "RECREATE");	
-	PosCalYZ->Write();
+	TFile *outf=new TFile ("drawCalZY.root", "RECREATE");	
+	PosCalZY->Write();
+	PosCalX->Write();
 }
 TTree* EDepSimTree() {
 	return gEDepSimTree;
@@ -77,6 +82,8 @@ void EDepSimDumpEvent() {
 		std::cout << "Event not available" << std::endl;
 	}
 
+	const char* prova="ppp";
+	std::cout<<prova<<std::endl;
 	std::cout << " " << event->EventId;
 	std::cout << " >event " << event->EventId;
 	std::cout << " primaries " << event->Primaries.size();
@@ -91,7 +98,8 @@ void EDepSimDumpEvent() {
 		std::cout << "   Position " << v->Position.X()
 			<< " " << v->Position.Y()
 			<< " " << v->Position.Z()
-			<< " Time " << v->Position.T();
+			<< " Time " << v->Position.T()
+		        << " ReacType "<<v->Reaction;
 		std::cout <<" Nbr of particles " << v->Particles.size()<<std::endl;
 		for (std::vector<TG4PrimaryParticle>::iterator
 				p = v->Particles.begin();
@@ -114,9 +122,8 @@ void EDepSimDumpEvent() {
 			int count = t->Points.size();
 			std::cout << " Up to " << count << " points";
 			std::cout << std::endl;
-			/*
+	/*	
 			   std::cout << " TRAJ POINTS:    ";
-
 			   for (std::vector<TG4TrajectoryPoint>::iterator
 			   p = t->Points.begin();
 			   p != t->Points.end();
@@ -128,7 +135,7 @@ void EDepSimDumpEvent() {
 			std::cout << std::endl;
 			if (--count < 1) break;
 			}
-			*/
+*/	
 		}
 	}
 	if(segm==true){	
@@ -141,19 +148,25 @@ void EDepSimDumpEvent() {
 			std::cout << std::endl;
 
 			if(d->first=="EMCalSci"){
+				int oldcontrib=0;
 				for (std::vector<TG4HitSegment>::iterator
 						h = d->second.begin();
 						h != d->second.end();
 						++h) {
 					//			std::cout << "      ";
 					//			std::cout << " Coordinates: " << h->Start.X()<<" "<<h->Start.Y()<<" "<<h->Start.Z()<<std::endl;
-					PosCalYZ->Fill(h->Start.Y(), h->Start.Z());
-					//			std::cout << " PrimaryId: " << h->PrimaryId;
+					PosCalZY->Fill(h->Start.Z(), h->Start.Y());
+					PosCalX->Fill(h->Start.X(), h->Start.Y());
+					int contrib=h->Contrib[0];
+					if(contrib!= oldcontrib){
+						std::cout << " PrimaryId: " << h->PrimaryId;
 					//			std::cout << " EnergyDeposit: " << h->EnergyDeposit;
 					//std::cout << " S: " << h->SecondaryDeposit;
-					//			std::cout << " Contrib: " << h->Contrib.size()<<" ["<<h->Contrib[0]<<"] ";
+						std::cout << " Contrib: " << h->Contrib.size()<<" ["<<h->Contrib[0]<<"] ";
 					//			std::cout << " Track Length: " << h->TrackLength;
-					//			std::cout << std::endl;
+								std::cout << std::endl;
+						}
+					oldcontrib=contrib;
 					if ((--count) < 1) break;
 				}
 			}

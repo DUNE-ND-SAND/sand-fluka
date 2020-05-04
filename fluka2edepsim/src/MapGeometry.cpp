@@ -23,9 +23,9 @@ void MapGeometry::ClearMap() {
 }
 
 
-void MapGeometry::AddPointToMap(string det_info, TVector3 pos){
+void MapGeometry::AddPointToMap(int det_info, TVector3 pos){
 
-	pair<string,TVector3> new_point;
+	pair<int,TVector3> new_point;
 
 	new_point.first=det_info;
 	new_point.second=pos;

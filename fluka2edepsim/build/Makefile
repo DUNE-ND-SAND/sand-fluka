@@ -54,9 +54,12 @@ TG4PRIMS         =TG4PrimaryVertex.$(SrcSuf)
 MAPO       =MapGeometry.$(ObjSuf)
 MAPS       =MapGeometry.$(SrcSuf)
 
+TREEO       =MapTree.$(ObjSuf)
+TREES       =MapTree.$(SrcSuf)
 
 
-OBJS          = $(TG4EVENTO) $(MAINWRITEO) $(TG4TRAJO) $(TG4HITSEGO) $(TG4PRIMO) $(MAPO)
+
+OBJS          = $(TG4EVENTO) $(MAINWRITEO) $(TG4TRAJO) $(TG4HITSEGO) $(TG4PRIMO) $(MAPO) $(TREEO)
 PROGRAMS      = $(MAIN) $(TG4EVENTSO)
 
 
@@ -96,6 +99,8 @@ TG4Prim.$(ObjSuf): TG4PrimaryVertex.h
 TG4Traj.$(ObjSuf): TG4Trajectory.h
 TG4HitSegment.$(ObjSuf): TG4HitSegment.h
 MapGeometry.$(ObjSuf): MapGeometry.h
+MapTree.$(ObjSuf): MapTree.h
+
 
 
 

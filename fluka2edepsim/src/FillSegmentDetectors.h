@@ -54,7 +54,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	DetHits->GetEntry(iev); // AS
 
         //if (entries>100) entries = 100;  // for debug
-	std::string det_str = "what";
+	int det_str = 99;
 
 	if (idet==1) {
 	    NSttHits = 0;
@@ -87,9 +87,12 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
             hitPosZ = 0.5*(hit.Start.Z()+hit.Stop.Z());
             TVector3 hitPos(hitPosX,hitPosY,hitPosZ);
 		
-			if (DirStt[j] == 1) det_str = "stt_horizontal";
-			else if (DirStt[j] == 2) det_str = "stt_vertical";
-			else std::cout<<" ... ??? det_str ???: "<<DirStt[j]<<std::endl;
+			if (DirStt[j] == 1) det_str =1; // "stt_horizontal";
+			else if (DirStt[j] == 2) det_str =2; // "stt_vertical";
+			else {
+				std::cout<<" ERROR not found det_str : "<<DirStt[j]<<std::endl;
+				det_str= 10; // "not_found";
+			}
 			MapGeometry::Get()->AddPointToMap(det_str, hitPos);			
 
     		NSttHits++;
@@ -136,8 +139,8 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
             hitPosZ = 0.5*(hit.Start.Z()+hit.Stop.Z());
             TVector3 hitPos(hitPosX,hitPosY,hitPosZ);
 
-			if (DirStt[j] == 0) det_str = "ecal";
-			else std::cout<<" ... ??? det_str ???: "<<DirStt[j]<<std::endl;
+			if (DirStt[j] == 0) det_str = 0; //"ecal";
+			else { std::cout<<" NOT FOunD ... ??? det_str ???: "<<DirStt[j]<<std::endl; det_str=9;}
 			MapGeometry::Get()->AddPointToMap(det_str, hitPos);			
 
 			NCalHits++;
@@ -194,7 +197,8 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
         hitPosY = 0.5*(hit.Start.Y()+hit.Stop.Y());
         hitPosZ = 0.5*(hit.Start.Z()+hit.Stop.Z());
         TVector3 hitPos(hitPosX,hitPosY,hitPosZ);
-		MapGeometry::Get()->AddPointToMap("3dst", hitPos);			
+		int det_str=3;
+		MapGeometry::Get()->AddPointToMap(det_str, hitPos);			
 
 		NDetHits++;
 		dest.push_back(hit);
@@ -208,20 +212,22 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 void FillSegmentDetectors(std::map<std::string, std::vector<TG4HitSegment> >& dest, TTree *SttHits, TTree *ScdHits,int ientry) {
 
 	dest.clear();
-
+	
 	std::string det = "Straw";
 	int iflag = 1;
 	int entries_stt = 0;
 	SummarizeHitSegments(dest[det], SttHits, ientry, entries_stt, iflag);
+
 //
 	det = "EMCalSci";
 	iflag = 2;
 	int entries_ecal = 0;
 	SummarizeHitSegments(dest[det], SttHits, ientry, entries_ecal, iflag);
-//
+
+
 	det = "3DST";
 	iflag = 3;
 	int entries_3dst = 0;
 	SummarizeHitSegments(dest[det], ScdHits, ientry, entries_3dst, iflag);
-//
+
 }

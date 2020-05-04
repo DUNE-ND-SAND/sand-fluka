@@ -13,7 +13,7 @@ private:
     MapGeometry();
     static MapGeometry* me;
 
-    vector<pair<string,TVector3>> fMap;
+    vector<pair<int,TVector3>> fMap;  
     int fN;
 
 
@@ -22,10 +22,9 @@ public:
     static MapGeometry* Get();
     void ClearMap();
 
-    void AddPointToMap(string, TVector3);
-    vector<pair<string,TVector3>> GetMap (){return fMap;}
+    void AddPointToMap(int, TVector3);
+    vector<pair<int,TVector3>> GetMap (){return fMap;}
 
-    void AddN (int n){fN=fN+n;}
     int GetN() const {return fN;}
 
 
