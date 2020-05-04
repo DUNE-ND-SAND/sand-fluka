@@ -143,20 +143,22 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 	StdHepP4[0][3]=P_Primary[3];
 
 
-	char Target_genie_code[100]; 
+	char Target_genie_code[11]; 
 
-	char Anumber[3];
+	//char Anumber[3];
 
-	if(TargA>99)  sprintf(Anumber,"%i",TargA);
-	if(TargA<100) sprintf(Anumber,"0%i",TargA);
-	if(TargA<10)  sprintf(Anumber,"00%i",TargA);
+	//sprintf(Anumber,"%03d",TargA);
+	//if(TargA>99)  sprintf(Anumber,"%i",TargA);
+	//if(TargA<100) sprintf(Anumber,"0%i",TargA);
+	//if(TargA<10)  sprintf(Anumber,"00%i",TargA);
 	
-	char Znumber[3];
-	if(TargZ>99)  sprintf(Znumber,"%i",TargZ);
-	if(TargZ<100) sprintf(Znumber,"0%i",TargZ);
-	if(TargZ<10)  sprintf(Znumber,"0%i",TargZ);
+	//char Znumber[3];
+	//sprintf(Znumber,"%03d",TargZ);
+	//if(TargZ>99)  sprintf(Znumber,"%i",TargZ);
+	//if(TargZ<100) sprintf(Znumber,"0%i",TargZ);
+	//if(TargZ<10)  sprintf(Znumber,"0%i",TargZ);
 	
-	sprintf(Target_genie_code,"100%s%s0",Znumber,Anumber);
+	sprintf(Target_genie_code,"100%03d%03d0",TargZ,TargA);
 	std::cout<<"Target_genie_code"<<Target_genie_code<<std::endl;
 /*
 ESEMPI di GENIE target CODES
@@ -175,6 +177,7 @@ ESEMPI di GENIE target CODES
 	
 	StdHepPdg[1] = atoi(Target_genie_code);
 
+	StdHepP4[1][0]=0.0;
 	StdHepP4[1][1]=0.0;
 	StdHepP4[1][2]=0.0;
 	StdHepP4[1][3]=0.0;
@@ -184,69 +187,69 @@ ESEMPI di GENIE target CODES
 		
 	for(int k=0; k<NumLep; k++){
                 StdHepPdg[nPart] = IdLep[k]; 
-		StdHepP4[nPart][0]=P_Lep[0][k];
-		StdHepP4[nPart][1]=P_Lep[1][k];
-		StdHepP4[nPart][2]=P_Lep[2][k];
-		StdHepP4[nPart][3]=P_Lep[3][k];
+		StdHepP4[nPart][0]=P_Lep[k][0];
+		StdHepP4[nPart][1]=P_Lep[k][1];
+		StdHepP4[nPart][2]=P_Lep[k][2];
+		StdHepP4[nPart][3]=P_Lep[k][3];
                 nPart ++;
 
 		prim.PDGCode = IdLep[k] ; 	
 		prim.TrackId = TrLep[k];;
-		prim.Momentum.SetX(P_Lep[0][k]);
-		prim.Momentum.SetY(P_Lep[1][k]);
-		prim.Momentum.SetZ(P_Lep[2][k]);
-		prim.Momentum.SetE(P_Lep[3][k]);
+		prim.Momentum.SetX(P_Lep[k][0]);
+		prim.Momentum.SetY(P_Lep[k][1]);
+		prim.Momentum.SetZ(P_Lep[k][2]);
+		prim.Momentum.SetE(P_Lep[k][3]);
 		vtx.Particles.push_back(prim);
 	}
 
 	for(int k=0; k<NumHad; k++){
-                StdHepPdg[nPart] = IdLep[k]; 
-		StdHepP4[nPart][0]=P_Lep[0][k];
-		StdHepP4[nPart][1]=P_Lep[1][k];
-		StdHepP4[nPart][2]=P_Lep[2][k];
-		StdHepP4[nPart][3]=P_Lep[3][k];
+                StdHepPdg[nPart] = IdHad[k]; 
+		StdHepP4[nPart][0]=P_Had[k][0];
+		StdHepP4[nPart][1]=P_Had[k][1];
+		StdHepP4[nPart][2]=P_Had[k][2];
+		StdHepP4[nPart][3]=P_Had[k][3];
                 nPart ++;
 
 		prim.PDGCode = IdHad[k] ; 	
 		prim.TrackId = TrHad[k];;
-		prim.Momentum.SetX(P_Had[0][k]);
-		prim.Momentum.SetY(P_Had[1][k]);
-		prim.Momentum.SetZ(P_Had[2][k]);
-		prim.Momentum.SetE(P_Had[3][k]);
+		prim.Momentum.SetX(P_Had[k][0]);
+		prim.Momentum.SetY(P_Had[k][1]);
+		prim.Momentum.SetZ(P_Had[k][2]);
+		prim.Momentum.SetE(P_Had[k][3]);
 		vtx.Particles.push_back(prim);
 	}
 
 	for(int k=0; k<NumPhot; k++){
                 StdHepPdg[nPart] = IdPhot[k]; 
-		StdHepP4[nPart][0]=P_Phot[0][k];
-		StdHepP4[nPart][1]=P_Phot[1][k];
-		StdHepP4[nPart][2]=P_Phot[2][k];
-		StdHepP4[nPart][3]=P_Phot[3][k];
+		StdHepP4[nPart][0]=P_Phot[k][0];
+		StdHepP4[nPart][1]=P_Phot[k][1];
+		StdHepP4[nPart][2]=P_Phot[k][2];
+		StdHepP4[nPart][3]=P_Phot[k][3];
                 nPart ++;
 
 		prim.PDGCode = IdPhot[k] ; 	
 		prim.TrackId = TrPhot[k];;
-		prim.Momentum.SetX(P_Phot[0][k]);
-		prim.Momentum.SetY(P_Phot[1][k]);
-		prim.Momentum.SetZ(P_Phot[2][k]);
-		prim.Momentum.SetE(P_Phot[3][k]);
+		prim.Momentum.SetX(P_Phot[k][0]);
+		prim.Momentum.SetY(P_Phot[k][1]);
+		prim.Momentum.SetZ(P_Phot[k][2]);
+		prim.Momentum.SetE(P_Phot[k][3]);
 		vtx.Particles.push_back(prim);
 	}
 
 	for(int k=0; k<NumHeavy; k++){
                 StdHepPdg[nPart] = IdHeavy[k]; 
-		StdHepP4[nPart][0]=P_Heavy[0][k];
-		StdHepP4[nPart][1]=P_Heavy[1][k];
-		StdHepP4[nPart][2]=P_Heavy[2][k];
-		StdHepP4[nPart][3]=P_Heavy[3][k];
+		StdHepP4[nPart][0]=P_Heavy[k][0];
+		StdHepP4[nPart][1]=P_Heavy[k][1];
+		StdHepP4[nPart][2]=P_Heavy[k][2];
+		StdHepP4[nPart][3]=P_Heavy[k][3];
                 nPart ++;
 
 		prim.PDGCode = IdHeavy[k] ; 	
 		prim.TrackId = TrHeavy[k];;
-		prim.Momentum.SetX(P_Heavy[0][k]);
-		prim.Momentum.SetY(P_Heavy[1][k]);
-		prim.Momentum.SetZ(P_Heavy[2][k]);
-		prim.Momentum.SetE(P_Heavy[3][k]);
+		prim.Momentum.SetX(P_Heavy[k][0]);
+		prim.Momentum.SetY(P_Heavy[k][1]);
+		prim.Momentum.SetZ(P_Heavy[k][2]);
+		prim.Momentum.SetE(P_Heavy[k][3]);
 		vtx.Particles.push_back(prim);
 	}
        
@@ -294,7 +297,7 @@ ESEMPI di GENIE target CODES
 
 	char genie_format_reaction[100];
 //	sprintf( genie_format_reaction, "%s:%i;tgt:%i;N:%i;%s;%s,%s",nu_type,Primary,Target_genie_code,Nboh,CC_NC,QES_RES_DIS);
-	sprintf( genie_format_reaction, "%s:%i;tgt:%s;%s;%s",nu_type,Primary,Target_genie_code,CC_NC,QES_RES_DIS);
+	sprintf( genie_format_reaction, "%s:%d;tgt:%s;%s;%s",nu_type,Primary,Target_genie_code,CC_NC,QES_RES_DIS);
 
 
 	vtx.Reaction = genie_format_reaction;   
