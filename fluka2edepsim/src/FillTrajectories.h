@@ -1,9 +1,10 @@
 void FillTrajectories(std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEntry) {
        //Variables
-       Int_t   RunNum, EveNum  , IdInc[MaxNhit], ParTrInc[MaxNhit];
+       Int_t   RunNum, EveNum;
+       //Int_t   RunNum, EveNum  , IdInc[MaxNhit], ParTrInc[MaxNhit]; // moved to MainWrite.cxx
        //Int_t   TrInc[MaxNhit];
-       Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
-       Float_t PosInc[MaxNhit][3];
+       //Float_t PInc[MaxNhit][5], TimeInc[MaxNhit]; // moved to MainWrite.cxx
+       //Float_t PosInc[MaxNhit][3];                 // moved to MainWrite.cxx
        //Int_t IdParInc[MaxNhit], IdTrack;
        
 	//HitTree Info
