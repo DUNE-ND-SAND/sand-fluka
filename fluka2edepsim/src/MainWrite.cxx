@@ -21,8 +21,21 @@ const int MaxN   = 1000; //Max Number of hits
 //Int_t   RunNum, EveNum  , NIncHits, IdTrack , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit], LatStt[MaxNhit];
 //Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
 //Float_t PosInc[MaxNhit][3];
-Int_t NIncHits, NStt, NSttHits;
-Int_t   TrInc[MaxNhit], TrStt[MaxNhit];
+Int_t NIncHits, NStt, NSttHits, NCalHits, NCatchHits;
+Int_t TrInc[MaxNhit], TrStt[MaxNhit], TrSttHits[MaxNhit], TrCalHits[MaxNhit], TrCatchHits[MaxNhit];
+
+// From FillTrajectories.h:
+Int_t IdInc[MaxNhit], ParTrInc[MaxNhit], PInc[MaxNhit][5], TimeInc[MaxNhit], PosInc[MaxNhit][3];
+
+// From FillSegmentDetectors.h:
+const int NhitMax = MaxNhit;
+const int NCellMax = MaxNhit;
+Int_t IdStt[NhitMax], IdParStt[NhitMax], IntParStt[NhitMax], PrimTrStt[NhitMax], RegStt[NhitMax], DirStt[NhitMax];
+Float_t PosInStt[NhitMax][3], PosOuStt[NhitMax][3], PStt[NhitMax][5], TimeStt[NhitMax], EdepStt[NhitMax], EdqStt[NhitMax];
+//
+Int_t IdCell[NCellMax],IdParCell[NCellMax];
+Float_t PosCell[NCellMax][3],EdepCell[NCellMax],EdepQCell[NCellMax],TimeCell[NCellMax];
+//
 #include "FillPrimaries.h"
 #include "FillTrajectories.h"
 #include "FillSegmentDetectors.h"
@@ -53,7 +66,9 @@ int main(int argc, char* argv[])
 	//TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_nocube_tr_numu_001_Out.root");
 	//TFile *fInput = new TFile("/eos/user/s/salap/DUNE-IT/sand/sand_testflags001_Out.root");
 	//TFile *fInput = new TFile("/data/scratch/numu_1000.0.edepsim.root");  //FIXME to be deleted for general inputfile
-	TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/DATA_mio/sand_testflags001_Out.root");  //FIXME to be deleted for general inputfile
+	//TFile *fInput = new TFile("/home/NEUTRINO/leadinotodune/DATA_mio/sand_testflags001_Out.root");  //FIXME to be deleted for general inputfile
+	TFile *fInput = new TFile("/data/Fluka/sand2020_nocube_sttonly_anumu001_Out.root");
+
 	//*************************************************
 //  TO BE USED FOR INPUT FROM CALL and OUTPUT with the name INPUT.fluka2edepsim.root
 /*	TFile *fInput = new TFile(finname);
