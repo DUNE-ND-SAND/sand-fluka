@@ -290,9 +290,9 @@ ESEMPI di GENIE target CODES
 
 	char* nu_type=NULL;
 	if(Primary==-14) nu_type=(char *)"nu_bar_mu";
-	if(Primary==14) nu_type=(char *)"nu_mu";
-	if(Primary==-12) nu_type=(char *)"nu_bar_e";
-	if(Primary==12) nu_type=(char *)"nu_e";
+	else if(Primary==14) nu_type=(char *)"nu_mu";
+	else if(Primary==-12) nu_type=(char *)"nu_bar_e";
+	else if(Primary==12) nu_type=(char *)"nu_e";
 	else{ std::cout<<"ERROR nu type not found-- Primary : "<<Primary<<std::endl;}
 
 	//int Nboh=111111; //nucleone con cui ha interagito il neutrino non abbiamo questa info in FLUKA e quindi non la mettiamo
