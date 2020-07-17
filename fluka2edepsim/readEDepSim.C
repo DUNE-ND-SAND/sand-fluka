@@ -11,8 +11,8 @@
 
 TTree* gEDepSimTree = NULL;
 TG4Event* gEDepSimEvent = NULL;
-bool flukafile=false; //put true to read Provadep.root
-bool traj=false;      //put true to read trajectories
+bool flukafile=true; //put true to read Provadep.root
+bool traj=true;      //put true to read trajectories
 bool segm=false;      //put true to read segment	
 TH2F* PosCalZY;
 TH2F* PosCalXY;
@@ -25,8 +25,10 @@ void readEDepSim() {
 	PosCalXY = new TH2F("PosCalXY","PosCalXY",1000,-2500,2500,1000,-5000,0); //-5000.0,0.0,1000,21500.0,26500.0);
 	if(flukafile==true){
 	//	TFile *ffile=new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/build/Prova.fluka2edep.root", "READ");
-		TFile *ffile=new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/build/Prova.fluka2edep.root", "READ");
+		TFile *ffile=new TFile("/home/NEUTRINO/leadinotodune/MASTER/sand-fluka/fluka2edepsim/sand_testflags001_Out.fluka2edep.root", "READ");
 		gEDepSimTree = (TTree*) ffile->Get("EDepSimEvents");
+		
+		/*
 		vector<pair<string,TVector3>>* MapGeo= NULL;
 		ffile->GetObject("myGeometryMap",MapGeo);     //build by  WriteObjectAny(&map, "vector<pair<string,TVector3>>","myGeometryMap");
 
@@ -42,7 +44,7 @@ void readEDepSim() {
 //			std::cout<<"det "<<val.first<<std::endl;
 //			std::cout<<"point "<<val.second(0)<<" "<<val.second(1)<<" "<<val.second(2)<<std::endl;
 		}
-
+*/
 	}else	gEDepSimTree = (TTree*) gFile->Get("EDepSimEvents");
 
 	if (!gEDepSimTree) {
@@ -63,9 +65,9 @@ void readEDepSim() {
 		EDepSimDumpEvent();
 		//gEDepSimTree->Print();
 	}
-	TFile *outf=new TFile ("drawCalZY.root", "RECREATE");	
-	PosCalZY->Write();
-	PosCalX->Write();
+//	TFile *outf=new TFile ("drawCalZY.root", "RECREATE");	
+//	PosCalZY->Write();
+//	PosCalX->Write();
 }
 TTree* EDepSimTree() {
 	return gEDepSimTree;
