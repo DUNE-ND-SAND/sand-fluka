@@ -26,7 +26,8 @@ Int_t NIncHits, NStt, NSttHits, NCalHits, NCatchHits;
 Int_t TrInc[MaxNhit], TrStt[MaxNhit], TrSttHits[MaxNhit], TrCalHits[MaxNhit], TrCatchHits[MaxNhit];
 
 // From FillTrajectories.h:
-Int_t IdInc[MaxNhit], ParTrInc[MaxNhit], PInc[MaxNhit][5], TimeInc[MaxNhit], PosInc[MaxNhit][3];
+Int_t IdInc[MaxNhit], ParTrInc[MaxNhit];
+Float_t PInc[MaxNhit][5], TimeInc[MaxNhit], PosInc[MaxNhit][3];
 
 // From FillSegmentDetectors.h:
 const int NhitMax = MaxNhit;
