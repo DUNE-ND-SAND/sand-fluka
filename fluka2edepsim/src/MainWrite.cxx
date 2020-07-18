@@ -11,32 +11,25 @@
 
 const int MaxNhit   = 1000000; //Max Number of hits
 const int MaxN   = 10000; //Max Number of hits
-//const int MaxNHad   = 10000; //Max Number of hits
-//const int MaxNHeavy = 10000; //Max Number of hits
-//const int MaxNPhot  = 10000; //Max Number of hits
-//const int MaxNTr    = 10000; //Max Number of hits
 
 //Global variables
-//Int_t  IdTrack, NumTracks, IdTrck[MaxNTr], NumLep, IdLep[MaxNLep], TrLep[MaxNLep], NumHad, IdHad[MaxNHad], TrHad[MaxNHad], NumHeavy, IdHeavy[MaxNHeavy], TrHeavy[MaxNHeavy], NumPhot, IdPhot[MaxNPhot], TrPhot[MaxNPhot];
-//Float_t P_Lep[MaxNLep]  , P_Had[MaxNHad], P_Heavy[MaxNHeavy], P_Phot[MaxNPhot];
-//Int_t   RunNum, EveNum  , NIncHits, IdTrack , IdInc[MaxNhit], IdParInc[MaxNhit], TrInc[MaxNhit], LatStt[MaxNhit];
-//Float_t PInc[MaxNhit][5], TimeInc[MaxNhit];
-//Float_t PosInc[MaxNhit][3];
-Int_t NIncHits, NStt, NSttHits, NCalHits, NCatchHits;
+Int_t NIncHits, NStt, NSttHits, NCalHits, NCatchHits, NIneHits, NTIneSec;
 Int_t TrInc[MaxNhit], TrStt[MaxNhit], TrSttHits[MaxNhit], TrCalHits[MaxNhit], TrCatchHits[MaxNhit];
 
 // From FillTrajectories.h:
-Int_t IdInc[MaxNhit], ParTrInc[MaxNhit];
-Float_t PInc[MaxNhit][5], TimeInc[MaxNhit], PosInc[MaxNhit][3];
+Int_t IdInc[MaxNhit], ParTrInc[MaxNhit], IdIne[MaxNhit], TypeIne[MaxNhit], IdParIne[MaxNhit], TrIne[MaxNhit], NSecIne[MaxNhit], IdSecIne[MaxNhit];
+Float_t PInc[MaxNhit][5], TimeInc[MaxNhit], PosInc[MaxNhit][3], PosIne[MaxNhit][3], PIne[MaxNhit][3], TimeIne[MaxNhit], PSec[MaxNhit][5];
 
 // From FillSegmentDetectors.h:
 const int NhitMax = MaxNhit;
 const int NCellMax = MaxNhit;
-Int_t IdStt[NhitMax], IdParStt[NhitMax], IntParStt[NhitMax], PrimTrStt[NhitMax], RegStt[NhitMax], DirStt[NhitMax];
+Int_t IdStt[NhitMax], IdParStt[NhitMax], IntParStt[NhitMax], PrimTrStt[NhitMax], RegStt[NhitMax], DirStt[NhitMax], FirstSec[NhitMax], TrSecIne[NhitMax] ;
 Float_t PosInStt[NhitMax][3], PosOuStt[NhitMax][3], PStt[NhitMax][5], TimeStt[NhitMax], EdepStt[NhitMax], EdqStt[NhitMax];
 //
 Int_t IdCell[NCellMax],IdParCell[NCellMax];
 Float_t PosCell[NCellMax][3],EdepCell[NCellMax],EdepQCell[NCellMax],TimeCell[NCellMax];
+
+
 //
 #include "FillPrimaries.h"
 #include "FillTrajectories.h"
@@ -127,12 +120,13 @@ int main(int argc, char* argv[])
 
 	int NEVENT=HeaderTree->GetEntries();
 	std::cout<<"Number of event to rewrite: "<<NEVENT<<std::endl;
+	NEVENT=2;
 
 	//scrivo dentro EDEPSIM
 	for(int i=0; i<NEVENT; i++){  
 
 		std::cout<<"entry ---------------------------------------"<<i<<std::endl;	
-		MapGeometry::Get()->ClearMap();
+		//MapGeometry::Get()->ClearMap();
 	
 		pEvent->RunId = 0;
 		pEvent->EventId = i;
@@ -151,8 +145,7 @@ int main(int argc, char* argv[])
                 //Check();
 	 	fEventTree->Fill();
 
-//		MapTree::Get()->FillTree(10, 0.02);
-		MapTree::Get()->Fill_MapTree(MapGeometry::Get()->GetMap(), i);
+	//	MapTree::Get()->Fill_MapTree(MapGeometry::Get()->GetMap(), i);
 	
 	/*	
 		std::cout<<"Ok"<<std::endl;
