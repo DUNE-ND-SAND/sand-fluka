@@ -19,61 +19,6 @@ int FindFather(int tr, int NT){
 }
 
 
-int IndexToInsert(std::vector<TG4Trajectory>& t, int newtr){
-//gli elementi vanno ordinati in ordine crescente di TrackId
-	int dim=t.size();
-	//std::cout<<"dimensione del vettore "<<t.size()<<std::endl;
-	//std::cout<<"new tr "<<newtr<<std::endl;
-        int c=0;
-	if(dim<1) return 0;
-	if(dim<2) {if(newtr>t.begin()->TrackId) c=1;
-		   else c=0;
-      		   return c;
-	}
-	int i=1;
-	c=0;
-	for (std::vector<TG4Trajectory>::iterator p = t.begin();p != t.end(); ++p) {
-             	if(i==dim){
-			if(newtr>p->TrackId) return c=dim;
-			else return c=dim-1;
-		}else{				
-		std::vector<TG4Trajectory>::iterator p2 = t.begin()+i;
-		std::cout<<p->TrackId<<" "<<p2->TrackId<<std::endl; 
-		 if(newtr>(p->TrackId) && newtr<(p2->TrackId)){ return c+1;}
-		}
-		c++;
-		i++;
-		}		
-return -1;
-}
-
-
-
-int IndexToInsert2(std::vector<TG4Trajectory>& t, int newtr){
-//gli elementi vanno ordinati in ordine crescente di TrackId
-	int dim=t.size();
-	int c=0;
-	//std::cout<<"dimensione del vettore "<<t.size()<<std::endl;
-        if(newtr<(t.begin()->TrackId)) return c=0;
-	int i=1;
-	c=0;
-	for (std::vector<TG4Trajectory>::iterator p = t.begin();p != t.end(); ++p) {
-             	if(i==dim){
-			if(newtr>p->TrackId) return c=dim;
-			else return c=dim-1;
-		}else{				
-		std::vector<TG4Trajectory>::iterator p2 = t.begin()+i;
-	//	std::cout<<p->TrackId<<" "<<p2->TrackId<<std::endl; 
-		 if(newtr>(p->TrackId) && newtr<(p2->TrackId)){ return c+1;}
-		}
-		c++;
-		i++;
-		}		
-return -1;
-}
-
-
-
 
 void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int iEntry) {
 	//Variables
@@ -126,7 +71,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 	TG4Trajectory *tx2=0;
 
 
-	//mettere come funzione...sono 4 volte uguali!!...
 	//loop on NIncHits the hit on the boudary
 
 
@@ -180,11 +124,13 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 			}		
 	}
 
+/*
 	std::cout<<"CICLO INC finito "<<std::endl;
 	 for (std::map<int,int>::iterator i = TrInDest.begin();
         				 i != TrInDest.end(); ++i) {
   					 std::cout<<"i first "<<i->first<<" isecond "<<i->second<<std::endl;
-				}
+		}
+*/
 		//loop on the NIneHits
 		//
 
@@ -309,24 +255,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 	
 	
 
-//controllo che i punti ci siano tutti:
-//
-
-
-/*
-std::cout<<"Prima di riordinare "<<std::endl;
-for (std::vector<TG4Trajectory>::iterator
-				t = dest.begin();
-				t != dest.end(); ++t) {
-			std::cout << " TrackId " << t->TrackId;
-			std::cout << " ParentId " << t->ParentId;
-			int count = t->Points.size();
-			std::cout << " Up to " << count << " points";
-			std::cout << std::endl;
-
-	}
-
-*/
 
 
  for (std::map<int,int>::iterator i = TrInDest.begin();
@@ -350,52 +278,4 @@ for (std::vector<TG4Trajectory>::iterator
 			std::cout << std::endl;
 
 	}
-
-
-std::map<int,int> prova;
-
-   prova.insert(std::make_pair(10,1));
-   prova.insert(std::make_pair(20,2));
-   prova.insert(std::make_pair(30,3));
-
-if(prova.find(30)==TrInDest.end()) std::cout<<"non ho trovato l'ultimo" <<std::endl;
-else std::cout<<"ho trovato l'ultimo" <<std::endl;
-
-if(prova.find(10)==TrInDest.end()) std::cout<<"non ho trovato 10" <<std::endl;
-else std::cout<<"ho trovato 10" <<std::endl;
-
-
-                                //if(tx != 0){
-                                //                                TrInDest.insert(std::make_pair(PrTrInc,dest.size()));
-                                //                                // 	int index=IndexToInsert(dest, PrTrInc);
-   //        	                dest.insert(dest.begin()+index, *tx);
-/*
-int tprec=-1;	
-int i=0;
-std::vector<TG4Trajectory>::iterator t = dest.begin();
-
-while (t!= dest.end()){
-	const TG4Trajectory tx3=dest.at(i);				
-	if((dest.at(i).TrackId)<tprec) {
-		dest.erase(dest.begin()+i); 
-		std::cout<<"tolgo "<<i<<std::endl;
-	
-		int index=IndexToInsert2(dest, tx3.TrackId);
-                dest.insert(dest.begin()+index, tx3);
-		t=dest.begin(); i=0; tprec=-1;
-	}else{
-	tprec=t->TrackId;
-	i++;
-        ++t;
-	}
-}
-
-
-
-std::cout<<"DOPO-------------------------------------------------------------------"<<std::endl;
-
-i
-
-*/
-
 }
