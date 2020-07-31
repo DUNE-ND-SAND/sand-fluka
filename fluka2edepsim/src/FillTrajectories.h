@@ -18,6 +18,9 @@ int FindFather(int tr, int NT){
 	return tr_father;
 }
 
+bool my_IsBigger(TG4TrajectoryPoint i,TG4TrajectoryPoint j) { 
+	return (i.Position.T()<j.Position.T());
+ }
 
 
 void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int iEntry) {
@@ -117,6 +120,10 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 		point.Momentum.SetXYZ (PInc[j][0], PInc[j][1], PInc[j][2]);
 		//point.Process = edepPoint->GetProcessType();
 		//point.Subprocess = edepPoint->GetProcessSubType();
+	
+///		std::cout<<"Inserisco il punto INC "<<point.Position.X()<<" "<<point.Position.Y()<<" "<<point.Position.Z()<<" "<<point.Position.T()<<std::endl;	
+
+
 		tx->Points.push_back(point);
 		if(tx != 0 && j == NIncHits - 1 && TrInDest.find(PrTrInc)==TrInDest.end())  {
 			TrInDest.insert(std::make_pair(PrTrInc,dest.size()));
@@ -124,13 +131,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 			}		
 	}
 
-/*
-	std::cout<<"CICLO INC finito "<<std::endl;
-	 for (std::map<int,int>::iterator i = TrInDest.begin();
-        				 i != TrInDest.end(); ++i) {
-  					 std::cout<<"i first "<<i->first<<" isecond "<<i->second<<std::endl;
-		}
-*/
 		//loop on the NIneHits
 		//
 
@@ -148,7 +148,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				dest.push_back(*tx);
 
 			///       std::cout<<" ************* Track is not there ***********"<<std::endl;
-				std::cout<<dest.size()<<std::endl;
 			}
 
 			PrTrIne = TrIne[j];
@@ -158,7 +157,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 					//        std::cout<<" ************* Track is there ***********"<<std::endl;
 					//If it doesnt exist make it
 			}else{
-				std::cout<<dest.size()<<std::endl;
 				
 				tx           = new TG4Trajectory;
 				tx->TrackId  = TrIne[j];
@@ -178,10 +176,13 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 		// Make sure they are ordered...etc ...see code /src/EDepSimPersistencyManager.cc at line 437
 		TG4TrajectoryPoint point;
 		TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosIne[j][0], PosIne[j][1], PosIne[j][2], TimeIne[j]));
+	
+
 		point.Position.SetXYZT(pos.X(), pos.Y(), pos.Z(), pos.T());
 		point.Momentum.SetXYZ (PIne[j][0], PIne[j][1], PIne[j][2]);
 		//point.Process = edepPoint->GetProcessType();
 		//point.Subprocess = edepPoint->GetProcessSubType();
+
 		tx->Points.push_back(point);
 		if(tx != 0 && j == NIneHits - 1 && TrInDest.find(PrTrIne)==TrInDest.end()){
 				TrInDest.insert(std::make_pair(PrTrIne,dest.size()));
@@ -199,7 +200,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				if(PrSecTrIne==TrSecIne[i]) std::cout<<"ERROR...stesso numero a particelle diverse???"<<std::endl;
 
 				//gli indici di questa interazione vanno da k a k+NSecIne[i]
-		//		std::cout<< "i TrSecIne : "<<i<<" "<<TrSecIne[i] <<std::endl;	
+				std::cout<< "i TrSecIne : "<<" "<<TrSecIne[i] <<" IdSecIne "<<IdSecIne[i]<<std::endl;	
 
 				if(TrInDest.find(TrSecIne[i])!=TrInDest.end()){
 					tx = &(dest[TrInDest[TrSecIne[i]]]);
@@ -218,35 +219,44 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				// Add the particles associated with the vertex to the summary.
 				// Make sure they are ordered...etc ...see code /src/EDepSimPersistencyManager.cc at line 437
 				TG4TrajectoryPoint point;
-				TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosIne[i][0], PosIne[i][1], PosIne[i][2], TimeIne[i]));
-
+				TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosIne[j][0], PosIne[j][1], PosIne[j][2], TimeIne[j]));
 				point.Position.SetXYZT(pos.X(), pos.Y(), pos.Z(), pos.T());
 				point.Momentum.SetXYZ (PSec[i][0], PSec[i][1], PSec[i][2]);
 				//point.Process = edepPoint->GetProcessType();
 				//point.Subprocess = edepPoint->GetProcessSubType();
-				
+	
 				bool newp=true;
 				//std::cout<<"numero di punti su cui controllo "<<tx->Points.size()<<std::endl;
+				float timelast=-1;
 				for (std::vector<TG4TrajectoryPoint>::iterator
 	                           p = tx->Points.begin();
         	                   p != tx->Points.end();
                 		           ++p) {
-                           		if(abs(point.Position.X()-p->Position.X())<0.1 && abs(point.Position.Y()-p->Position.Y())<0.1 && abs(point.Position.Z()-p->Position.Z())<0.1 && abs(point.Position.T()-p->Position.T())<1e-11) {
-						std::cout<<"ho trovato un punto uguale "<<std::endl;
+                           		timelast=p->Position.T();
+					if(abs(point.Position.X()-p->Position.X())<0.1 && abs(point.Position.Y()-p->Position.Y())<0.1 && abs(point.Position.Z()-p->Position.Z())<0.1 && abs(point.Position.T()-p->Position.T())<1e-11) {
+						std::cout<<"ERROR ho trovato un punto uguale "<<std::endl;
 						newp=false;
 						break;
 					}
 				}
 				
 				if(newp==true) {
-					tx->Points.push_back(point);
-				}		
+				//std::cout<<"tempo dell'ultimo punto "<<tx->Points.back().Position.T()<<std::endl;
+				if(timelast>point.Position.T()){ 
+				
+				 std::cout<<"ERROR on time: l'ultimo punto è precedente!!  nuovo punto e timelast "<<point.Position.T()<<" "<<timelast<<std::endl;	
+				}
+			//	std::cout<<"Inserisco il punto SEC"<<point.Position.X()<<" "<<point.Position.Y()<<" "<<point.Position.Z()<<" "<<point.Position.T()<<std::endl;	
+
+
+				tx->Points.push_back(point);
+				}							
 				//std::cout<<"numero di punti a fine giro "<<tx->Points.size()<<std::endl;
 				
 				PrSecTrIne=TrSecIne[i];
 				
-					TrInDest.insert(std::make_pair(PrSecTrIne,dest.size()));
-					dest.push_back(*tx);		
+				TrInDest.insert(std::make_pair(PrSecTrIne,dest.size()));
+				dest.push_back(*tx);		
 								//}
 				//sono tutti punti diversi!!..quindi chiudo subito la traccia
 			}
@@ -255,8 +265,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 	
 	
 
-
-
+//riordino le tracce con TrackId in ordine crescente
  for (std::map<int,int>::iterator i = TrInDest.begin();
          i != TrInDest.end(); ++i) {
         destfin.push_back(dest[i->second]);
@@ -272,10 +281,30 @@ for (std::vector<TG4Trajectory>::iterator
 				t = destfin.begin();
 				t != destfin.end(); ++t) {
 			std::cout << " TrackId " << t->TrackId;
-			std::cout << " ParentId " << t->ParentId;
+		//	std::cout << " ParentId " << t->ParentId;
 			int count = t->Points.size();
 			std::cout << " Up to " << count << " points";
 			std::cout << std::endl;
+			std::sort (t->Points.begin(), t->Points.end(), my_IsBigger); 
+ 					
+			float last=-1;	
+                       for (std::vector<TG4TrajectoryPoint>::iterator
+		 		   p = t->Points.begin();
+				   p != t->Points.end();
+			   		++p) {
+			if(p->Position.T()<last) std::cout<<"ERRORRRRRR"<<std::endl;
+			last=p->Position.T();
+			std::cout << " Time: " << p->Position.T();
+			   std::cout << " Position: " << p->Position.X()<<" "<< p->Position.Y()<<" "<< p->Position.Z();
+			//PosX->Fill(p->Position.X());
+			//std::cout << " Subprocess: " << p->Subprocess;
+			std::cout << std::endl;
+			if (--count < 1) break;
+			}
 
 	}
+std::cout << " Up to " << std::endl;
+std::cout << "Tempo del'ultimo punto "<<((destfin.back()).Points.back()).Position.X()<<std::endl;
+
+
 }
