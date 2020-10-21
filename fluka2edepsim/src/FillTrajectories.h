@@ -80,7 +80,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 		if(TrInc[j] != PrTrInc){
 
 			TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosInc[j][0], PosInc[j][1], PosInc[j][2], TimeInc[j]));
-			TVector3 mom(PInc[j][0], PInc[j][1], PInc[j][2]); 
 
 			//If it doesnt find it --> add
 			if(tx != 0 && TrInDest.find(PrTrInc)==TrInDest.end()){
@@ -115,7 +114,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 		TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosInc[j][0], PosInc[j][1], PosInc[j][2], TimeInc[j]));
 
 		point.Position.SetXYZT(pos.X(), pos.Y(), pos.Z(), pos.T());
-		point.Momentum.SetXYZ (PInc[j][0], PInc[j][1], PInc[j][2]);
+		point.Momentum.SetXYZ (PInc[j][0]*1000, PInc[j][1]*1000, PInc[j][2]*1000);
 		//point.Process = edepPoint->GetProcessType();
 		//point.Subprocess = edepPoint->GetProcessSubType();
 	
@@ -177,7 +176,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 	
 
 		point.Position.SetXYZT(pos.X(), pos.Y(), pos.Z(), pos.T());
-		point.Momentum.SetXYZ (PIne[j][0], PIne[j][1], PIne[j][2]);
+		point.Momentum.SetXYZ (PIne[j][0]*1000, PIne[j][1]*1000, PIne[j][2]*1000);
 		//point.Process = edepPoint->GetProcessType();
 		//point.Subprocess = edepPoint->GetProcessSubType();
 
@@ -219,7 +218,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				TG4TrajectoryPoint point;
 				TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosIne[j][0], PosIne[j][1], PosIne[j][2], TimeIne[j]));
 				point.Position.SetXYZT(pos.X(), pos.Y(), pos.Z(), pos.T());
-				point.Momentum.SetXYZ (PSec[i][0], PSec[i][1], PSec[i][2]);
+				point.Momentum.SetXYZ (PSec[i][0]*1000, PSec[i][1]*1000, PSec[i][2]*1000);
 				//point.Process = edepPoint->GetProcessType();
 				//point.Subprocess = edepPoint->GetProcessSubType();
 	

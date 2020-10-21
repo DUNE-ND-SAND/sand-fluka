@@ -186,19 +186,21 @@ ESEMPI di GENIE target CODES
 	int nPart=2;
 		
 	for(int k=0; k<NumLep; k++){
-                StdHepPdg[nPart] = IdLep[k]; 
+               	//formato di Genie in GeV
+		 StdHepPdg[nPart] = IdLep[k]; 
 		StdHepP4[nPart][0]=P_Lep[k][0];
 		StdHepP4[nPart][1]=P_Lep[k][1];
 		StdHepP4[nPart][2]=P_Lep[k][2];
 		StdHepP4[nPart][3]=P_Lep[k][3];
                 nPart ++;
 
+		//formato di edepsim in MeV
 		prim.PDGCode = IdLep[k] ; 	
 		prim.TrackId = TrLep[k];;
-		prim.Momentum.SetX(P_Lep[k][0]);
-		prim.Momentum.SetY(P_Lep[k][1]);
-		prim.Momentum.SetZ(P_Lep[k][2]);
-		prim.Momentum.SetE(P_Lep[k][3]);
+		prim.Momentum.SetX(P_Lep[k][0]*1000);
+		prim.Momentum.SetY(P_Lep[k][1]*1000);
+		prim.Momentum.SetZ(P_Lep[k][2]*1000);
+		prim.Momentum.SetE(P_Lep[k][3]*1000);
 		vtx.Particles.push_back(prim);
 	}
 
@@ -212,10 +214,10 @@ ESEMPI di GENIE target CODES
 
 		prim.PDGCode = IdHad[k] ; 	
 		prim.TrackId = TrHad[k];;
-		prim.Momentum.SetX(P_Had[k][0]);
-		prim.Momentum.SetY(P_Had[k][1]);
-		prim.Momentum.SetZ(P_Had[k][2]);
-		prim.Momentum.SetE(P_Had[k][3]);
+		prim.Momentum.SetX(P_Had[k][0]*1000);
+		prim.Momentum.SetY(P_Had[k][1]*1000);
+		prim.Momentum.SetZ(P_Had[k][2]*1000);
+		prim.Momentum.SetE(P_Had[k][3]*1000);
 		vtx.Particles.push_back(prim);
 	}
 
@@ -229,10 +231,10 @@ ESEMPI di GENIE target CODES
 
 		prim.PDGCode = IdPhot[k] ; 	
 		prim.TrackId = TrPhot[k];;
-		prim.Momentum.SetX(P_Phot[k][0]);
-		prim.Momentum.SetY(P_Phot[k][1]);
-		prim.Momentum.SetZ(P_Phot[k][2]);
-		prim.Momentum.SetE(P_Phot[k][3]);
+		prim.Momentum.SetX(P_Phot[k][0]*1000);
+		prim.Momentum.SetY(P_Phot[k][1]*1000);
+		prim.Momentum.SetZ(P_Phot[k][2]*1000);
+		prim.Momentum.SetE(P_Phot[k][3]*1000);
 		vtx.Particles.push_back(prim);
 	}
 
@@ -246,10 +248,10 @@ ESEMPI di GENIE target CODES
 
 		prim.PDGCode = IdHeavy[k] ; 	
 		prim.TrackId = TrHeavy[k];;
-		prim.Momentum.SetX(P_Heavy[k][0]);
-		prim.Momentum.SetY(P_Heavy[k][1]);
-		prim.Momentum.SetZ(P_Heavy[k][2]);
-		prim.Momentum.SetE(P_Heavy[k][3]);
+		prim.Momentum.SetX(P_Heavy[k][0]*1000);
+		prim.Momentum.SetY(P_Heavy[k][1]*1000);
+		prim.Momentum.SetZ(P_Heavy[k][2]*1000);
+		prim.Momentum.SetE(P_Heavy[k][3]*1000);
 		vtx.Particles.push_back(prim);
 	}
        
