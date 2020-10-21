@@ -71,8 +71,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 	TrInDest.clear();
 	
 	TG4Trajectory *tx = 0;	
-	TG4Trajectory *tx2=0;
-
 
 	//loop on NIncHits the hit on the boudary
 
@@ -272,9 +270,19 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
     }
 
 
+//riordino i Points con i tempi crescenti
+
+
+for (std::vector<TG4Trajectory>::iterator
+				t = destfin.begin();
+				t != destfin.end(); ++t) {
+			std::sort (t->Points.begin(), t->Points.end(), my_IsBigger); 
+ 					
+	}
 
 
 
+/*
 std::cout<<"FINE....ecco tutte le traiettorie "<<std::endl;
 
 for (std::vector<TG4Trajectory>::iterator
@@ -303,8 +311,7 @@ for (std::vector<TG4Trajectory>::iterator
 			}
 
 	}
-std::cout << " Up to " << std::endl;
 std::cout << "Tempo del'ultimo punto "<<((destfin.back()).Points.back()).Position.X()<<std::endl;
-
+*/
 
 }
