@@ -82,10 +82,10 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 					float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
 					hit.TrackLength = segLen;
 
-					(hit.Contrib).push_back(TrStt[j]);
+					(hit.Contrib).push_back(TrStt[j]*1e9);
 
-					TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]);
-					TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]);
+					TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]*1e9);
+					TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]*1e9);
 
 					hit.Start=GlobalCoordinates(pos_in);
 					hit.Stop=GlobalCoordinates(pos_out);
@@ -136,10 +136,10 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 					float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
 					hit.TrackLength = segLen;
 
-					(hit.Contrib).push_back(TrStt[j]);
+					(hit.Contrib).push_back(TrStt[j]*1e9);
 
-					TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]);
-					TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]);
+					TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]*1e9);
+					TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]*1e9);
 
 					hit.Start=GlobalCoordinates(pos_in);
 					hit.Stop=GlobalCoordinates(pos_out);
@@ -183,10 +183,10 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 					float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
 					hit.TrackLength = segLen;
 
-					(hit.Contrib).push_back(TrStt[j]);
+					(hit.Contrib).push_back(TrStt[j]*1e9);
 
-					TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]);
-					TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]);
+					TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]*1e9);
+					TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]*1e9);
 
 					hit.Start=GlobalCoordinates(pos_in);
 					hit.Stop=GlobalCoordinates(pos_out);
@@ -249,8 +249,8 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 
 			(hit.Contrib).push_back(IdParCell[j]);
 
-			TLorentzVector pos_in(PosCell[j][0],PosCell[j][1],PosCell[j][2],TimeStt[j]);
-			TLorentzVector pos_out(PosCell[j][0],PosCell[j][1],PosCell[j][2],TimeStt[j]);
+			TLorentzVector pos_in(PosCell[j][0],PosCell[j][1],PosCell[j][2],TimeStt[j]*1e9);
+			TLorentzVector pos_out(PosCell[j][0],PosCell[j][1],PosCell[j][2],TimeStt[j]*1e9);
 
 			hit.Start=GlobalCoordinates(pos_in);
 			hit.Stop=GlobalCoordinates(pos_out);

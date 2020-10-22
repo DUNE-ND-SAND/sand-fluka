@@ -72,6 +72,8 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 	
 	TG4Trajectory *tx = 0;	
 
+
+
 	//loop on NIncHits the hit on the boudary
 
 
@@ -79,7 +81,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 		//std::cout<< " TrInc : "<<j <<" "<< TrInc[j] <<std::endl;	
 		if(TrInc[j] != PrTrInc){
 
-			TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosInc[j][0], PosInc[j][1], PosInc[j][2], TimeInc[j]));
+			TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosInc[j][0], PosInc[j][1], PosInc[j][2], TimeInc[j]*1e9));
 
 			//If it doesnt find it --> add
 			if(tx != 0 && TrInDest.find(PrTrInc)==TrInDest.end()){
@@ -102,6 +104,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				//std::cout<<"TrInc ParTr "<<TrInc[j]<<" "<<ParTrInc[j]<<std::endl;
 				if (TDatabasePDG::Instance()->GetParticle(IdInc[j])){
 					tx->Name     = TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
+
 				}
 				else {
 					tx->Name = "Ion";
@@ -111,7 +114,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 		// Add the particles associated with the vertex to the summary.
 		// Make sure they are ordered...etc ...see code /src/EDepSimPersistencyManager.cc at line 437
 		TG4TrajectoryPoint point;
-		TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosInc[j][0], PosInc[j][1], PosInc[j][2], TimeInc[j]));
+		TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosInc[j][0], PosInc[j][1], PosInc[j][2], TimeInc[j]*1e9));
 
 		point.Position.SetXYZT(pos.X(), pos.Y(), pos.Z(), pos.T());
 		point.Momentum.SetXYZ (PInc[j][0]*1000, PInc[j][1]*1000, PInc[j][2]*1000);
@@ -172,7 +175,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 		// Add the particles associated with the vertex to the summary.
 		// Make sure they are ordered...etc ...see code /src/EDepSimPersistencyManager.cc at line 437
 		TG4TrajectoryPoint point;
-		TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosIne[j][0], PosIne[j][1], PosIne[j][2], TimeIne[j]));
+		TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosIne[j][0], PosIne[j][1], PosIne[j][2], TimeIne[j]*1e9));
 	
 
 		point.Position.SetXYZT(pos.X(), pos.Y(), pos.Z(), pos.T());
@@ -197,7 +200,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				if(PrSecTrIne==TrSecIne[i]) std::cout<<"ERROR...stesso numero a particelle diverse???"<<std::endl;
 
 				//gli indici di questa interazione vanno da k a k+NSecIne[i]
-				std::cout<< "i TrSecIne : "<<" "<<TrSecIne[i] <<" IdSecIne "<<IdSecIne[i]<<std::endl;	
+		//		std::cout<< "i TrSecIne : "<<" "<<TrSecIne[i] <<" IdSecIne "<<IdSecIne[i]<<std::endl;	
 
 				if(TrInDest.find(TrSecIne[i])!=TrInDest.end()){
 					tx = &(dest[TrInDest[TrSecIne[i]]]);
@@ -216,7 +219,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				// Add the particles associated with the vertex to the summary.
 				// Make sure they are ordered...etc ...see code /src/EDepSimPersistencyManager.cc at line 437
 				TG4TrajectoryPoint point;
-				TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosIne[j][0], PosIne[j][1], PosIne[j][2], TimeIne[j]));
+				TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosIne[j][0], PosIne[j][1], PosIne[j][2], TimeIne[j]*1e9));
 				point.Position.SetXYZT(pos.X(), pos.Y(), pos.Z(), pos.T());
 				point.Momentum.SetXYZ (PSec[i][0]*1000, PSec[i][1]*1000, PSec[i][2]*1000);
 				//point.Process = edepPoint->GetProcessType();
