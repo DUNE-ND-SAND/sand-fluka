@@ -6,33 +6,34 @@
 #include "utils.h"
 #include "MapGeometry.h"
 #include "TVector3.h"
+int point_counter;
+
+/*
+int where(Tree *SttTree, int iev){
+int w=-1;
+SttTree->SetBranchAddress("PosInStt",&PosInStt);
+SttTree->GetEntry(iev);
+float rad2 = pow(PosInStt[j][1],2) + pow(PosInStt[j][2],2);
+		// STT:
+ if (rad2 < 40000. && std::abs(PosInStt[j][0])<169.) w=1;
+ if (((rad2>=40000.&&rad2<50625.) || (std::abs(PosInStt[j][0])>=169.)) && std::abs(PosInStt[j][0])<216.){
+	if(w!=-1) std::cout<<"ERROR 1"<<std::endl 	
+	 w=2;
+	
+	}
+ if (rad2>50625. || std::abs(PosInStt[j][0])>216.) {
+	if(w!=-1) std::cout<<"ERROR 2"<<std::endl 	
+	w=3;
+	}	
+return w;
+}
+*/
+
 
 void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev, int entries, int idet) {
 
 	dest.clear();
 
-	//const int NhitMax=MaxNhit;
-	//const int NCellMax=MaxNhit;
-	/*
-	// moved to MainWrite.cxx:
-	//Int_t NStt;
-	Int_t IdStt[NhitMax];
-	Int_t IdParStt[NhitMax];
-	//Int_t TrStt[NhitMax];
-	Int_t IntParStt[NhitMax];
-	Int_t PrimTrStt[NhitMax];
-	Int_t RegStt[NhitMax];
-	Int_t DirStt[NhitMax];
-	Float_t PosInStt[NhitMax][3];
-	Float_t PosOuStt[NhitMax][3];
-	Float_t PStt[NhitMax][5];
-	Float_t TimeStt[NhitMax];
-	Float_t EdepStt[NhitMax];
-	Float_t EdqStt[NhitMax];
-	//
-	Int_t NCells,IdCell[NCellMax],IdParCell[NCellMax];
-	Float_t PosCell[NCellMax][3],EdepCell[NCellMax],EdepQCell[NCellMax],TimeCell[NCellMax];
-	*/
 	Int_t NCells;
 	Float_t hitPosX,hitPosY,hitPosZ;
 	//
@@ -43,7 +44,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 	//2 stt_vertical
 	//3 3dst 
 	//4 catcher
-
+	//
 
 	if (idet < 4) {
 		DetHits->SetBranchAddress("NStt",&NStt);
@@ -63,10 +64,36 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 
 		DetHits->GetEntry(iev); // AS
 
-		//if (entries>100) entries = 100;  // for debug
+
+/*
+		// for debug
+		int w=-1;
+		for(int o=0; o<NStt; o++){
+		w=-1;
+		float rad2 = pow(PosInStt[o][1],2) + pow(PosInStt[o][2],2);
+		// STT:
+ 		if (rad2 < 40000. && std::abs(PosInStt[o][0])<169.) w=1;   //STT
+ 		if ((rad2>=40000.&& rad2<50625. && std::abs(PosInStt[o][0])<216.) || (std::abs(PosInStt[o][0])>=169. && std::abs(PosInStt[o][0])<192. && rad2<40000.)){
+			if(w!=-1) std::cout<<"ERROR 1"<<std::endl; 	
+	 		w=2;
+	
+		}
+ 		if (rad2>50625. || std::abs(PosInStt[o][0])>=216.) {
+			if(w!=-1) {
+				std::cout<<"ERROR 2"<<std::endl; 	
+				std::cout<<"Point "<<PosInStt[o][0]<<" "<<PosInStt[o][1]<<" "<<PosInStt[o][2]<<" w "<<w<<std::endl;
+				}
+				w=3;
+				}	
+		if(w==-1) std::cout<<"ERROR in nessuno"<<std::endl;
+
+		}
+*/
 		if (idet==1) {
 			NSttHits = 0;
 			for(int j=0; j<NStt; j++){
+				
+
 				float rad2 = pow(PosInStt[j][1],2) + pow(PosInStt[j][2],2);
 				// STT:
 				if (rad2 < 40000. && std::abs(PosInStt[j][0])<169.) {
@@ -77,12 +104,12 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 					//hit.PrimaryId = IdParStt[j];
 					//if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = TrStt[j];
 					hit.PrimaryId = PrimTrStt[j];
-					hit.EnergyDeposit = EdepStt[j];
+					hit.EnergyDeposit = EdqStt[j]*1000;     
 					hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 					float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
 					hit.TrackLength = segLen;
 
-					(hit.Contrib).push_back(TrStt[j]*1e9);
+					(hit.Contrib).push_back(TrStt[j]);
 
 					TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]*1e9);
 					TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]*1e9);
@@ -112,10 +139,10 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 					//	    std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
 					}
 					*/
+					point_counter++;
 					dest.push_back(hit);
 				}
 			}
-			//std::cout<<" STT> NSttHits: "<<NSttHits<<std::endl;
 		}
 		else if (idet==2) {
 			//int NCalHits = 0;
@@ -123,20 +150,21 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 			for(int j=0; j<NStt; j++){
 				float rad2 = pow(PosInStt[j][1],2) + pow(PosInStt[j][2],2);
 				// ECAL:
-				if (((rad2>=40000.&&rad2<50625.) || (std::abs(PosInStt[j][0])>=169.)) && std::abs(PosInStt[j][0])<216.) {
-
+		
+				if ((rad2>=40000.&& rad2<50625. && std::abs(PosInStt[j][0])<215.) || (std::abs(PosInStt[j][0])>=169. && std::abs(PosInStt[j][0])<192. && rad2<40000.)){
+	
 					TG4HitSegment hit;
 					TG4HitSegment::Contributors Contrib;
 
 					//hit.PrimaryId = IdParStt[j];
 					//if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = TrStt[j];
 					hit.PrimaryId = PrimTrStt[j];
-					hit.EnergyDeposit = EdepStt[j];
+					hit.EnergyDeposit = EdqStt[j]*1000;
 					hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 					float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
 					hit.TrackLength = segLen;
 
-					(hit.Contrib).push_back(TrStt[j]*1e9);
+					(hit.Contrib).push_back(TrStt[j]);
 
 					TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]*1e9);
 					TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]*1e9);
@@ -162,6 +190,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 					//	    std::cout<<" ... xout: "<<PosOuStt[j][0]<<" yout: "<<PosOuStt[j][1]<<" zout: "<<PosOuStt[j][2]<<std::endl;
 					}
 					*/
+					point_counter++;
 					dest.push_back(hit);
 				}
 			}
@@ -178,12 +207,12 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 					TG4HitSegment::Contributors Contrib;
 
 					hit.PrimaryId = PrimTrStt[j];
-					hit.EnergyDeposit = EdepStt[j];
+					hit.EnergyDeposit = EdqStt[j];
 					hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
 					float segLen = sqrt(pow((PosOuStt[j][0]-PosInStt[j][0]),2) + pow((PosOuStt[j][1]-PosInStt[j][1]),2) + pow((PosOuStt[j][2]-PosInStt[j][2]),2));
 					hit.TrackLength = segLen;
 
-					(hit.Contrib).push_back(TrStt[j]*1e9);
+					(hit.Contrib).push_back(TrStt[j]);
 
 					TLorentzVector pos_in(PosInStt[j][0],PosInStt[j][1],PosInStt[j][2],TimeStt[j]*1e9);
 					TLorentzVector pos_out(PosOuStt[j][0],PosOuStt[j][1],PosOuStt[j][2],TimeStt[j]*1e9);
@@ -214,6 +243,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 					}
 					*/
 					dest.push_back(hit);
+					point_counter++;
 				}
 			}
 			// std::cout<<" CATCHER> NCatchHits: "<<NCatchHits<<std::endl;
@@ -275,6 +305,9 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 void FillSegmentDetectors(std::map<std::string, std::vector<TG4HitSegment> >& dest, TTree *SttHits, TTree *ScdHits,int ientry) {
 
 	dest.clear();
+	point_counter=0;
+	
+
 
 	std::string det = "Straw";
 	int iflag = 1;
@@ -296,4 +329,6 @@ void FillSegmentDetectors(std::map<std::string, std::vector<TG4HitSegment> >& de
 	int entries_3dst = 0;
 	SummarizeHitSegments(dest[det], ScdHits, ientry, entries_3dst, iflag);
 	//
+	std::cout<<"point counter "<<point_counter<<std::endl;	
+	if(point_counter!=NStt) std::cout<<"ERROR on NUMBER OF POINT"<<std::endl;
 }
