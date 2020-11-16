@@ -6,7 +6,7 @@
 #include "TDatabasePDG.h"
 #include "THashList.h"
 #include "utils.h"
-
+#include <string>
 //#include "TParticlePDG.h"
 
 const int MaxNhit   = 1000000; //Max Number of hits
@@ -69,20 +69,22 @@ int main(int argc, char* argv[])
 //  TO BE USED FOR INPUT FROM CALL and OUTPUT with the name INPUT.fluka2edepsim.root
 	TFile *fInput = new TFile(finname);
 	char* name2=argv[1];
-
 	strtok(name2, ".");
 	std::string name3=name2;
-	std::string nameout=name3 + ".fluka2edep.root";
+	std::string nameout=name3+ ".fluka2edep.root";
 
 	const char*foutname=nameout.c_str();
 	std::cout<<"Output file in "<<foutname<<std::endl;
-	
 	
 	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
 	TTree *HitsTree = (TTree*)fInput->Get("HitsTree");
 	TTree *SttTree = (TTree*)fInput->Get("SttTree");
 	TTree *CellTree = (TTree*)fInput->Get("CellTree");
 
+	Int_t Run, Evnum;
+	HeaderTree->SetBranchAddress("RunNum",&Run);
+	HeaderTree->SetBranchAddress("EveNum",&Evnum);
+	
 
 	//Opening EDEPSIM OUTPUT FILE	
 	fOutput = TFile::Open(foutname, "RECREATE", "EDepSim Root Output");  
@@ -119,8 +121,10 @@ int main(int argc, char* argv[])
 
 
 	int NEVENT=HeaderTree->GetEntries();
+	HeaderTree->GetEntry(0);
+	int run=Run;
+	int iev=Evnum;
 	std::cout<<"Number of event to rewrite: "<<NEVENT<<std::endl;
-	NEVENT=2;
 
 	//scrivo dentro EDEPSIM
 	for(int i=0; i<NEVENT; i++){  
@@ -128,16 +132,20 @@ int main(int argc, char* argv[])
 		std::cout<<"entry ---------------------------------------"<<i<<std::endl;	
 		//MapGeometry::Get()->ClearMap();
 	
-		pEvent->RunId = 0;
-		pEvent->EventId = i;
+		pEvent->RunId = run;
+		pEvent->EventId = iev+i;
 
 		std::cout<<"Run " << pEvent->RunId	<< " Event " << pEvent->EventId<<std::endl;
 
 		FillPrimaries(pEvent->Primaries, rootracker, HeaderTree, i);
 	//	std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
+
 		FillTrajectories(pEvent->Trajectories, HitsTree, i);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
+
+		
+
 
 		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
@@ -196,6 +204,7 @@ int main(int argc, char* argv[])
 
 	//fEventTree->Print();           // Print the tree contents
 	fOutput->Close();
+	std::cout<<"FINITO!!"<<std::endl;
 }
 
 

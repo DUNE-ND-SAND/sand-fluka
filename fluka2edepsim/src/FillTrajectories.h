@@ -197,7 +197,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 
 		//costruisco tutti i figli
 		for(int i=k; i<k+NSecIne[j]; i++){
-				if(PrSecTrIne==TrSecIne[i]) std::cout<<"ERROR...stesso numero a particelle diverse???"<<std::endl;
+				//if(PrSecTrIne==TrSecIne[i]) std::cout<<"ERROR...stesso numero a particelle diverse???"<<std::endl;
 
 				//gli indici di questa interazione vanno da k a k+NSecIne[i]
 		//		std::cout<< "i TrSecIne : "<<" "<<TrSecIne[i] <<" IdSecIne "<<IdSecIne[i]<<std::endl;	
@@ -234,7 +234,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
                 		           ++p) {
                            		timelast=p->Position.T();
 					if(abs(point.Position.X()-p->Position.X())<0.1 && abs(point.Position.Y()-p->Position.Y())<0.1 && abs(point.Position.Z()-p->Position.Z())<0.1 && abs(point.Position.T()-p->Position.T())<1e-11) {
-						std::cout<<"ERROR ho trovato un punto uguale "<<std::endl;
+				//		std::cout<<"ERROR ho trovato un punto uguale "<<std::endl;
 						newp=false;
 						break;
 					}
@@ -244,7 +244,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				//std::cout<<"tempo dell'ultimo punto "<<tx->Points.back().Position.T()<<std::endl;
 				if(timelast>point.Position.T()){ 
 				
-				 std::cout<<"ERROR on time: l'ultimo punto è precedente!!  nuovo punto e timelast "<<point.Position.T()<<" "<<timelast<<std::endl;	
+				 //std::cout<<"ERROR on time: l'ultimo punto è precedente!!  nuovo punto e timelast "<<point.Position.T()<<" "<<timelast<<std::endl;	
 				}
 			//	std::cout<<"Inserisco il punto SEC"<<point.Position.X()<<" "<<point.Position.Y()<<" "<<point.Position.Z()<<" "<<point.Position.T()<<std::endl;	
 
@@ -263,7 +263,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 			k+=NSecIne[j]; //in modo che al giro dopo mi trovo all'indice giusto
 		}
 	
-	
+//	delete tx;	
 
 //riordino le tracce con TrackId in ordine crescente
  for (std::map<int,int>::iterator i = TrInDest.begin();
