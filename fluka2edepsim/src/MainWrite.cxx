@@ -69,11 +69,32 @@ int main(int argc, char* argv[])
 //  TO BE USED FOR INPUT FROM CALL and OUTPUT with the name INPUT.fluka2edepsim.root
 	TFile *fInput = new TFile(finname);
 	char* name2=argv[1];
-	strtok(name2, ".");
-	std::string name3=name2;
-	std::string nameout=name3+ ".fluka2edep.root";
+	std::string namei=name2;
 
+	std::cout<<"Nome iniziale "<<namei<<std::endl;
+
+	int s=0;
+	
+	std::size_t found = namei.find("..");
+  	
+	while (found!=std::string::npos){	
+	
+		namei.erase(0,3); //elimino ../	
+		std::cout<<"Nome ora "<<namei<<std::endl;
+		s++;
+		found=namei.find("..");
+		}
+	strtok(name2, ".");
+	std::string name3=namei;
+	std::string nameout=name3+ ".fluka2edep.root";
+	
+	for(int i=0; i<s; i++){
+		nameout="../"+nameout;
+		
+	}
+	
 	const char*foutname=nameout.c_str();
+
 	std::cout<<"Output file in "<<foutname<<std::endl;
 	
 	TTree *HeaderTree  = (TTree*)fInput->Get("HeaderTree");
@@ -204,7 +225,9 @@ int main(int argc, char* argv[])
 
 	//fEventTree->Print();           // Print the tree contents
 	fOutput->Close();
-	std::cout<<"FINITO!!"<<std::endl;
+	std::cout<<"DONE!!: Output file in "<<foutname<<std::endl;
+	
+
 }
 
 
