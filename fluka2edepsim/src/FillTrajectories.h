@@ -67,15 +67,32 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 	Double_t PrTrInc = -1;
 
 	// Making another container to appened the unordered Info
-	std::map<int,int> TrInDest;
+	std::map<int,int> TrInDest;   //contiene (Tr, dest.size)
+	std::map<int,int> TrId;       //Tr e Id 
+
 	TrInDest.clear();
 	
 	TG4Trajectory *tx = 0;	
+/*
+        int tr=0;
+	for (int j=0; j< NIncHits; j++) {
+	if(tr!=TrInc[j]) std::cout<<"trInc "<<TrInc[j]<<" "<<IdInc[j]<<std::endl;
+	tr=TrInc[j];
+	}
+	tr=0;
+	for (int j=0; j< NIneHits; j++) {
+	 if(tr!=TrIne[j]) std::cout<<"trIne "<<TrIne[j]<<" "<<IdIne[j]<<" fist last "<<FirstSec[j]<<" "<<NSecIne[j]<<std::endl;
+	tr=TrIne[j];
+	}
+	tr=0;
 
-
+	for (int j=0; j< NTIneSec; j++) {
+	if(tr!=TrSecIne[j])std::cout<<"TrSecIne j "<<j<<" "<<TrSecIne[j]<<" "<<IdSecIne[j]<<std::endl;
+	tr=TrSecIne[j];
+	}
+*/
 
 	//loop on NIncHits the hit on the boudary
-
 
 	for (int j=0; j< NIncHits; j++) {
 		//std::cout<< " TrInc : "<<j <<" "<< TrInc[j] <<std::endl;	
@@ -88,19 +105,22 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				//if(tx != 0){
 				TrInDest.insert(std::make_pair(PrTrInc,dest.size()));
 				dest.push_back(*tx);
-				
 			}
 			PrTrInc = TrInc[j];
 			//If it finds it let it be
-			if(TrInDest.find(TrInc[j])!=TrInDest.end()){
+			if(TrInDest.find(TrInc[j])!=TrInDest.end()){				//controllo che l'Id sia giusto
+				//if(IdInc[j]!=TrId[TrInc[j]] && TrInc[j]!=-1) std::cout<<"ERROR TrInc "<<TrInc[j]<<" era "<<TrId[TrInc[j]]<<" ma ora sembra essere "<<IdInc[j]<<std::endl;	
+				
 				tx = &(dest[TrInDest[TrInc[j]]]);
 				//       std::cout<<" ************* Track is there ***********"<<std::endl;
 				//If it doesnt exist make it
 			}else{
+				TrId.insert(std::make_pair(TrInc[j],IdInc[j]));
 				tx           = new TG4Trajectory;
 				tx->TrackId  = TrInc[j];
 				tx->ParentId = ParTrInc[j];
 				tx->PDGCode  = IdInc[j];
+			//	 std::cout<<"Nuova traccia Inc "<<TrInc[j]<<" ParentId "<<ParTrInc[j]<<" IdInc "<<IdInc[j]<<std::endl;
 				//std::cout<<"TrInc ParTr "<<TrInc[j]<<" "<<ParTrInc[j]<<std::endl;
 				if (TDatabasePDG::Instance()->GetParticle(IdInc[j])){
 					tx->Name     = TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
@@ -154,17 +174,19 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 			//If it finds it let it be
 			if(TrInDest.find(TrIne[j])!=TrInDest.end()){
 				tx = &(dest[TrInDest[TrIne[j]]]);
-					//        std::cout<<" ************* Track is there ***********"<<std::endl;
+				//controllo che l'Id sia giusto
+ 		//		if(IdIne[j]!=TrId[TrIne[j]] && TrIne[j]!=-1) std::cout<<"ERROR TrIne "<<TrIne[j]<<" era "<<TrId[TrIne[j]]<<" ma ora sembra essere "<<IdIne[j]<<std::endl;
+  //                                //        std::cout<<" ************* Track is there ***********"<<std::endl;
 					//If it doesnt exist make it
 			}else{
-				
+				TrId.insert(std::make_pair(TrIne[j],IdIne[j]));
 				tx           = new TG4Trajectory;
 				tx->TrackId  = TrIne[j];
 				//std::cout<<"NTIneSec "<<NTIneSec<<std::endl;		
 				int tr_fath=FindFather(TrIne[j], NTIneSec);
 				tx->ParentId = tr_fath;
 				tx->PDGCode  = IdIne[j];
-				//std::cout<<"TrIne father "<<TrIne[j]<<" "<<tr_fath<<std::endl;
+		//		std::cout<<"Nuova traccia Ine "<<TrIne[j]<<" ParentId "<<tr_fath<<" IdIne "<<IdIne[j]<<std::endl;
 				if (TDatabasePDG::Instance()->GetParticle(IdIne[j])){
 					tx->Name     = TDatabasePDG::Instance()->GetParticle(IdIne[j])->GetName();
 				}
@@ -192,21 +214,23 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 
 	
 	for (int j=0; j< NIneHits; j++) {
-		
-		//std::cout<<" j TrIne[j] FirstSec NSec"<<j<<" "<<TrIne[j]<<" "<<FirstSec[j]<<" "<<NSecIne[j]<<std::endl;
+			//std::cout<<"Padre j TrIne[j] IdTrIne"<<j<<" "<<TrIne[j]<<" "<<IdIne[j]<<std::endl;
 
 		//costruisco tutti i figli
 		for(int i=k; i<k+NSecIne[j]; i++){
-				//if(PrSecTrIne==TrSecIne[i]) std::cout<<"ERROR...stesso numero a particelle diverse???"<<std::endl;
-
+	
+			//std::cout<<"Figli TrSecIne "<<TrSecIne[i]<<" IdSecIne "<<IdSecIne[i]<<std::endl;	
+			
 				//gli indici di questa interazione vanno da k a k+NSecIne[i]
-		//		std::cout<< "i TrSecIne : "<<" "<<TrSecIne[i] <<" IdSecIne "<<IdSecIne[i]<<std::endl;	
-
 				if(TrInDest.find(TrSecIne[i])!=TrInDest.end()){
 					tx = &(dest[TrInDest[TrSecIne[i]]]);
+					//controllo che l'Id sia giusto
+		//		        if(IdSecIne[i]!=TrId[TrSecIne[i]] && TrSecIne[i]!=-1) std::cout<<"ERROR TrIne "<<TrSecIne[i]<<" era "<<TrId[TrSecIne[i]]<<" ma ora sembra essere "<<IdSecIne[i]<<std::endl;
+				 //
+			}else{
 					//If it doesnt exist make it
-				}else{
-					//std::cout<<" ************* New Track ***********"<<std::endl;
+				 	//	std::cout<<" ************* New Track ***********"<<TrSecIne[i]<<" "<<IdSecIne[i]<<std::endl;
+					 TrId.insert(std::make_pair(TrSecIne[i],IdSecIne[i]));
 					tx           = new TG4Trajectory;
 					tx->TrackId  = TrSecIne[i];
 					tx->ParentId = TrIne[j]; // sono tutti figli dello stesso padre
@@ -216,7 +240,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 					}
 					else {tx->Name = "Ion";}
 				}
-				// Add the particles associated with the vertex to the summary.
+	// Add the particles associated with the vertex to the summary.
 				// Make sure they are ordered...etc ...see code /src/EDepSimPersistencyManager.cc at line 437
 				TG4TrajectoryPoint point;
 				TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosIne[j][0], PosIne[j][1], PosIne[j][2], TimeIne[j]*1e9));
@@ -234,7 +258,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
                 		           ++p) {
                            		timelast=p->Position.T();
 					if(abs(point.Position.X()-p->Position.X())<0.1 && abs(point.Position.Y()-p->Position.Y())<0.1 && abs(point.Position.Z()-p->Position.Z())<0.1 && abs(point.Position.T()-p->Position.T())<1e-11) {
-				//		std::cout<<"ERROR ho trovato un punto uguale "<<std::endl;
+						//se trovo un punto uguale, newp=false e quindi non lo salvo
 						newp=false;
 						break;
 					}
@@ -247,7 +271,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				 //std::cout<<"ERROR on time: l'ultimo punto è precedente!!  nuovo punto e timelast "<<point.Position.T()<<" "<<timelast<<std::endl;	
 				}
 			//	std::cout<<"Inserisco il punto SEC"<<point.Position.X()<<" "<<point.Position.Y()<<" "<<point.Position.Z()<<" "<<point.Position.T()<<std::endl;	
-
+			
 
 				tx->Points.push_back(point);
 				}							
@@ -257,7 +281,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				
 				TrInDest.insert(std::make_pair(PrSecTrIne,dest.size()));
 				dest.push_back(*tx);		
-								//}
 				//sono tutti punti diversi!!..quindi chiudo subito la traccia
 			}
 			k+=NSecIne[j]; //in modo che al giro dopo mi trovo all'indice giusto

@@ -101,7 +101,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 					TG4HitSegment hit;
 					TG4HitSegment::Contributors Contrib;
 
-					//hit.PrimaryId = IdParStt[j];
+					//hit.PrimaryId = IdParStt[j];  //FIXME
 					//if (IntParStt[j] == 102 || IntParStt[j] == 110) hit.PrimaryId = TrStt[j];
 					hit.PrimaryId = PrimTrStt[j];
 					hit.EnergyDeposit = EdqStt[j]*1000;     
@@ -125,7 +125,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 					if (DirStt[j] == 1) det_str =1; // "stt_horizontal";
 					else if (DirStt[j] == 2) det_str =2; // "stt_vertical";
 					else {
-						std::cout<<" ERROR not found DirStt!= da 1 e da 2 : "<<DirStt[j]<<std::endl;
+					//	std::cout<<" ERROR not found DirStt!= da 1 e da 2 : "<<DirStt[j]<<std::endl;
 						det_str= 10; // "not_found";
 					}
 					MapGeometry::Get()->AddPointToMap(det_str, hitPos);
@@ -206,6 +206,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 					TG4HitSegment hit;
 					TG4HitSegment::Contributors Contrib;
 
+					//hit.PrimaryId = IdParStt[j];
 					hit.PrimaryId = PrimTrStt[j];
 					hit.EnergyDeposit = EdqStt[j];
 					hit.SecondaryDeposit = 0.0;  //non ce lo abbiamo
