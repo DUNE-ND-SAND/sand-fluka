@@ -7,8 +7,6 @@
 #include "THashList.h"
 #include "utils.h"
 #include <string>
-//#include "TParticlePDG.h"
-
 const int MaxNhit   = 1000000; //Max Number of hits
 const int MaxN   = 10000; //Max Number of hits
 
@@ -30,7 +28,6 @@ Int_t IdCell[NCellMax],IdParCell[NCellMax];
 Float_t PosCell[NCellMax][3],EdepCell[NCellMax],EdepQCell[NCellMax],TimeCell[NCellMax];
 
 
-//
 #include "FillPrimaries.h"
 #include "FillTrajectories.h"
 #include "FillSegmentDetectors.h"
@@ -38,19 +35,67 @@ Float_t PosCell[NCellMax][3],EdepCell[NCellMax],EdepQCell[NCellMax],TimeCell[NCe
 #include "Check.h"
 #include "MapGeometry.h"
 #include "MapTree.h"
-	
+#include <fstream>
+//#include "TParticlePDG.h"
+
+
+
+
+
+float Rin_ECAL; //=200.0;
+float Rout_ECAL;//225.0;
+float zmin_STT; //-129.5;
+float xminAbs_ENDCAP; //169.0;
+float xmaxAbs_BARREL; //216.0;
+float xmaxAbs_ENDCAP; //192.0;
+
+
 
 int main(int argc, char* argv[])
 {
 //  TO BE USED FOR INPUT FROM CALL and OUTPUT with the name INPUT.fluka2edepsim.root
 
-	if(argc != 2){
-		std::cout<<"./Fluka2Edepsim <inputfile>"<<std::endl;
+	if(argc != 3){
+		std::cout<<"./Main <inputfile.root>  <geo.txt> "<<std::endl;
 	}
 	const char* finname=argv[1];
 	std::cout<<"Input file : "<<finname<<std::endl;
 
-	/// The ROOT output file that events are saved into.
+	const char* finputname=argv[2];
+	std::cout<<"Input geo file : "<<finputname<<std::endl;
+
+	ifstream myfile;
+        string line;
+	float num;
+	myfile.open (finputname);
+
+	int count_var=0; // le variabili da assegnare sono 5
+ 	if (myfile.is_open()) {
+    		while ( myfile >> line >> num){
+			if(line=="Rin_ECAL") {Rin_ECAL=num; count_var++;}
+    			if(line=="Rout_ECAL") {Rout_ECAL=num; count_var++;}
+			if(line=="xmaxAbs_BARREL") {xmaxAbs_BARREL=num; count_var++;}
+			if(line=="xminAbs_ENDCAP") {xminAbs_ENDCAP=num; count_var++;}
+			if(line=="xmaxAbs_ENDCAP") {xmaxAbs_ENDCAP=num; count_var++;}
+			if(line=="zmin_STT") {zmin_STT=num; count_var++;}
+		}
+	}
+
+	myfile.close();
+
+	std::cout<<count_var<<std::endl;
+	if(count_var!=6) {std::cout<<"Some geom variables are not set up!!...Check input geo file!!"<<std::endl; exit(1);}
+
+        std::cout<<":::::::::::::Geometry variables set up::::::::::::::::::::::::::: "<<std::endl;
+  	std::cout<<"Rin_ECAL       : "<<Rin_ECAL<<std::endl;
+  	std::cout<<"Rout_ECAL      : "<<Rout_ECAL<<std::endl;
+   	std::cout<<"zmin_STT      : "<<zmin_STT<<std::endl;
+  	std::cout<<"xmaxAbs_BARREL : "<<xmaxAbs_BARREL<<std::endl;
+  	std::cout<<"xmaxAbs_ENDCAP : "<<xmaxAbs_ENDCAP<<std::endl;
+	std::cout<<"xminAbs_ENDCAP : "<<xminAbs_ENDCAP<<std::endl;
+	std::cout<<"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: "<<std::endl;
+
+
 	TFile *fOutput;
 
 	/// The event tree that contains the output events.
@@ -70,8 +115,6 @@ int main(int argc, char* argv[])
 	TFile *fInput = new TFile(finname);
 	char* name2=argv[1];
 	std::string namei=name2;
-
-	std::cout<<"Nome iniziale "<<namei<<std::endl;
 
 	int s=0;
 	
@@ -147,7 +190,7 @@ int main(int argc, char* argv[])
 	int iev=Evnum;
 	std::cout<<"Number of event to rewrite: "<<NEVENT<<std::endl;
 	
-//scrivo dentro EDEPSIM
+	//scrivo dentro EDEPSIM
 	for(int i=0; i<NEVENT; i++){  
 
 		std::cout<<"entry ---------------------------------------"<<i<<std::endl;	

@@ -1,0 +1,6 @@
+Rin_ECAL 200.0
+Rout_ECAL 225.0
+zmin_STT -129.5
+xminAbs_ENDCAP 169.0
+xmaxAbs_BARREL 216.0
+xmaxAbs_ENDCAP 192.0

@@ -8,6 +8,13 @@
 #include "TVector3.h"
 int point_counter;
 
+extern float Rin_ECAL; 
+extern float Rout_ECAL; 
+extern float zmin_STT; 
+extern float xminAbs_ENDCAP; 
+extern float xmaxAbs_BARREL; 
+extern float xmaxAbs_ENDCAP; 
+
 
 void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev, int entries, int idet) {
 
@@ -43,16 +50,15 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 
 		DetHits->GetEntry(iev); // AS
 
-
-		float Rin_ECAL=200.0;
-		float Rout_ECAL=225.0;
-		float zmin_STT=-129.5;
-		float xminAbs_ENDCAP=169.0;
-		float xmaxAbs_BARREL=216.0;
-		float xmaxAbs_ENDCAP=192.0;
-
-
 /*
+		 Rin_ECAL=200.0;
+		 Rout_ECAL=225.0;
+		 zmin_STT=-129.5;
+		 xminAbs_ENDCAP=169.0;
+		 xmaxAbs_BARREL=216.0;
+		 xmaxAbs_ENDCAP=192.0;
+
+*/
 		// for debug
 		int nw1=0;
 		int nw2=0;
@@ -87,7 +93,7 @@ void SummarizeHitSegments(TG4HitSegmentContainer& dest, TTree *DetHits, int iev,
 		std::cout<<" stt: "<<nw1<<" Lar "<<nw4<<" ecal "<<nw2<<" catcher: "<<nw3<<std::endl;
 		std::cout<<" tot "<<nw1+nw2+nw3+nw4<<std::endl;
 		///
-*/	
+	
 			
 		if (idet==1) {
 			NSttHits = 0;
