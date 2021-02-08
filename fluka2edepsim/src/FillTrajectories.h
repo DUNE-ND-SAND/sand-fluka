@@ -109,8 +109,9 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 			PrTrInc = TrInc[j];
 			//If it finds it let it be
 			if(TrInDest.find(TrInc[j])!=TrInDest.end()){				//controllo che l'Id sia giusto
-				//if(IdInc[j]!=TrId[TrInc[j]] && TrInc[j]!=-1) std::cout<<"ERROR TrInc "<<TrInc[j]<<" era "<<TrId[TrInc[j]]<<" ma ora sembra essere "<<IdInc[j]<<std::endl;	
-				
+				if(IdInc[j]!=TrId[TrInc[j]] && TrInc[j]!=-1 && TrId[TrInc[j]]<9000 && TrId[TrInc[j]]!=-311 && TrId[TrInc[j]]!=311) std::cout<<"ERROR TrInc "<<TrInc[j]<<" era "<<TrId[TrInc[j]]<<" ma ora sembra essere "<<IdInc[j]<<std::endl;	
+				// i nuclei hanno TrId>9000 e spesso ma non sempre numero di traccia -1, i K+ 311 o K- possono trasformarsi			
+	
 				tx = &(dest[TrInDest[TrInc[j]]]);
 				//       std::cout<<" ************* Track is there ***********"<<std::endl;
 				//If it doesnt exist make it
@@ -175,7 +176,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 			if(TrInDest.find(TrIne[j])!=TrInDest.end()){
 				tx = &(dest[TrInDest[TrIne[j]]]);
 				//controllo che l'Id sia giusto
- 		//		if(IdIne[j]!=TrId[TrIne[j]] && TrIne[j]!=-1) std::cout<<"ERROR TrIne "<<TrIne[j]<<" era "<<TrId[TrIne[j]]<<" ma ora sembra essere "<<IdIne[j]<<std::endl;
+ 				if(IdIne[j]!=TrId[TrIne[j]] && TrIne[j]!=-1 && TrId[TrIne[j]]<9000 && TrId[TrIne[j]]!=-311 && TrId[TrIne[j]]!=311) std::cout<<"ERROR TrIne "<<TrIne[j]<<" era "<<TrId[TrIne[j]]<<" ma ora sembra essere "<<IdIne[j]<<std::endl;
   //                                //        std::cout<<" ************* Track is there ***********"<<std::endl;
 					//If it doesnt exist make it
 			}else{
@@ -225,7 +226,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 				if(TrInDest.find(TrSecIne[i])!=TrInDest.end()){
 					tx = &(dest[TrInDest[TrSecIne[i]]]);
 					//controllo che l'Id sia giusto
-		//		        if(IdSecIne[i]!=TrId[TrSecIne[i]] && TrSecIne[i]!=-1) std::cout<<"ERROR TrIne "<<TrSecIne[i]<<" era "<<TrId[TrSecIne[i]]<<" ma ora sembra essere "<<IdSecIne[i]<<std::endl;
+				        if(IdSecIne[i]!=TrId[TrSecIne[i]] && TrSecIne[i]!=-1 && TrId[TrSecIne[i]]<9000 && TrId[TrSecIne[i]]!=-311 && TrId[TrSecIne[i]]!=311) std::cout<<"ERROR TrIne "<<TrSecIne[i]<<" era "<<TrId[TrSecIne[i]]<<" ma ora sembra essere "<<IdSecIne[i]<<std::endl;
 				 //
 			}else{
 					//If it doesnt exist make it
