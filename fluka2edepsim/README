@@ -19,9 +19,11 @@ cd build
 make (in this way the .o and the TG4Event.so library is produced)
 
 to run
-./Main
+./Main input_fluka_file  geofile.txt
 in this way a default fluka file is converted in a Provadep.root file
 
+In the geofile.txt the coordinates of the ecal (barrel endcap) and stt are written. 
+An example file is in inputs/Lar_stt_geo.txt 
 
 
 --for reading an edepsim file------------------------------------------------------------------------------------
