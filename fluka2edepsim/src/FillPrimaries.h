@@ -255,12 +255,12 @@ ESEMPI di GENIE target CODES
 		vtx.Particles.push_back(prim);
 	}
       
-	std::cout<<"Particelle primarie "<<std::endl;
- 	std::cout<<"Numero di primari salvati "<<vtx.Particles.size()<<std::endl;
+	//std::cout<<"Particelle primarie "<<std::endl;
+ 	//std::cout<<"Numero di primari salvati "<<vtx.Particles.size()<<std::endl;
 		
 	//costruisco TG4Trajectory
 	for (std::vector<TG4PrimaryParticle>::iterator p = vtx.Particles.begin(); p != vtx.Particles.end(); ++p) { 
-                std::cout<<"Trackid "<<p->TrackId<<std::endl; //" "<<p->ParentId<<std::endl;
+                //std::cout<<"Trackid "<<p->TrackId<<std::endl; //" "<<p->ParentId<<std::endl;
 		TG4Trajectory tj;
 		tj.TrackId=p->TrackId;
 		tj.ParentId=-1;
@@ -275,7 +275,7 @@ ESEMPI di GENIE target CODES
 		desttj.push_back(tj);
 	}
 
-
+/*
 	std::cout<<"Ecco le traiettorie dei primari "<<std::endl;
 	for (std::vector<TG4Trajectory>::iterator
 				t = desttj.begin();
@@ -288,7 +288,7 @@ ESEMPI di GENIE target CODES
  					
 		}	
 
-		
+*/		
 	 
 	if(StdHepN!=nPart) std::cout<<"ERROR on number of particles in rootracker"<<std::endl;
        //rootracker->Print();

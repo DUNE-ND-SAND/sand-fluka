@@ -64,7 +64,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, std::vector<TG4Trajec
 	HitsTree->GetEntry(iEntry);
 	Double_t PrTrInc = -1;
 
-
+/*
 	std::cout<<"Ecco le traiettorie dei primari che arrivano da Primaries"<<std::endl;
         for (std::vector<TG4Trajectory>::iterator
                                 t = dest.begin();
@@ -76,7 +76,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, std::vector<TG4Trajec
                         std::cout << std::endl;
 
                 }
-
+*/
 	// Making another container to appened the unordered Info
 	std::map<int,int> TrInDest;   //contiene (Tr, dest.size)
 	std::map<int,int> TrId;       //Tr e Id 
@@ -89,10 +89,10 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, std::vector<TG4Trajec
 	for (std::vector<TG4Trajectory>::iterator
                                 t = dest.begin();
                                 t != dest.end(); ++t) {
-		
+				
 				TrInDest.insert(std::make_pair(t->TrackId,a));  //perchè sono ordinati
 				TrId.insert(std::make_pair(t->TrackId,t->PDGCode));
-				std::cout<<t->TrackId<<" size "<<TrInDest.size()<<std::endl;		
+			//	std::cout<<t->TrackId<<" size "<<TrInDest.size()<<std::endl;		
 				a++;
 	}
 /*
@@ -133,7 +133,7 @@ for(int a=0; a<TrInDest.size(); a++){
 
 	for (int j=0; j< NIncHits; j++) {
 		if(IdInc[j]>9000)continue;  //sono nuclei di cui non tracciamo nulla anche se Fluka li salva
-		//std::cout<< " TrInc : "<<j <<" "<< TrInc[j] <<std::endl;	
+		// std::cout<< " TrInc : "<< TrInc[j] <<" IdInc "<<IdInc[i]<<std::endl;	
 		if(TrInc[j] != PrTrInc){
 
 			//If it doesnt find it --> add
@@ -167,7 +167,7 @@ for(int a=0; a<TrInDest.size(); a++){
 			//	 std::cout<<"Nuova traccia Inc "<<TrInc[j]<<" ParentId "<<ParTrInc[j]<<" IdInc "<<IdInc[j]<<std::endl;
 				//std::cout<<"TrInc ParTr "<<TrInc[j]<<" "<<ParTrInc[j]<<std::endl;
 				if (TDatabasePDG::Instance()->GetParticle(IdInc[j])){
-					tx->Name     = TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
+				tx->Name     = TDatabasePDG::Instance()->GetParticle(IdInc[j])->GetName();
 
 				}
 				else {
@@ -336,9 +336,10 @@ for(int a=0; a<TrInDest.size(); a++){
         destfin.push_back(dest[i->second]);
     }
 
+//elimino la traccia -1 nel primo elemento se presente
+if(destfin.at(0).TrackId==-1) destfin.erase(destfin.begin()); 
 
 //riordino i Points con i tempi crescenti
-
 
 for (std::vector<TG4Trajectory>::iterator
 				t = destfin.begin();
@@ -349,21 +350,22 @@ for (std::vector<TG4Trajectory>::iterator
 
 
 
-/*
-std::cout<<"FINE....ecco tutte le traiettorie "<<std::endl;
 
+//std::cout<<"FINE....ecco tutte le traiettorie "<<std::endl;
+int ss=0; //per controllare che non ci siano salti nel numero delle traiettorie (Nibir)
 for (std::vector<TG4Trajectory>::iterator
 				t = destfin.begin();
 				t != destfin.end(); ++t) {
-			std::cout << " TrackId " << t->TrackId;
+	//		std::cout << " TrackId " << t->TrackId;
+			if(ss>0 && ss!=t->TrackId) {std::cout<<"ERROR on track numb "<<ss<<" "<<t->TrackId<<std::endl; exit(1);}
 		//	std::cout << " ParentId " << t->ParentId;
 			int count = t->Points.size();
-			std::cout << " Up to " << count << " points";
-			std::cout << std::endl;
+	//		std::cout << " Up to " << count << " points";
+	//		std::cout << std::endl;
 			std::sort (t->Points.begin(), t->Points.end(), my_IsBigger); 
  					
-			float last=-1;	
-                       for (std::vector<TG4TrajectoryPoint>::iterator
+	/*		float last=-1;	
+                        for (std::vector<TG4TrajectoryPoint>::iterator
 		 		   p = t->Points.begin();
 				   p != t->Points.end();
 			   		++p) {
@@ -377,8 +379,7 @@ for (std::vector<TG4Trajectory>::iterator
 			std::cout << std::endl;
 			if (--count < 1) break;
 			}
-
+	*/
 	}
-std::cout << "Tempo del'ultimo punto "<<((destfin.back()).Points.back()).Position.X()<<std::endl;
-*/
+//std::cout << "Tempo del'ultimo punto "<<((destfin.back()).Points.back()).Position.X()<<std::endl;
 }
