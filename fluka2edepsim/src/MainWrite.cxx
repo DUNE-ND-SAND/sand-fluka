@@ -123,17 +123,21 @@ int main(int argc, char* argv[])
 	while (found!=std::string::npos){	
 	
 		namei.erase(0,3); //elimino ../	
-		std::cout<<"Nome ora "<<namei<<std::endl;
+	//	std::cout<<"Nome ora "<<namei<<std::endl;
 		s++;
 		found=namei.find("..");
 		}
-	strtok(name2, ".");
-	std::string name3=namei;
-	std::string nameout=name3+ ".fluka2edep.root";
+	
+	char* name4; 
+	name4= &namei[0];
+	strtok(name4, ".");
+	//std::cout<<"Nome ora 4 "<<name4<<std::endl;
+	
+	std::string namep=name4;	
+	std::string nameout=namep +".fluka2edep.root";
 	
 	for(int i=0; i<s; i++){
 		nameout="../"+nameout;
-		
 	}
 	
 	const char*foutname=nameout.c_str();

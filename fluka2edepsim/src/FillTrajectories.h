@@ -136,8 +136,6 @@ for(int a=0; a<TrInDest.size(); a++){
 		//std::cout<< " TrInc : "<<j <<" "<< TrInc[j] <<std::endl;	
 		if(TrInc[j] != PrTrInc){
 
-			TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosInc[j][0], PosInc[j][1], PosInc[j][2], TimeInc[j]*1e9));
-
 			//If it doesnt find it --> add
 			if(tx != 0 && TrInDest.find(PrTrInc)==TrInDest.end()){
 				//std::cout<<"chiudo dest"<<std::endl;	
@@ -182,6 +180,9 @@ for(int a=0; a<TrInDest.size(); a++){
 		
 		TG4TrajectoryPoint point;
 		TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosInc[j][0], PosInc[j][1], PosInc[j][2], TimeInc[j]*1e9));
+		//std::cout<<"punto fluka "<<PosInc[j][0]<<" "<<PosInc[j][1]<<" "<<PosInc[j][2]<<std::endl;
+		//std::cout<<"Inserisco il punto "<<pos.X()<<" "<<pos.Y()<<" "<<pos.Z()<<" "<<pos.T()<<std::endl;	
+
 
 		point.Position.SetXYZT(pos.X(), pos.Y(), pos.Z(), pos.T());
 		point.Momentum.SetXYZ (PInc[j][0]*1000, PInc[j][1]*1000, PInc[j][2]*1000);
@@ -189,7 +190,6 @@ for(int a=0; a<TrInDest.size(); a++){
 		//point.Subprocess = edepPoint->GetProcessSubType();
 	
 		//std::cout<<"Inserisco il punto INC "<<point.Position.X()<<" "<<point.Position.Y()<<" "<<point.Position.Z()<<" "<<point.Position.T()<<std::endl;	
-	
 		tx->Points.push_back(point);
 		
 		if(tx != 0 && j == NIncHits - 1 && TrInDest.find(PrTrInc)==TrInDest.end())  {
@@ -251,6 +251,8 @@ for(int a=0; a<TrInDest.size(); a++){
 		point.Momentum.SetXYZ (PIne[j][0]*1000, PIne[j][1]*1000, PIne[j][2]*1000);
 		//point.Process = edepPoint->GetProcessType();
 		//point.Subprocess = edepPoint->GetProcessSubType();
+		
+		//std::cout<<"Inserisco il punto "<<point.Position.X()<<" "<<point.Position.Y()<<" "<<point.Position.Z()<<" "<<point.Position.T()<<std::endl;	
 
 		tx->Points.push_back(point);
 		if(tx != 0 && j == NIneHits - 1 && TrInDest.find(PrTrIne)==TrInDest.end()){
@@ -298,12 +300,10 @@ for(int a=0; a<TrInDest.size(); a++){
 	
 				bool newp=true;
 				//std::cout<<"numero di punti su cui controllo "<<tx->Points.size()<<std::endl;
-				float timelast=-1;
 				for (std::vector<TG4TrajectoryPoint>::iterator
 	                           p = tx->Points.begin();
         	                   p != tx->Points.end();
                 		           ++p) {
-                           		timelast=p->Position.T();
 					if(abs(point.Position.X()-p->Position.X())<0.1 && abs(point.Position.Y()-p->Position.Y())<0.1 && abs(point.Position.Z()-p->Position.Z())<0.1 && abs(point.Position.T()-p->Position.T())<1e-11) {
 						//se trovo un punto uguale, newp=false e quindi non lo salvo
 						newp=false;
@@ -312,14 +312,9 @@ for(int a=0; a<TrInDest.size(); a++){
 				}
 				
 				if(newp==true) {
-				//std::cout<<"tempo dell'ultimo punto "<<tx->Points.back().Position.T()<<std::endl;
-				if(timelast>point.Position.T()){ 
 				
-				 //std::cout<<"ERROR on time: l'ultimo punto è precedente!!  nuovo punto e timelast "<<point.Position.T()<<" "<<timelast<<std::endl;	
-				}
-			//	std::cout<<"Inserisco il punto SEC"<<point.Position.X()<<" "<<point.Position.Y()<<" "<<point.Position.Z()<<" "<<point.Position.T()<<std::endl;	
+				//std::cout<<"Inserisco il punto SEC"<<point.Position.X()<<" "<<point.Position.Y()<<" "<<point.Position.Z()<<" "<<point.Position.T()<<std::endl;	
 			
-
 				tx->Points.push_back(point);
 				}							
 				//std::cout<<"numero di punti a fine giro "<<tx->Points.size()<<std::endl;
@@ -374,7 +369,8 @@ for (std::vector<TG4Trajectory>::iterator
 			   		++p) {
 			if(p->Position.T()<last) std::cout<<"ERRORRRRRR"<<std::endl;
 			last=p->Position.T();
-			std::cout << " Time: " << p->Position.T();
+			if(p->Position.Y()>0) std::cout<<"ERROR Y"<<std::endl;
+			//	std::cout << " Time: " << p->Position.T();
 			   std::cout << " Position: " << p->Position.X()<<" "<< p->Position.Y()<<" "<< p->Position.Z();
 			//PosX->Fill(p->Position.X());
 			//std::cout << " Subprocess: " << p->Subprocess;
@@ -385,5 +381,4 @@ for (std::vector<TG4Trajectory>::iterator
 	}
 std::cout << "Tempo del'ultimo punto "<<((destfin.back()).Points.back()).Position.X()<<std::endl;
 */
-
 }
