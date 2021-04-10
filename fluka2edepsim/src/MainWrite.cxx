@@ -14,6 +14,9 @@ const int MaxN   = 10000; //Max Number of hits
 Int_t NIncHits, NStt, NSttHits, NCalHits, NCatchHits, NIneHits, NTIneSec;
 Int_t TrInc[MaxNhit], TrStt[MaxNhit], TrSttHits[MaxNhit], TrCalHits[MaxNhit], TrCatchHits[MaxNhit];
 
+
+TObjString * EvtCode=nullptr;
+
 // From FillTrajectories.h:
 Int_t IdInc[MaxNhit], ParTrInc[MaxNhit], IdIne[MaxNhit], TypeIne[MaxNhit], IdParIne[MaxNhit], TrIne[MaxNhit], NSecIne[MaxNhit], IdSecIne[MaxNhit];
 Float_t PInc[MaxNhit][5], TimeInc[MaxNhit], PosInc[MaxNhit][3], PosIne[MaxNhit][3], PIne[MaxNhit][3], TimeIne[MaxNhit], PSec[MaxNhit][5];
@@ -157,7 +160,6 @@ int main(int argc, char* argv[])
 	//Opening EDEPSIM OUTPUT FILE	
 	fOutput = TFile::Open(foutname, "RECREATE", "EDepSim Root Output");  
 	//fOutput = TFile::Open("Prova.fluka2edep.root", "RECREATE", "EDepSim Root Output");  //FIXME to be deleted for output = input.fluka2edep.root
-
 	fOutput->cd();
 
 	fEventTree = new TTree("EDepSimEvents",
@@ -166,27 +168,17 @@ int main(int argc, char* argv[])
 	TG4Event *pEvent=new TG4Event();
 	fEventTree->Branch("Event","TG4Event",&pEvent);
 
-/*
-	TTree *MapTree;
-	MapTree = new TTree("MapTree", "MapTree");
-
-        MapTree->Branch("EvtNum"    ,0, "EvtNum/I");
-	MapTree->Branch("NhitT"   ,0, "NhitT/I");
-	MapTree->Branch("Position"   ,0, "Position[NhitT][3]/D");
-*/
-
-	//MapTree::Get()->InitTree();
-
-       
-        TTree *rootracker;
+	TDirectory *dir= fOutput->mkdir("DetSimPassThru");
+	dir->cd();
+	TTree *rootracker;
 	rootracker = new TTree("gRooTracker", "Genie Rootracker");
 	rootracker->Branch("EvtNum"    ,0, "EvtNum/I");
 	rootracker->Branch("StdHepN"   ,0, "StdHepN/I");
 	rootracker->Branch("StdHepPdg"     ,0,  "StdHepPdg[StdHepN]/I");
 	rootracker->Branch("StdHepP4"   ,0, "StdHepP4[StdHepN][4]/D");
+	rootracker->Branch("EvtCode"  ,"TObjString",&EvtCode,32000,0);
 
-
-
+	fOutput->cd();
 
 	int NEVENT=HeaderTree->GetEntries();
 	HeaderTree->GetEntry(0);
@@ -270,6 +262,7 @@ int main(int argc, char* argv[])
 	//fOutput->WriteObjectAny(&map, "vector<pair<string,TVector3>>","myGeometryMap");
 
 	//fEventTree->Print();           // Print the tree contents
+	delete EvtCode;
 	fOutput->Close();
 	std::cout<<"DONE!!: Output file in "<<foutname<<std::endl;
 	

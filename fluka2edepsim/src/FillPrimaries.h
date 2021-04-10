@@ -1,6 +1,7 @@
 #include "TTree.h"
 #include <iostream>
 #include "utils.h"
+#include "TString.h"
 
 void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree *mytree, int entry, std::vector<TG4Trajectory>& desttj) {
 	dest.clear();
@@ -40,11 +41,12 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 	Int_t IdPhot[MaxN];
 	Int_t TrPhot[MaxN];
 	Float_t P_Phot[MaxN][5];
-        //Genie
-        Int_t    StdHepPdg[MaxN];
-        Double_t StdHepP4[MaxN][4];
-        Int_t    StdHepN;
-	Int_t EvtNum;
+        
+	//Genie
+ 	Int_t EvtNum;
+	Int_t    StdHepPdg[MaxN];
+	Double_t StdHepP4[MaxN][4];
+	Int_t    StdHepN;
 
 	Int_t TargZ=0;
 	Int_t TargA=0;
@@ -84,32 +86,13 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 
 	mytree->SetBranchAddress("TargZ",&TargZ);
 	mytree->SetBranchAddress("TargA",&TargA);
-	
-	EvtNum = EveNum;
-	//-------------------------------------------------------------------------- RootrackerTree, some variables are still unknown
-	
-        rootracker->SetBranchAddress("EvtNum"   ,&EvtNum);
-	//rootracker->SetBranchAddress("EvtFlags" ,&EvtFlags);
-	//*rootracker->SetBranchAddress("EvtCode"  ,&EvtCode);
-	//rootracker->SetBranchAddress("EvtXSec"  ,&EvtXSec, "EvtXSec/D");
-	//rootracker->SetBranchAddress("EvtDXSec" ,&EvtDXSec,"EvtDXSec/D");
-	//rootracker->SetBranchAddress("EvtWgt"   ,&EvtWgt,  "EvtWgt/D");
-	//rootracker->SetBranchAddress("EvtProb"  ,&EvtProb, "EvtProb/D");
-	//rootracker->SetBranchAddress("EvtProb"  ,&EvtProb, "EvtProb/D");
-	//rootracker->SetBranchAddress("EvtVx[4]" ,&EvtVx,   "EvtVx[4]/D");
+
+	rootracker->SetBranchAddress("EvtNum"   ,&EvtNum);
 	rootracker->SetBranchAddress("StdHepN"  ,&StdHepN);
 	rootracker->SetBranchAddress("StdHepPdg",&StdHepPdg);
-	//rootracker->SetBranchAddress("StdHepStatus[StdHepN]",&StdHepStatus, "StdHepStatus[StdHepN]/I");
-	//rootracker->SetBranchAddress("StdHepRescat[StdHepN]",&StdHepRescat, "StdHepRescat[StdHepN]/I");
-	//rootracker->SetBranchAddress("StdHepX4[StdHepN][4]" ,&StdHepX4, "StdHepX4[StdHepN][4]/D");
 	rootracker->SetBranchAddress("StdHepP4" ,&StdHepP4);
-	//rootracker->SetBranchAddress("StdHepPolz[StdHepN][3]",&StdHepPolz, "StdHepPolz[StdHepN][3]/D");
-	//rootracker->SetBranchAddress("StdHepFd[StdHepN]",&StdHepFd, "StdHepFd[StdHepN]/D");
-	//rootracker->SetBranchAddress("StdHepLd[StdHepN]",&StdHepLd, "StdHepLd[StdHepN]/D");
-	//rootracker->SetBranchAddress("StdHepFm[StdHepN]",&StdHepFm, "StdHepFm[StdHepN]/D");
-	//rootracker->SetBranchAddress("StdHepLm[StdHepN]",&StdHepLm, "StdHepLm[StdHepN]/D");
-	//-------------------------------------------------------------------------- RootrackerTree
-
+	//-------------------------------------------------------------------
+	
 	mytree->GetEntry(entry);
 
 	TG4PrimaryVertex vtx;
@@ -129,10 +112,10 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 
 	//std::cout<<"Number of particle in vertex "<<NParticle<<std::endl;
 	// Add the particles associated with the vertex to the summary.
+	
+	EvtNum = EveNum;
+
 	TG4PrimaryParticle prim;
-        //EvtCode     = new TObjString(ReacType);
-        //EvtCode  = ReacType;      //which one is correct to be filled? it should be a string or int? in fluka it's int
-        //EvtCode  = IntType;
  	StdHepN = NParticle+2;
  
 	StdHepPdg[0] = Primary; 
@@ -163,7 +146,7 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 /*
 ESEMPI di GENIE target CODES
 	
-		1000060120, #C12
+   	     1000060120, #C12
              1000100200, #Ne20
              1000130270, #Al27
              1000140300, #Si30
@@ -289,11 +272,6 @@ ESEMPI di GENIE target CODES
 		}	
 
 */		
-	 
-	if(StdHepN!=nPart) std::cout<<"ERROR on number of particles in rootracker"<<std::endl;
-       //rootracker->Print();
-	rootracker->Fill();
-
 
 
 /*
@@ -314,7 +292,7 @@ ESEMPI di GENIE target CODES
 // bool nuclear_target = (target_code > 1000000000);
 
 
-             //nu:14;tgt:1000822070;N:2112;proc:Weak[CC],QES;
+        //nu:14;tgt:1000822070;N:2112;proc:Weak[CC],QES;
         char* QES_RES_DIS=NULL;
         if(IntType==1) QES_RES_DIS=(char *)"QES"; 
         else if(IntType==2) QES_RES_DIS=(char *)"RES"; 
@@ -338,6 +316,12 @@ ESEMPI di GENIE target CODES
 //	sprintf( genie_format_reaction, "%s:%i;tgt:%i;N:%i;%s;%s,%s",nu_type,Primary,Target_genie_code,Nboh,CC_NC,QES_RES_DIS);
 	sprintf( genie_format_reaction, "%s:%d;tgt:%s;%s;%s",nu_type,Primary,Target_genie_code,CC_NC,QES_RES_DIS);
 
+	EvtCode=new TObjString(genie_format_reaction);
+//	std::cout<<"EvtCode "<<EvtCode->GetString().Data()<<std::endl;
+
+	if(StdHepN!=nPart) std::cout<<"ERROR on number of particles in rootracker"<<std::endl;
+        rootracker->Fill();
+	//rootracker->Print();
 
 	vtx.Reaction = genie_format_reaction;   
 	dest.push_back(vtx);

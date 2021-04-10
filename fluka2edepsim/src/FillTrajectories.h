@@ -352,19 +352,21 @@ for (std::vector<TG4Trajectory>::iterator
 
 
 //std::cout<<"FINE....ecco tutte le traiettorie "<<std::endl;
-int ss=0; //per controllare che non ci siano salti nel numero delle traiettorie (Nibir)
+
+//controllo che non ci siano salti nel numero delle traiettorie (nibir)
+int ss=0; 
 for (std::vector<TG4Trajectory>::iterator
 				t = destfin.begin();
 				t != destfin.end(); ++t) {
 	//		std::cout << " TrackId " << t->TrackId;
 			if(ss>0 && ss!=t->TrackId) {std::cout<<"ERROR on track numb "<<ss<<" "<<t->TrackId<<std::endl; exit(1);}
 		//	std::cout << " ParentId " << t->ParentId;
-			int count = t->Points.size();
+	//		int count = t->Points.size();
 	//		std::cout << " Up to " << count << " points";
 	//		std::cout << std::endl;
 			std::sort (t->Points.begin(), t->Points.end(), my_IsBigger); 
- 					
-	/*		float last=-1;	
+ 	/*				
+			float last=-1;	
                         for (std::vector<TG4TrajectoryPoint>::iterator
 		 		   p = t->Points.begin();
 				   p != t->Points.end();
