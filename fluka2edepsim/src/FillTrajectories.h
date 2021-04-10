@@ -23,7 +23,7 @@ bool my_IsBigger(TG4TrajectoryPoint i,TG4TrajectoryPoint j) {
  }
 
 
-void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int iEntry) {
+void FillTrajectories(std::vector<TG4Trajectory>& destfin, std::vector<TG4Trajectory>& dest, TTree *HitsTree, int iEntry) {
 	//Variables
 	Int_t   RunNum, EveNum;
 
@@ -58,21 +58,58 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 	   HitsTree->SetBranchAddress("PSec",&PSec);         //Initial momentum of interaction daugthers                       , Mc hit
 	   	
 
-	std::vector<TG4Trajectory> dest; 
-	dest.clear();
+	
 	destfin.clear();
-
 
 	HitsTree->GetEntry(iEntry);
 	Double_t PrTrInc = -1;
+
+
+	std::cout<<"Ecco le traiettorie dei primari che arrivano da Primaries"<<std::endl;
+        for (std::vector<TG4Trajectory>::iterator
+                                t = dest.begin();
+                                t != dest.end(); ++t) {
+                        std::cout << " TrackId " << t->TrackId;
+                //      std::cout << " ParentId " << t->ParentId;
+                        int count = t->Points.size();
+                        std::cout << " Up to " << count << " points";
+                        std::cout << std::endl;
+
+                }
 
 	// Making another container to appened the unordered Info
 	std::map<int,int> TrInDest;   //contiene (Tr, dest.size)
 	std::map<int,int> TrId;       //Tr e Id 
 
 	TrInDest.clear();
+	TrId.clear();
+
+
+	int a=0;
+	for (std::vector<TG4Trajectory>::iterator
+                                t = dest.begin();
+                                t != dest.end(); ++t) {
+		
+				TrInDest.insert(std::make_pair(t->TrackId,a));  //perchè sono ordinati
+				TrId.insert(std::make_pair(t->TrackId,t->PDGCode));
+				std::cout<<t->TrackId<<" size "<<TrInDest.size()<<std::endl;		
+				a++;
+	}
+/*
+for(int a=0; a<TrInDest.size(); a++){
+
+	TG4Trajectory *ti = 0;	
+	ti=&dest[a];
+	std::cout<<"a ti "<<a<<" "<<ti->Name<<std::endl;
+	}
 	
+	std::cout<<"fatto size dest dopo vertex  "<<dest.size()<<std::endl;
+	std::cout<<"fatto size mappa dai vertici "<<TrInDest.size()<<std::endl;
+	std::cout<<"fatto size mappa dai vertici "<<TrId.size()<<std::endl;
+*/	
 	TG4Trajectory *tx = 0;	
+
+
 /*
         int tr=0;
 	for (int j=0; j< NIncHits; j++) {
@@ -95,6 +132,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 	//loop on NIncHits the hit on the boudary
 
 	for (int j=0; j< NIncHits; j++) {
+		if(IdInc[j]>9000)continue;  //sono nuclei di cui non tracciamo nulla anche se Fluka li salva
 		//std::cout<< " TrInc : "<<j <<" "<< TrInc[j] <<std::endl;	
 		if(TrInc[j] != PrTrInc){
 
@@ -102,6 +140,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 
 			//If it doesnt find it --> add
 			if(tx != 0 && TrInDest.find(PrTrInc)==TrInDest.end()){
+				//std::cout<<"chiudo dest"<<std::endl;	
 				//if(tx != 0){
 				TrInDest.insert(std::make_pair(PrTrInc,dest.size()));
 				dest.push_back(*tx);
@@ -109,13 +148,19 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 			PrTrInc = TrInc[j];
 			//If it finds it let it be
 			if(TrInDest.find(TrInc[j])!=TrInDest.end()){				//controllo che l'Id sia giusto
+				//std::cout<<"trovato"<<std::endl;	
 				if(IdInc[j]!=TrId[TrInc[j]] && TrInc[j]!=-1 && TrId[TrInc[j]]<9000 && TrId[TrInc[j]]!=-311 && TrId[TrInc[j]]!=311) std::cout<<"ERROR TrInc "<<TrInc[j]<<" era "<<TrId[TrInc[j]]<<" ma ora sembra essere "<<IdInc[j]<<std::endl;	
-				// i nuclei hanno TrId>9000 e spesso ma non sempre numero di traccia -1, i K+ 311 o K- possono trasformarsi			
-	
-				tx = &(dest[TrInDest[TrInc[j]]]);
+				// i nuclei hanno IdInc>9000 e spesso ma non sempre numero di traccia -1, i K+ 311 o K- possono trasformarsi			
+				//std::cout<<"TrInDest TrInc"<<TrInDest[TrInc[j]]<<" "<<TrInc[j]<<std::endl;
+				
+				int nn=TrInDest[TrInc[j]];
+				tx = &(dest[nn]);
+				if(tx->PDGCode!=IdInc[j] && tx->PDGCode<9000) std::cout<<"ERROR tx "<<tx->PDGCode<<" IdInc "<<IdInc[j]<<std::endl;
+				//std::cout<<"name tx "<<tx->Name<<std::endl;
 				//       std::cout<<" ************* Track is there ***********"<<std::endl;
 				//If it doesnt exist make it
 			}else{
+				//std::cout<<"nuovo elemento "<<std::endl;
 				TrId.insert(std::make_pair(TrInc[j],IdInc[j]));
 				tx           = new TG4Trajectory;
 				tx->TrackId  = TrInc[j];
@@ -134,6 +179,7 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 		}
 		// Add the particles associated with the vertex to the summary.
 		// Make sure they are ordered...etc ...see code /src/EDepSimPersistencyManager.cc at line 437
+		
 		TG4TrajectoryPoint point;
 		TLorentzVector pos = GlobalCoordinates(TLorentzVector(PosInc[j][0], PosInc[j][1], PosInc[j][2], TimeInc[j]*1e9));
 
@@ -142,10 +188,10 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, TTree *HitsTree, int 
 		//point.Process = edepPoint->GetProcessType();
 		//point.Subprocess = edepPoint->GetProcessSubType();
 	
-///		std::cout<<"Inserisco il punto INC "<<point.Position.X()<<" "<<point.Position.Y()<<" "<<point.Position.Z()<<" "<<point.Position.T()<<std::endl;	
-
-
+		//std::cout<<"Inserisco il punto INC "<<point.Position.X()<<" "<<point.Position.Y()<<" "<<point.Position.Z()<<" "<<point.Position.T()<<std::endl;	
+	
 		tx->Points.push_back(point);
+		
 		if(tx != 0 && j == NIncHits - 1 && TrInDest.find(PrTrInc)==TrInDest.end())  {
 			TrInDest.insert(std::make_pair(PrTrInc,dest.size()));
 			dest.push_back(*tx);

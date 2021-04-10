@@ -2,7 +2,7 @@
 #include <iostream>
 #include "utils.h"
 
-void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree *mytree, int entry) {
+void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree *mytree, int entry, std::vector<TG4Trajectory>& desttj) {
 	dest.clear();
 
 	//---Branch of HeaderTree
@@ -125,7 +125,7 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 
 	int NParticle=NumLep+NumPhot+NumHeavy+NumHad;
 
-	std::cout<<"NParticle "<<NParticle<<std::endl;
+	std::cout<<"NParticle primarie "<<NParticle<<std::endl;
 
 	//std::cout<<"Number of particle in vertex "<<NParticle<<std::endl;
 	// Add the particles associated with the vertex to the summary.
@@ -159,7 +159,7 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 	//if(TargZ<10)  sprintf(Znumber,"0%i",TargZ);
 	
 	sprintf(Target_genie_code,"100%03d%03d0",TargZ,TargA);
-	std::cout<<"Target_genie_code"<<Target_genie_code<<std::endl;
+	//std::cout<<"Target_genie_code"<<Target_genie_code<<std::endl;
 /*
 ESEMPI di GENIE target CODES
 	
@@ -254,7 +254,42 @@ ESEMPI di GENIE target CODES
 		prim.Momentum.SetE(P_Heavy[k][3]*1000);
 		vtx.Particles.push_back(prim);
 	}
-       
+      
+	std::cout<<"Particelle primarie "<<std::endl;
+ 	std::cout<<"Numero di primari salvati "<<vtx.Particles.size()<<std::endl;
+		
+	//costruisco TG4Trajectory
+	for (std::vector<TG4PrimaryParticle>::iterator p = vtx.Particles.begin(); p != vtx.Particles.end(); ++p) { 
+                std::cout<<"Trackid "<<p->TrackId<<std::endl; //" "<<p->ParentId<<std::endl;
+		TG4Trajectory tj;
+		tj.TrackId=p->TrackId;
+		tj.ParentId=-1;
+		tj.PDGCode=p->PDGCode;
+		if (TDatabasePDG::Instance()->GetParticle(tj.PDGCode)) tj.Name     = TDatabasePDG::Instance()->GetParticle(tj.PDGCode)->GetName();
+		else tj.Name="Ion";
+	
+		TG4TrajectoryPoint point;
+		point.Position.SetXYZT(vtx.Position.X(),vtx.Position.Y(),vtx.Position.Z(),vtx.Position.T());
+		point.Momentum.SetXYZ(p->Momentum.X(),p->Momentum.Y(),p->Momentum.Z());
+		tj.Points.push_back(point);
+		desttj.push_back(tj);
+	}
+
+
+	std::cout<<"Ecco le traiettorie dei primari "<<std::endl;
+	for (std::vector<TG4Trajectory>::iterator
+				t = desttj.begin();
+				t != desttj.end(); ++t) {
+			std::cout << " TrackId " << t->TrackId;
+		//	std::cout << " ParentId " << t->ParentId;
+			int count = t->Points.size();
+			std::cout << " Up to " << count << " points";
+			std::cout << std::endl;
+ 					
+		}	
+
+		
+	 
 	if(StdHepN!=nPart) std::cout<<"ERROR on number of particles in rootracker"<<std::endl;
        //rootracker->Print();
 	rootracker->Fill();

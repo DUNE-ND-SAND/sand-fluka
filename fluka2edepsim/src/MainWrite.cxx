@@ -34,7 +34,7 @@ Float_t PosCell[NCellMax][3],EdepCell[NCellMax],EdepQCell[NCellMax],TimeCell[NCe
 //#include "Fillrootracker.h"
 #include "Check.h"
 #include "MapGeometry.h"
-#include "MapTree.h"
+//#include "MapTree.h"
 #include <fstream>
 //#include "TParticlePDG.h"
 
@@ -171,7 +171,7 @@ int main(int argc, char* argv[])
 	MapTree->Branch("Position"   ,0, "Position[NhitT][3]/D");
 */
 
-	MapTree::Get()->InitTree();
+	//MapTree::Get()->InitTree();
 
        
         TTree *rootracker;
@@ -201,20 +201,19 @@ int main(int argc, char* argv[])
 
 		std::cout<<"Run " << pEvent->RunId	<< " Event " << pEvent->EventId<<std::endl;
 
-		FillPrimaries(pEvent->Primaries, rootracker, HeaderTree, i);
-	//	std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
+		std::vector<TG4Trajectory> tj_preliminary;
+		tj_preliminary.clear();
+	
+		FillPrimaries(pEvent->Primaries, rootracker, HeaderTree, i, tj_preliminary);
+		std::cout<<"   Primaries " << pEvent->Primaries.size()<<std::endl;
 
-
-		FillTrajectories(pEvent->Trajectories, HitsTree, i);
+		FillTrajectories(pEvent->Trajectories,tj_preliminary, HitsTree, i);
 		std::cout<<"   Trajectories " << pEvent->Trajectories.size()<<std::endl;
-
-		
-
 
 		FillSegmentDetectors(pEvent->SegmentDetectors, SttTree, CellTree, i);
 		std::cout<<"   Segment Detectors "	<< pEvent->SegmentDetectors.size()<<std::endl;
 
-                //Check();
+                Check();
 	 	fEventTree->Fill();
 
 	//	MapTree::Get()->Fill_MapTree(MapGeometry::Get()->GetMap(), i);

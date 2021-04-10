@@ -5,9 +5,8 @@ void  Check(){
 	int  counter = 0;
 	std::vector<Int_t> st;
 	//std::cout<< "Nhits From hitstree and Stttree: "<< NIncHits<< " , "<< NStt <<std::endl;
-	std::cout<< "Nhits From hitstree and Stttree: "<< NIncHits<< " , "<< NSttHits <<std::endl;
+//	std::cout<< "Nhits From hitstree and Stttree: "<< NIncHits<< " , "<< NSttHits <<std::endl;
         
-	std::cout<<"Warning! The Following TrackId are missing in SttTree : "<<std::endl;
 	for (int i=0; i< NSttHits; i++){
 		check = false;
 		for(unsigned int j=0; j< st.size(); j++){
@@ -15,8 +14,7 @@ void  Check(){
 				check = true;
 			}
 		}
-		if (!check)
-			st.push_back(TrStt[i]);
+		if (!check) st.push_back(TrStt[i]);
 		else  continue;
 		check = false;
 		for(int j=0; j< NIncHits; j++){
@@ -24,6 +22,22 @@ void  Check(){
 				check = true;
 			}
 		}
+		if (check==true) continue;
+		for(int j=0; j< NIneHits; j++){
+			if (TrIne[j] == TrStt[i]){
+				check = true;
+			}
+		}
+		if(check==true) continue;
+		int k=0;
+		for(int j=0; j< NIneHits; j++){
+			for(int ii=k; ii<k+NSecIne[j]; ii++){
+				if(TrSecIne[ii]==TrStt[i]) check=true;	
+			}
+			k+=NSecIne[j];
+		
+		}
+
                 //std::cout<< "Track Id of Stt, Check : "<< TrStt[i]<< " , "<< check << std::endl;
 		if (!check){
 			counter ++;
@@ -32,5 +46,6 @@ void  Check(){
 		//else std::cout<<" Warning, Track Id is not consistent "<<std::endl;
 	}
 	std::cout<<" Total Number of Track ID Missing : "<< counter<<std::endl;
+
 }
 #endif
