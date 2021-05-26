@@ -63,7 +63,6 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, std::vector<TG4Trajec
 
 	HitsTree->GetEntry(iEntry);
 	Double_t PrTrInc = -1;
-
 /*
 	std::cout<<"Ecco le traiettorie dei primari che arrivano da Primaries"<<std::endl;
         for (std::vector<TG4Trajectory>::iterator
@@ -84,15 +83,18 @@ void FillTrajectories(std::vector<TG4Trajectory>& destfin, std::vector<TG4Trajec
 	TrInDest.clear();
 	TrId.clear();
 
-
 	int a=0;
 	for (std::vector<TG4Trajectory>::iterator
                                 t = dest.begin();
                                 t != dest.end(); ++t) {
+
+
+			        
 				
 				TrInDest.insert(std::make_pair(t->TrackId,a));  //perchè sono ordinati
 				TrId.insert(std::make_pair(t->TrackId,t->PDGCode));
-			//	std::cout<<t->TrackId<<" size "<<TrInDest.size()<<std::endl;		
+	//			std::cout<<t->TrackId<<" size "<<TrInDest.size()<<std::endl;		
+			
 				a++;
 	}
 /*
@@ -331,12 +333,18 @@ for(int a=0; a<TrInDest.size(); a++){
 //	delete tx;	
 
 //controllo che non ci siano buchi e nel caso li riempio
-int ss1=0;
+
+
+
+int ss1=0;  //ci sono tracce finte con TrackId=-1
+	if(TrInDest.begin()->first==1) ss1=1;
+	else if(TrInDest.begin()->first!=-1) {std::cout<<"ERROR sulle Trajectory!!! "<<std::endl; exit(1);}
+	
 for (std::map<int,int>::iterator i = TrInDest.begin();
          i != TrInDest.end(); ++i) {
 	//std::cout<<"ss "<<ss1<<" isecond "<<i->first<<std::endl;
 if(ss1>0 && ss1!= i->first) {
-	std::cout<<"ERROR "<<ss1<<" "<<i->first<<std::endl; 
+	std::cout<<"ERROR contatore "<<ss1<<" trackid "<<i->first<<std::endl; 
 
 	TrInDest.insert(std::make_pair(ss1,dest.size()));
 
@@ -384,8 +392,6 @@ for (std::vector<TG4Trajectory>::iterator
 
 //std::cout<<"FINE....ecco tutte le traiettorie "<<std::endl;
 
-std::cout<<"Controllo i tempi e i buchi per Nibir "<<std::endl;
-
 
 //controllo che non ci siano salti nel numero delle traiettorie (nibir)
 int ss=1; 
@@ -407,6 +413,7 @@ for (std::vector<TG4Trajectory>::iterator
 			   		++p) {
 			if(p->Position.T()<last) { 
 				std::cout<<"ERRORRRRRR nuovo tempo minimo "<<p->Position.T()<<" tempo minimo "<<last<<std::endl;
+				exit(1);
 	}		
 	//		if(p->Position.Y()>0) std::cout<<"ERROR Y"<<std::endl;
 			//	std::cout << " Time: " << p->Position.T();
