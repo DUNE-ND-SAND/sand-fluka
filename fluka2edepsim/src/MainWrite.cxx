@@ -13,7 +13,7 @@ const int MaxN   = 10000; //Max Number of hits
 //Global variables
 Int_t NIncHits, NStt, NSttHits, NCalHits, NCatchHits, NIneHits, NTIneSec;
 Int_t TrInc[MaxNhit], TrStt[MaxNhit], TrSttHits[MaxNhit], TrCalHits[MaxNhit], TrCatchHits[MaxNhit];
-
+Int_t NPrimari=0;
 
 TObjString * EvtCode=nullptr;
 

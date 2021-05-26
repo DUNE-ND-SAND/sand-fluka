@@ -336,6 +336,11 @@ for(int a=0; a<TrInDest.size(); a++){
         destfin.push_back(dest[i->second]);
     }
 
+//ci sono dei buchi!!
+
+
+
+
 //elimino la traccia -1 nel primo elemento se presente
 if(destfin.at(0).TrackId==-1) destfin.erase(destfin.begin()); 
 
@@ -354,18 +359,19 @@ for (std::vector<TG4Trajectory>::iterator
 //std::cout<<"FINE....ecco tutte le traiettorie "<<std::endl;
 
 //controllo che non ci siano salti nel numero delle traiettorie (nibir)
-int ss=0; 
+int ss=1; 
 for (std::vector<TG4Trajectory>::iterator
 				t = destfin.begin();
 				t != destfin.end(); ++t) {
-	//		std::cout << " TrackId " << t->TrackId;
-			if(ss>0 && ss!=t->TrackId) {std::cout<<"ERROR on track numb "<<ss<<" "<<t->TrackId<<std::endl; exit(1);}
+			if(EveNum==30) std::cout << " TrackId " << t->TrackId;
+			if(ss!=t->TrackId) {std::cout<<"ERROR on track numb "<<ss<<" "<<t->TrackId<<std::endl; exit(1);}
 		//	std::cout << " ParentId " << t->ParentId;
 	//		int count = t->Points.size();
 	//		std::cout << " Up to " << count << " points";
 	//		std::cout << std::endl;
 			std::sort (t->Points.begin(), t->Points.end(), my_IsBigger); 
- 	/*				
+			ss++; 
+	/*				
 			float last=-1;	
                         for (std::vector<TG4TrajectoryPoint>::iterator
 		 		   p = t->Points.begin();

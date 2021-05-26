@@ -106,17 +106,17 @@ void FillPrimaries(std::vector<TG4PrimaryVertex>& dest, TTree *rootracker, TTree
 
         vtx.GeneratorName="FLUKA";
 
-	int NParticle=NumLep+NumPhot+NumHeavy+NumHad;
+        NPrimari=NumLep+NumPhot+NumHeavy+NumHad;
 
-	std::cout<<"NParticle primarie "<<NParticle<<std::endl;
+	std::cout<<"N particelle primarie "<<NPrimari<<std::endl;
 
-	//std::cout<<"Number of particle in vertex "<<NParticle<<std::endl;
+	//std::cout<<"Number of particle in vertex "<<NPrimari<<std::endl;
 	// Add the particles associated with the vertex to the summary.
 	
 	EvtNum = EveNum;
 
 	TG4PrimaryParticle prim;
- 	StdHepN = NParticle+2;
+ 	StdHepN = NPrimari+2;
  
 	StdHepPdg[0] = Primary; 
         //Adding the Neutrino
