@@ -330,13 +330,39 @@ for(int a=0; a<TrInDest.size(); a++){
 	
 //	delete tx;	
 
+//controllo che non ci siano buchi e nel caso li riempio
+int ss1=0;
+for (std::map<int,int>::iterator i = TrInDest.begin();
+         i != TrInDest.end(); ++i) {
+	//std::cout<<"ss "<<ss1<<" isecond "<<i->first<<std::endl;
+if(ss1>0 && ss1!= i->first) {
+	std::cout<<"ERROR "<<ss1<<" "<<i->first<<std::endl; 
+
+	TrInDest.insert(std::make_pair(ss1,dest.size()));
+
+
+	tx           = new TG4Trajectory;
+        tx->TrackId  = ss1; //quello mancante
+        tx->ParentId = -99; // fake particle
+        tx->PDGCode  = -99;
+        tx->Name = "Fake";
+	dest.push_back(*tx);
+
+	std::cout<<"nuovo elemento inserito...forse "<<std::endl;
+	i--;
+	//exit(1);
+	}
+	
+ss1++;
+}
+
+
+
 //riordino le tracce con TrackId in ordine crescente
  for (std::map<int,int>::iterator i = TrInDest.begin();
          i != TrInDest.end(); ++i) {
         destfin.push_back(dest[i->second]);
     }
-
-//ci sono dei buchi!!
 
 
 
@@ -358,36 +384,38 @@ for (std::vector<TG4Trajectory>::iterator
 
 //std::cout<<"FINE....ecco tutte le traiettorie "<<std::endl;
 
+std::cout<<"Controllo i tempi e i buchi per Nibir "<<std::endl;
+
+
 //controllo che non ci siano salti nel numero delle traiettorie (nibir)
 int ss=1; 
 for (std::vector<TG4Trajectory>::iterator
 				t = destfin.begin();
 				t != destfin.end(); ++t) {
-			if(EveNum==30) std::cout << " TrackId " << t->TrackId;
 			if(ss!=t->TrackId) {std::cout<<"ERROR on track numb "<<ss<<" "<<t->TrackId<<std::endl; exit(1);}
 		//	std::cout << " ParentId " << t->ParentId;
-	//		int count = t->Points.size();
+			int count = t->Points.size();
 	//		std::cout << " Up to " << count << " points";
 	//		std::cout << std::endl;
 			std::sort (t->Points.begin(), t->Points.end(), my_IsBigger); 
 			ss++; 
-	/*				
-			float last=-1;	
+			
+			double last=t->Points.begin()->Position.T();	
                         for (std::vector<TG4TrajectoryPoint>::iterator
 		 		   p = t->Points.begin();
 				   p != t->Points.end();
 			   		++p) {
-			if(p->Position.T()<last) std::cout<<"ERRORRRRRR"<<std::endl;
-			last=p->Position.T();
-			if(p->Position.Y()>0) std::cout<<"ERROR Y"<<std::endl;
+			if(p->Position.T()<last) { 
+				std::cout<<"ERRORRRRRR nuovo tempo minimo "<<p->Position.T()<<" tempo minimo "<<last<<std::endl;
+	}		
+	//		if(p->Position.Y()>0) std::cout<<"ERROR Y"<<std::endl;
 			//	std::cout << " Time: " << p->Position.T();
-			   std::cout << " Position: " << p->Position.X()<<" "<< p->Position.Y()<<" "<< p->Position.Z();
+	//		   std::cout << " Position: " << p->Position.X()<<" "<< p->Position.Y()<<" "<< p->Position.Z();
 			//PosX->Fill(p->Position.X());
 			//std::cout << " Subprocess: " << p->Subprocess;
-			std::cout << std::endl;
+	//		std::cout << std::endl;
 			if (--count < 1) break;
 			}
-	*/
 	}
 //std::cout << "Tempo del'ultimo punto "<<((destfin.back()).Points.back()).Position.X()<<std::endl;
 }
